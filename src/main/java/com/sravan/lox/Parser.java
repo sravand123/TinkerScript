@@ -2,6 +2,7 @@ package com.sravan.lox;
 
 import static com.sravan.lox.TokenType.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
@@ -15,12 +16,36 @@ public class Parser {
         this.tokens = tokens;
     }
 
-    Expr parse() {
+    List<Stmt> parse() {
         try {
-            return expression();
+            List<Stmt> statements = new ArrayList<>();
+            while (!isAtEnd()) {
+                statements.add(statement());
+            }
+            return statements;
         } catch (ParseError error) {
             return null;
         }
+    }
+
+    private Stmt statement() {
+        if (match(PRINT))
+            return printStatement();
+
+        return expressionStatement();
+
+    }
+
+    private Stmt printStatement() {
+        Expr expr = expression();
+        consume(SEMICOLON, "Expected ;");
+        return new Stmt.Print(expr);
+    }
+
+    private Stmt expressionStatement() {
+        Expr expr = expression();
+        consume(SEMICOLON, "Expected ;");
+        return new Stmt.Expression(expr);
     }
 
     private boolean match(TokenType... types) {
