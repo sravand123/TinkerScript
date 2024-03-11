@@ -33,6 +33,8 @@ public class Parser {
         try {
             if (match(VAR))
                 return variableDeclaration();
+            if (match(FUN))
+                return function("function");
             return statement();
         } catch (ParseError error) {
             synchronize();
@@ -206,13 +208,56 @@ public class Parser {
 
     }
 
+    private Expr call() {
+        Expr expr = primary();
+        while (true) {
+            if (match(LEFT_PAREN))
+                expr = finishCall(expr);
+            else
+                break;
+        }
+        return expr;
+    }
+
+    private Stmt.Function function(String kind) {
+        Token name = consume(IDENTIFIER, "Expected function name");
+        consume(LEFT_PAREN, "Expected ( after " + kind + " name");
+        List<Token> parameters = new ArrayList<>();
+        if (!check(RIGHT_PAREN)) {
+            do {
+                if (parameters.size() >= 255) {
+                    error(peek(), "Cant have more than 255 parameters");
+                }
+                parameters.add(
+                        consume(IDENTIFIER, "Expected parameter name"));
+            } while (match(COMMA));
+        }
+        consume(RIGHT_PAREN, "Expected )");
+        consume(LEFT_BRACE, "expected { before " + kind + " body");
+        List<Stmt> body = block();
+        return new Stmt.Function(name, parameters, body);
+    }
+
+    private Expr finishCall(Expr expr) {
+        List<Expr> arguments = new ArrayList<>();
+        if (!check(RIGHT_PAREN)) {
+            do {
+                if (arguments.size() >= 255) {
+                    error(peek(), "Cant have more than 255 arguments");
+                }
+                arguments.add(expression());
+            } while (match(COMMA));
+        }
+        Token paren = consume(RIGHT_PAREN, "Expected )");
+        return new Expr.Call(expr, paren, arguments);
+    }
     private Expr unary() {
         if (match(BANG, MINUS)) {
             Token operator = previous();
             Expr right = unary();
             return new Expr.Unary(operator, right);
         }
-        return primary();
+        return call();
     }
 
     private Expr factor() {

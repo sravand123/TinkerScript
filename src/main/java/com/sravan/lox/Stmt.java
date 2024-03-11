@@ -17,6 +17,8 @@ abstract class Stmt {
 
         R visitWhileStmt(While stmt);
 
+        R visitFunctionStmt(Function stmt);
+
     }
 
     static class Print extends Stmt {
@@ -96,6 +98,22 @@ abstract class Stmt {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitWhileStmt(this);
+        }
+    }
+
+    static class Function extends Stmt {
+        Function(Token name, List<Token> params, List<Stmt> body) {
+            this.name = name;
+            this.params = params;
+            this.body = body;
+        }
+
+        final Token name;
+        final List<Token> params;
+        final List<Stmt> body;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitFunctionStmt(this);
         }
     }
 
