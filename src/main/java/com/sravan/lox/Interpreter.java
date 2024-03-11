@@ -1,7 +1,6 @@
 package com.sravan.lox;
 
-import static com.sravan.lox.TokenType.AND;
-import static com.sravan.lox.TokenType.OR;
+import static com.sravan.lox.TokenType.*;
 
 import java.util.List;
 
@@ -17,6 +16,7 @@ import com.sravan.lox.Stmt.Expression;
 import com.sravan.lox.Stmt.If;
 import com.sravan.lox.Stmt.Print;
 import com.sravan.lox.Stmt.Var;
+import com.sravan.lox.Stmt.While;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     Environment environment = new Environment();
@@ -224,5 +224,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return false;
         }
         return evaluate(expr.right);
+    }
+
+    @Override
+    public Void visitWhileStmt(While stmt) {
+        while (isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.body);
+        }
+        return null;
     }
 }

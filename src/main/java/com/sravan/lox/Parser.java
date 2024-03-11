@@ -3,6 +3,7 @@ package com.sravan.lox;
 import static com.sravan.lox.TokenType.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Parser {
@@ -55,14 +56,68 @@ public class Parser {
         if (match(LEFT_BRACE)) {
             return new Stmt.Block(block());
         }
+        if (match(WHILE)) {
+            return whileStatement();
+        }
+        if (match(FOR))
+            return forLoop();
+
         if (match(IF))
             return ifStatement();
         return expressionStatement();
 
     }
 
+    private Stmt forLoop() {
+        consume(LEFT_PAREN, "Expected (");
+        Stmt initializer;
+        if (match(SEMICOLON)) {
+            initializer = null;
+        } else if (match(VAR)) {
+            initializer = variableDeclaration();
+        } else {
+            initializer = expressionStatement();
+        }
+
+        Expr condition = null;
+
+        if (!check(SEMICOLON)) {
+            condition = expression();
+        }
+        consume(SEMICOLON, "Expected ;");
+
+        Expr increment = null;
+
+        if (!check(RIGHT_PAREN)) {
+            increment = expression();
+        }
+        consume(RIGHT_PAREN, "Expected )");
+        Stmt body = statement();
+
+        if (increment != null) {
+            body = new Stmt.Block(Arrays.asList(body, new Stmt.Expression(increment)));
+        }
+
+        if (condition == null)
+            condition = new Expr.Literal(true);
+        body = new Stmt.While(condition, body);
+
+        if (initializer != null) {
+            body = new Stmt.Block(Arrays.asList(initializer, body));
+        }
+        return body;
+    }
+
+    private Stmt whileStatement() {
+        consume(LEFT_PAREN, "Expected (");
+        Expr condition = expression();
+        consume(RIGHT_PAREN, "Expected )");
+        Stmt body = statement();
+        return new Stmt.While(condition, body);
+    }
+
     private Stmt ifStatement() {
-        consume(LEFT_PAREN, "Expected )");
+        consume(LEFT_PAREN, "Expected (");
         Expr condition = expression();
         consume(RIGHT_PAREN, "Expected )");
         Stmt thenStatement = statement();
