@@ -20,12 +20,33 @@ public class Parser {
         try {
             List<Stmt> statements = new ArrayList<>();
             while (!isAtEnd()) {
-                statements.add(statement());
+                statements.add(declaration());
             }
             return statements;
         } catch (ParseError error) {
             return null;
         }
+    }
+
+    private Stmt declaration() {
+        try {
+            if (match(VAR))
+                return variableDeclaration();
+            return statement();
+        } catch (ParseError error) {
+            synchronize();
+            return null;
+        }
+    }
+
+    private Stmt variableDeclaration() {
+        Token name = consume(IDENTIFIER, "Expected Identifier");
+        Expr initializer = null;
+        if (match(EQUAL)) {
+            initializer = expression();
+        }
+        consume(SEMICOLON, "Expected ;");
+        return new Stmt.Var(name, initializer);
     }
 
     private Stmt statement() {
@@ -98,6 +119,9 @@ public class Parser {
             consume(RIGHT_PAREN, "expected ) after expression.");
             return new Expr.Grouping(expression);
         }
+        if (match(IDENTIFIER))
+            return new Expr.Variable(previous());
+
         throw error(peek(), "expected expression.");
 
     }
@@ -155,10 +179,10 @@ public class Parser {
         return equality();
     }
 
-    private void consume(TokenType type, String error) {
+    private Token consume(TokenType type, String error) {
         if (check(type)) {
             advance();
-            return;
+            return previous();
         }
         throw error(peek(), error);
     }
@@ -168,4 +192,26 @@ public class Parser {
         return new ParseError();
     }
 
+    private void synchronize() {
+        advance();
+        while (!isAtEnd()) {
+            if (previous().type == SEMICOLON)
+                return;
+            switch (peek().type) {
+                case CLASS:
+                case FUN:
+                case FOR:
+                case VAR:
+                case IF:
+                case WHILE:
+                case PRINT:
+                case RETURN:
+                    return;
+
+                default:
+                    break;
+            }
+            advance();
+        }
+    }
 }

@@ -6,10 +6,13 @@ import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Grouping;
 import com.sravan.lox.Expr.Literal;
 import com.sravan.lox.Expr.Unary;
+import com.sravan.lox.Expr.Variable;
 import com.sravan.lox.Stmt.Expression;
 import com.sravan.lox.Stmt.Print;
+import com.sravan.lox.Stmt.Var;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+    Environment environment = new Environment();
     void interpret(List<Stmt> statements) {
         try {
             for (Stmt stmt : statements) {
@@ -150,5 +153,20 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Void visitExpressionStmt(Expression stmt) {
         evaluate(stmt.expression);
         return null;
+    }
+
+    @Override
+    public Void visitVarStmt(Var stmt) {
+        Object value = null;
+        if (stmt.initializer != null)
+            value = evaluate(stmt.initializer);
+        environment.define(stmt.name.lexeme, value);
+        return null;
+
+    }
+
+    @Override
+    public Object visitVariableExpr(Variable expr) {
+        return environment.get(expr.name);
     }
 }
