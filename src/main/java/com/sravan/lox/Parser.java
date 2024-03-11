@@ -66,8 +66,20 @@ public class Parser {
 
         if (match(IF))
             return ifStatement();
+        if (match(RETURN))
+            return returnStatement();
         return expressionStatement();
 
+    }
+
+    private Stmt returnStatement() {
+        Expr value = null;
+        Token keyword = previous();
+        if (!check(SEMICOLON)) {
+            value = expression();
+        }
+        consume(SEMICOLON, "Expected ;");
+        return new Stmt.Return(keyword, value);
     }
 
     private Stmt forLoop() {
