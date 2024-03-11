@@ -3,7 +3,9 @@ package com.sravan.lox;
 import static com.sravan.lox.TokenType.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
@@ -24,6 +26,7 @@ import com.sravan.lox.Stmt.While;
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();
     private Environment environment = globals;
+    private final Map<Expr, Integer> locals = new HashMap<>();
 
     Interpreter() {
         globals.define("clock", new LoxCallable() {
@@ -45,6 +48,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
         });
     }
+
+    void resolve(Expr expression, Integer depth) {
+        locals.put(expression, depth);
+    }
+
     void interpret(List<Stmt> statements) {
         try {
             for (Stmt stmt : statements) {
@@ -174,6 +182,15 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return text;
     }
 
+    public Object lookUpVariable(Token name, Expr expr) {
+        Integer distance = locals.get(expr);
+        if (distance != null) {
+            return environment.getAt(name, distance);
+        } else {
+            return globals.get(name);
+        }
+    }
+
     @Override
     public Void visitPrintStmt(Print stmt) {
         Object value = evaluate(stmt.expression);
@@ -199,13 +216,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Object visitVariableExpr(Variable expr) {
-        return environment.get(expr.name);
+        return lookUpVariable(expr.name, expr);
     }
 
     @Override
     public Object visitAssignExpr(Assign expr) {
         Object value = evaluate(expr.value);
-        environment.assign(expr.name, value);
+        Integer distance = locals.get(expr);
+        if (distance != null) {
+            environment.assignAt(expr.name, value, distance);
+        } else {
+            globals.assign(expr.name, value);
+        }
         return value;
     }
 
