@@ -15,6 +15,8 @@ abstract class Expr {
 
         R visitVariableExpr(Variable expr);
 
+        R visitAssignExpr(Assign expr);
+
     }
 
     static class Binary extends Expr {
@@ -80,6 +82,20 @@ abstract class Expr {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitVariableExpr(this);
+        }
+    }
+
+    static class Assign extends Expr {
+        Assign(Token name, Expr value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        final Token name;
+        final Expr value;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitAssignExpr(this);
         }
     }
 
