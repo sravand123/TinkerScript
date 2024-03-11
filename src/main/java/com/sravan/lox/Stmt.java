@@ -11,6 +11,8 @@ abstract class Stmt {
 
         R visitVarStmt(Var stmt);
 
+        R visitBlockStmt(Block stmt);
+
     }
 
     static class Print extends Stmt {
@@ -48,6 +50,18 @@ abstract class Stmt {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitVarStmt(this);
+        }
+    }
+
+    static class Block extends Stmt {
+        Block(List<Stmt> statements) {
+            this.statements = statements;
+        }
+
+        final List<Stmt> statements;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitBlockStmt(this);
         }
     }
 

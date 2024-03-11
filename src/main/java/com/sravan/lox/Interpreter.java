@@ -8,6 +8,7 @@ import com.sravan.lox.Expr.Grouping;
 import com.sravan.lox.Expr.Literal;
 import com.sravan.lox.Expr.Unary;
 import com.sravan.lox.Expr.Variable;
+import com.sravan.lox.Stmt.Block;
 import com.sravan.lox.Stmt.Expression;
 import com.sravan.lox.Stmt.Print;
 import com.sravan.lox.Stmt.Var;
@@ -176,5 +177,24 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Object value = evaluate(expr.value);
         environment.assign(expr.name, value);
         return value;
+    }
+
+    @Override
+    public Void visitBlockStmt(Block stmt) {
+        executeBlock(stmt.statements, new Environment(environment));
+        return null;
+    }
+
+    private void executeBlock(List<Stmt> statements, Environment environment) {
+        Environment previous = this.environment;
+        try {
+            this.environment = environment;
+            for (Stmt stmt : statements) {
+                execute(stmt);
+            }
+        } finally {
+            this.environment = previous;
+        }
+
     }
 }
