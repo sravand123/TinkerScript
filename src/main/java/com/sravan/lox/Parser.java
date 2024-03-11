@@ -55,9 +55,22 @@ public class Parser {
         if (match(LEFT_BRACE)) {
             return new Stmt.Block(block());
         }
-
+        if (match(IF))
+            return ifStatement();
         return expressionStatement();
 
+    }
+
+    private Stmt ifStatement() {
+        consume(LEFT_PAREN, "Expected )");
+        Expr condition = expression();
+        consume(RIGHT_PAREN, "Expected )");
+        Stmt thenStatement = statement();
+        Stmt elseStatement = null;
+        if (match(ELSE)) {
+            elseStatement = statement();
+        }
+        return new Stmt.If(condition, thenStatement, elseStatement);
     }
 
     private List<Stmt> block() {

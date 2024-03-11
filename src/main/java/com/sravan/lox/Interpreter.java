@@ -10,6 +10,7 @@ import com.sravan.lox.Expr.Unary;
 import com.sravan.lox.Expr.Variable;
 import com.sravan.lox.Stmt.Block;
 import com.sravan.lox.Stmt.Expression;
+import com.sravan.lox.Stmt.If;
 import com.sravan.lox.Stmt.Print;
 import com.sravan.lox.Stmt.Var;
 
@@ -196,5 +197,15 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             this.environment = previous;
         }
 
+    }
+
+    @Override
+    public Void visitIfStmt(If stmt) {
+        boolean isConditionTruthy = isTruthy(evaluate(stmt.condition));
+        if (isConditionTruthy)
+            execute(stmt.thenStatement);
+        else if (stmt.elseStatement != null)
+            execute(stmt.elseStatement);
+        return null;
     }
 }
