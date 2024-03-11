@@ -204,8 +204,27 @@ public class Parser {
         return assignment();
     }
 
-    private Expr assignment() {
+    private Expr or() {
+        Expr expr = and();
+        while (match(OR)) {
+            Token name = previous();
+            Expr right = and();
+            expr = new Expr.Logical(expr, name, right);
+        }
+        return expr;
+    }
+
+    private Expr and() {
         Expr expr = equality();
+        while (match(AND)) {
+            Token name = previous();
+            Expr right = equality();
+            expr = new Expr.Logical(expr, name, right);
+        }
+        return expr;
+    }
+    private Expr assignment() {
+        Expr expr = or();
         if (match(EQUAL)) {
             Token equals = previous();
             Expr right = assignment();

@@ -1,11 +1,15 @@
 package com.sravan.lox;
 
+import static com.sravan.lox.TokenType.AND;
+import static com.sravan.lox.TokenType.OR;
+
 import java.util.List;
 
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Grouping;
 import com.sravan.lox.Expr.Literal;
+import com.sravan.lox.Expr.Logical;
 import com.sravan.lox.Expr.Unary;
 import com.sravan.lox.Expr.Variable;
 import com.sravan.lox.Stmt.Block;
@@ -207,5 +211,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         else if (stmt.elseStatement != null)
             execute(stmt.elseStatement);
         return null;
+    }
+
+    @Override
+    public Object visitLogicalExpr(Logical expr) {
+        Object value = evaluate(expr.left);
+        if (expr.operator.type == OR) {
+            if (isTruthy(value))
+                return true;
+        } else {
+            if (!isTruthy(value))
+                return false;
+        }
+        return evaluate(expr.right);
     }
 }
