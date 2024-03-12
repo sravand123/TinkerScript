@@ -26,6 +26,7 @@ run: $(TARGET_DIR)/$(MAIN_JAR_NAME)
 	@java -jar $<
 
 generate-ast: ${TARGET_DIR}/${TOOL_JAR_NAME}
+	@mvn package
 	@java -jar $< ${SRC_DIR}/com/sravan/lox
 
 # Build and run target
