@@ -75,13 +75,13 @@
                   </manifest>
                 </archive>
                 <finalName>jlox</finalName>
-                <classifier>package</classifier>
+                <classifier>app</classifier>
               </configuration>
             </execution>
 
             <!-- Execution for Package 2 -->
             <execution>
-              <id>generate_ast</id>
+              <id>generate-ast</id>
               <goals>
                 <goal>jar</goal>
               </goals>
@@ -91,8 +91,8 @@
                     <mainClass>com.sravan.tool.GenerateAst</mainClass>
                   </manifest>
                 </archive>
-                <finalName>generate_ast</finalName>
-                <classifier>package</classifier>
+                <finalName>generate-ast</finalName>
+                <classifier>tool</classifier>
               </configuration>
             </execution>
           </executions>
