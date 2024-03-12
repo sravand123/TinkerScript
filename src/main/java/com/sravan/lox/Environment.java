@@ -26,8 +26,8 @@ public class Environment {
         return environment;
     }
 
-    Object getAt(Token name, int distance) {
-        return ancestor(distance).get(name);
+    Object getAt(String name, int distance) {
+        return ancestor(distance).values.get(name);
     }
 
     void assignAt(Token name, Object value, int distance) {

@@ -35,11 +35,25 @@ public class Parser {
                 return variableDeclaration();
             if (match(FUN))
                 return function("function");
+            if (match(CLASS))
+                return classDeclaration();
             return statement();
         } catch (ParseError error) {
             synchronize();
             return null;
         }
+    }
+
+    private Stmt classDeclaration() {
+        Token name = consume(IDENTIFIER, "Expected class name.");
+        consume(LEFT_BRACE, "Expected {");
+        List<Stmt.Function> methods = new ArrayList<>();
+        while (!isAtEnd() && !check(RIGHT_BRACE)) {
+            methods.add(function("method"));
+        }
+        consume(RIGHT_BRACE, "Expected } after class body");
+        return new Stmt.Class(name, methods);
+
     }
 
     private Stmt variableDeclaration() {
@@ -203,7 +217,8 @@ public class Parser {
             return new Expr.Literal(false);
         if (match(TRUE))
             return new Expr.Literal(true);
-
+        if (match(THIS))
+            return new Expr.This(previous());
         if (match(NIL))
             return new Expr.Literal(null);
         if (match(STRING, NUMBER))
@@ -225,6 +240,10 @@ public class Parser {
         while (true) {
             if (match(LEFT_PAREN))
                 expr = finishCall(expr);
+            else if (match(DOT)) {
+                Token name = consume(IDENTIFIER, "Expected property name after '.'");
+                expr = new Expr.Get(expr, name);
+            }
             else
                 break;
         }
@@ -343,6 +362,8 @@ public class Parser {
 
             if (expr instanceof Expr.Variable) {
                 return new Expr.Assign(((Expr.Variable) expr).name, right);
+            } else if (expr instanceof Expr.Get) {
+                return new Expr.Set(((Expr.Get) expr).object, equals, right);
             }
             error(equals, "Invalid assignment target");
         }
