@@ -136,13 +136,15 @@ abstract class Stmt {
     }
 
     static class Class extends Stmt {
-        Class(Token name, List<Stmt.Function> methods) {
+        Class(Token name, List<Stmt.Function> methods, Expr.Variable superClass) {
             this.name = name;
             this.methods = methods;
+            this.superClass = superClass;
         }
 
         final Token name;
         final List<Stmt.Function> methods;
+        final Expr.Variable superClass;
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitClassStmt(this);

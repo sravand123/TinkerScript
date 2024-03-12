@@ -46,13 +46,17 @@ public class Parser {
 
     private Stmt classDeclaration() {
         Token name = consume(IDENTIFIER, "Expected class name.");
+        Expr.Variable superClass = null;
+        if (match(LESS)) {
+            superClass = new Expr.Variable(consume(IDENTIFIER, "Expected super class name"));
+        }
         consume(LEFT_BRACE, "Expected {");
         List<Stmt.Function> methods = new ArrayList<>();
         while (!isAtEnd() && !check(RIGHT_BRACE)) {
             methods.add(function("method"));
         }
         consume(RIGHT_BRACE, "Expected } after class body");
-        return new Stmt.Class(name, methods);
+        return new Stmt.Class(name, methods, superClass);
 
     }
 
@@ -230,6 +234,13 @@ public class Parser {
         }
         if (match(IDENTIFIER))
             return new Expr.Variable(previous());
+
+        if (match(SUPER)) {
+            Token keyword = previous();
+            consume(DOT, "Expected . after super");
+            Token method = consume(IDENTIFIER, "expected super class method name");
+            return new Expr.Super(keyword, method);
+        }
 
         throw error(peek(), "expected expression.");
 
