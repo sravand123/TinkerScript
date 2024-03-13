@@ -23,6 +23,7 @@ package:
 
 # Run target
 run: $(TARGET_DIR)/$(MAIN_JAR_NAME)
+	@mvn package
 	@java -jar $<
 
 generate-ast: ${TARGET_DIR}/${TOOL_JAR_NAME}
