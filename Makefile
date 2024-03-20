@@ -26,6 +26,10 @@ run: $(TARGET_DIR)/$(MAIN_JAR_NAME)
 	@mvn package
 	@java -jar $<
 
+test: $(TARGET_DIR)/$(MAIN_JAR_NAME)
+	@mvn package
+	@java -jar $< src/main/test/test.lox
+
 generate-ast: ${TARGET_DIR}/${TOOL_JAR_NAME}
 	@mvn package
 	@java -jar $< ${SRC_DIR}/com/sravan/lox

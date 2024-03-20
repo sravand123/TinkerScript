@@ -100,6 +100,31 @@ public class Scanner {
                     while (!isAtEnd() && peek() != '\n') {
                         advance();
                     }
+                    addToken(COMMENT, source.substring(start + 2, current));
+                } else if (match('*')) {
+                    int nestedLevel = 1;
+                    while (!isAtEnd()) {
+                        if (peek() == '*' && peekNext() == '/') {
+                            advance();
+                            advance();
+                            nestedLevel--;
+                        } else if (peek() == '/' && peekNext() == '*') {
+                            advance();
+                            advance();
+                            nestedLevel++;
+                        } else {
+                            if (peek() == '\n')
+                                line++;
+                            advance();
+                        }
+                        if (nestedLevel == 0)
+                            break;
+                    }
+                    if (isAtEnd() && nestedLevel > 0) {
+                        Lox.error(line, "Unterminated comment");
+                    } else {
+                        addToken(COMMENT, source.substring(start + 2, current - 2));
+                    }
                 } else
                     addToken(SLASH);
                 break;

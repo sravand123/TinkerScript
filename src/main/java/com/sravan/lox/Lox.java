@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Lox {
     static boolean hadError = false;
@@ -53,6 +54,12 @@ public class Lox {
     public static void run(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
+        tokens.removeIf(new Predicate<Token>() {
+            @Override
+            public boolean test(Token t) {
+                return t.type == TokenType.COMMENT;
+            }
+        });
         Parser parser = new Parser(tokens);
         List<Stmt> statements = parser.parse();
         if (hadError)
