@@ -108,6 +108,15 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return isEqual(leftVal, rightVal);
             case BANG_EQUAL:
                 return !isEqual(leftVal, rightVal);
+            case PIPE:
+                checkIntegerOperands(expr.operator, leftVal, rightVal);
+                return (double) ((int) (double) leftVal | (int) (double) rightVal);
+            case AMPERSAND:
+                checkIntegerOperands(expr.operator, leftVal, rightVal);
+                return (double) ((int) (double) leftVal & (int) (double) rightVal);
+            case CARAT:
+                checkIntegerOperands(expr.operator, leftVal, rightVal);
+                return (double) ((int) (double) leftVal ^ (int) (double) rightVal);
             case PLUS:
                 if (leftVal instanceof Double && rightVal instanceof Double) {
                     return (double) leftVal + (double) rightVal;
@@ -141,6 +150,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return -(double) right;
             case BANG:
                 return !isTruthy(right);
+            case TILDA:
+                checkIntegerOperand(expr.operator, right);
+                return (double) (~(int) (double) right);
             default:
                 return null;
 
@@ -180,6 +192,30 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         throw new RuntimeError(operator, "Operands must be numbers");
     }
 
+    private boolean checkInteger(Object value) {
+        if (value instanceof Integer)
+            return true;
+        if (!(value instanceof Double)) {
+            return false;
+        }
+        Double doubleValue = (Double) value;
+        if (doubleValue != doubleValue.intValue()) {
+            return false;
+        }
+        return true;
+    }
+
+    private void checkIntegerOperands(Token operator, Object left, Object right) {
+        if (checkInteger(left) && checkInteger(right))
+            return;
+        throw new RuntimeError(operator, "Operands must be integers");
+    }
+
+    private void checkIntegerOperand(Token operator, Object val) {
+        if (checkInteger(val))
+            return;
+        throw new RuntimeError(operator, "Operand must be integer");
+    }
     private void checkNumberOperand(Token operator, Object right) {
         if (right instanceof Double)
             return;
@@ -420,14 +456,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             throw new RuntimeError(expr.rightSqParen, "Only arrays can be accessed through [] notation");
         }
 
-        if (!(index instanceof Double)) {
-            throw new RuntimeError(expr.rightSqParen, "index must be an integer");
+        if (!checkInteger(index)) {
+            throw new RuntimeError(expr.rightSqParen, "array index must be an integer");
         }
-        Double indexValue = (Double) index;
-        if (indexValue != indexValue.intValue()) {
-            throw new RuntimeError(expr.rightSqParen, "index must be an integer");
-        }
-        return ((LoxArray) array).get(expr.rightSqParen, indexValue.intValue());
+        return ((LoxArray) array).get(expr.rightSqParen, (int) ((double) index));
     }
 
     @Override
@@ -439,14 +471,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             throw new RuntimeError(expr.equals, "Only arrays can be accessed through [] notation");
         }
 
-        if (!(index instanceof Double)) {
-            throw new RuntimeError(expr.equals, "index must be an integer");
+        if (!checkInteger(index)) {
+            throw new RuntimeError(expr.equals, "array index must be an integer");
         }
-        Double indexValue = (Double) index;
-        if (indexValue != indexValue.intValue()) {
-            throw new RuntimeError(expr.equals, "index must be an integer");
-        }
-        ((LoxArray) array).set(expr.equals, indexValue.intValue(), value);
+        ((LoxArray) array).set(expr.equals, (int) ((double) index), value);
         return value;
     }
 

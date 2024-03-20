@@ -13,7 +13,7 @@ fun do(){
     c.array = elementThree();
 
     for( var i = 0; i < 6; i=i+1) {
-        print c.array[i]--;
+         c.array[i]+=2;
     }
     for( var i = 0; i < 6; i=i+1) {
         print c.get(i);

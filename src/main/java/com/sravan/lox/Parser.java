@@ -305,7 +305,7 @@ public class Parser {
     }
 
     private Expr unary() {
-        if (match(BANG, MINUS)) {
+        if (match(BANG, MINUS, TILDA)) {
             Token operator = previous();
             Expr right = unary();
             return new Expr.Unary(operator, right);
@@ -401,14 +401,47 @@ public class Parser {
     }
 
     private Expr and() {
-        Expr expr = equality();
+        Expr expr = bitWiseOr();
         while (match(AND)) {
             Token name = previous();
-            Expr right = equality();
+            Expr right = bitWiseOr();
             expr = new Expr.Logical(expr, name, right);
         }
         return expr;
     }
+
+    private Expr bitWiseOr() {
+        Expr expr = bitWiseXOR();
+        while (match(PIPE)) {
+            Token name = previous();
+            Expr right = bitWiseXOR();
+            expr = new Expr.Binary(expr, name, right);
+        }
+        return expr;
+    }
+
+    private Expr bitWiseXOR() {
+        Expr expr = bitWiseAnd();
+        while (match(CARAT)) {
+            Token name = previous();
+            Expr right = bitWiseAnd();
+            expr = new Expr.Binary(expr, name, right);
+        }
+        return expr;
+
+    }
+
+    private Expr bitWiseAnd() {
+        Expr expr = equality();
+        while (match(AMPERSAND)) {
+            Token name = previous();
+            Expr right = equality();
+            expr = new Expr.Binary(expr, name, right);
+        }
+        return expr;
+
+    }
+
 
     private Expr assignment() {
         Expr expr = ternary();

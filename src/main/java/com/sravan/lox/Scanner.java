@@ -95,6 +95,18 @@ public class Scanner {
             case ']':
                 addToken(RIGHT_SQUARE_BRACE);
                 break;
+            case '|':
+                addToken(match('|') ? PIPE_PIPE : PIPE);
+                break;
+            case '&':
+                addToken(match('&') ? AMPERSAND_AMPRESAND : AMPERSAND);
+                break;
+            case '~':
+                addToken(TILDA);
+                break;
+            case '^':
+                addToken(CARAT);
+                break;
             case '!':
                 addToken(match('=') ? BANG_EQUAL : BANG);
                 break;
