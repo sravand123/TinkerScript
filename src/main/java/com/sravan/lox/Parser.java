@@ -490,7 +490,8 @@ public class Parser {
             type = SLASH;
             lexeme = "/";
         } else {
-            throw new ParseError();
+            throw error(token,
+                    "Can't create arithmetic operator token as the token is not compound assignment operator");
         }
         return new Token(type, lexeme, null, token.line);
 
