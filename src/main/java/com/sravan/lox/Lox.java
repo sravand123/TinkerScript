@@ -54,12 +54,7 @@ public class Lox {
     public static void run(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
-        tokens.removeIf(new Predicate<Token>() {
-            @Override
-            public boolean test(Token t) {
-                return t.type == TokenType.COMMENT;
-            }
-        });
+        filterCommentTokens(tokens);
         Parser parser = new Parser(tokens);
         List<Stmt> statements = parser.parse();
         if (hadError)
@@ -92,6 +87,15 @@ public class Lox {
         System.err.println(
                 "[line " + line + "] Error " + where + ": " + message);
         hadError = true;
+    }
+
+    private static void filterCommentTokens(List<Token> tokens) {
+        tokens.removeIf(new Predicate<Token>() {
+            @Override
+            public boolean test(Token t) {
+                return t.type == TokenType.COMMENT;
+            }
+        });
     }
 
 }
