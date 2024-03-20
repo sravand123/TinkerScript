@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.sravan.lox.Expr.Array;
 import com.sravan.lox.Expr.ArrayAccess;
+import com.sravan.lox.Expr.ArraySet;
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Call;
@@ -414,16 +415,36 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Object array = evaluate(expr.array);
         Object index = evaluate(expr.index);
         if (!(array instanceof LoxArray)) {
-            throw new RuntimeError(expr.token, "Only arrays can be accessed through [] notation");
+            throw new RuntimeError(expr.rightSqParen, "Only arrays can be accessed through [] notation");
         }
 
         if (!(index instanceof Double)) {
-            throw new RuntimeError(expr.token, "index must be an integer");
+            throw new RuntimeError(expr.rightSqParen, "index must be an integer");
         }
         Double indexValue = (Double) index;
         if (indexValue != indexValue.intValue()) {
-            throw new RuntimeError(expr.token, "index must be an integer");
+            throw new RuntimeError(expr.rightSqParen, "index must be an integer");
         }
-        return ((LoxArray) array).get(expr.token, indexValue.intValue());
+        return ((LoxArray) array).get(expr.rightSqParen, indexValue.intValue());
+    }
+
+    @Override
+    public Object visitArraySetExpr(ArraySet expr) {
+        Object array = evaluate(expr.array);
+        Object index = evaluate(expr.index);
+        Object value = evaluate(expr.value);
+        if (!(array instanceof LoxArray)) {
+            throw new RuntimeError(expr.equals, "Only arrays can be accessed through [] notation");
+        }
+
+        if (!(index instanceof Double)) {
+            throw new RuntimeError(expr.equals, "index must be an integer");
+        }
+        Double indexValue = (Double) index;
+        if (indexValue != indexValue.intValue()) {
+            throw new RuntimeError(expr.equals, "index must be an integer");
+        }
+        ((LoxArray) array).set(expr.equals, indexValue.intValue(), value);
+        return value;
     }
 }

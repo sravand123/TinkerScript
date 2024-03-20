@@ -12,11 +12,17 @@ class C {
     get(index) {
         return this.array[index];
     }
+    set(index,value) {
+        this.array[index] = value;
+    }
 }
 
 var c  = C();
 c.array = elementThree();
 
+for( var i = 0; i < 6; i=i+1) {
+     c.set(i,i);
+}
 for( var i = 0; i < 6; i=i+1) {
     print c.get(i);
 }

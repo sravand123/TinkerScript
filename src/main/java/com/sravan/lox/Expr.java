@@ -35,6 +35,8 @@ abstract class Expr {
 
         R visitArrayAccessExpr(ArrayAccess expr);
 
+        R visitArraySetExpr(ArraySet expr);
+
     }
 
     static class Binary extends Expr {
@@ -234,18 +236,36 @@ abstract class Expr {
     }
 
     static class ArrayAccess extends Expr {
-        ArrayAccess(Expr array, Expr index, Token token) {
+        ArrayAccess(Expr array, Expr index, Token rightSqParen) {
             this.array = array;
             this.index = index;
-            this.token = token;
+            this.rightSqParen = rightSqParen;
         }
 
         final Expr array;
         final Expr index;
-        final Token token;
+        final Token rightSqParen;
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitArrayAccessExpr(this);
+        }
+    }
+
+    static class ArraySet extends Expr {
+        ArraySet(Expr array, Expr index, Expr value , Token equals) {
+            this.array = array;
+            this.index = index;
+            this.value = value;
+            this.equals = equals;
+        }
+
+        final Expr array;
+        final Expr index;
+        final Expr value;
+        final Token equals;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitArraySetExpr(this);
         }
     }
 

@@ -383,6 +383,9 @@ public class Parser {
                 return new Expr.Assign(((Expr.Variable) expr).name, right);
             } else if (expr instanceof Expr.Get) {
                 return new Expr.Set(((Expr.Get) expr).object, ((Expr.Get) expr).name, right);
+            } else if (expr instanceof Expr.ArrayAccess) {
+                return new Expr.ArraySet(((Expr.ArrayAccess) expr).array, ((Expr.ArrayAccess) expr).index, right,
+                        equals);
             }
             error(equals, "Invalid assignment target");
         }
