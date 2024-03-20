@@ -14,6 +14,7 @@ import com.sravan.lox.Expr.Literal;
 import com.sravan.lox.Expr.Logical;
 import com.sravan.lox.Expr.Set;
 import com.sravan.lox.Expr.Super;
+import com.sravan.lox.Expr.Ternary;
 import com.sravan.lox.Expr.This;
 import com.sravan.lox.Expr.Unary;
 import com.sravan.lox.Expr.Variable;
@@ -297,6 +298,14 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             Lox.error(expr.keyword, "Can't use super in a class with no super class");
         }
         resolveLocal(expr, expr.keyword);
+        return null;
+    }
+
+    @Override
+    public Object visitTernaryExpr(Ternary expr) {
+        resolve(expr.condition);
+        resolve(expr.left);
+        resolve(expr.right);
         return null;
     }
 

@@ -16,6 +16,7 @@ import com.sravan.lox.Expr.Literal;
 import com.sravan.lox.Expr.Logical;
 import com.sravan.lox.Expr.Set;
 import com.sravan.lox.Expr.Super;
+import com.sravan.lox.Expr.Ternary;
 import com.sravan.lox.Expr.This;
 import com.sravan.lox.Expr.Unary;
 import com.sravan.lox.Expr.Variable;
@@ -381,5 +382,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             throw new RuntimeError(expr.method, "Undefined propert '" + expr.method.lexeme + "'.");
         }
         return method.bind(object);
+    }
+
+    @Override
+    public Object visitTernaryExpr(Ternary expr) {
+        if (isTruthy(evaluate(expr.condition))) {
+            return evaluate(expr.left);
+        }
+        return evaluate(expr.right);
     }
 }

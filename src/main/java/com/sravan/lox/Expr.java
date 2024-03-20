@@ -29,6 +29,8 @@ abstract class Expr {
 
         R visitSuperExpr(Super expr);
 
+        R visitTernaryExpr(Ternary expr);
+
     }
 
     static class Binary extends Expr {
@@ -196,6 +198,22 @@ abstract class Expr {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitSuperExpr(this);
+        }
+    }
+
+    static class Ternary extends Expr {
+        Ternary(Expr condition , Expr left, Expr right) {
+            this.condition = condition;
+            this.left = left;
+            this.right = right;
+        }
+
+        final Expr condition;
+        final Expr left;
+        final Expr right;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitTernaryExpr(this);
         }
     }
 

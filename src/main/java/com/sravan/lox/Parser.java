@@ -365,8 +365,9 @@ public class Parser {
         }
         return expr;
     }
+
     private Expr assignment() {
-        Expr expr = or();
+        Expr expr = ternary();
         if (match(EQUAL)) {
             Token equals = previous();
             Expr right = assignment();
@@ -379,6 +380,17 @@ public class Parser {
             error(equals, "Invalid assignment target");
         }
         return expr;
+    }
+
+    private Expr ternary() {
+        Expr condition = or();
+        if (match(CONDITIONAL)) {
+            Expr left = expression();
+            consume(COLON, "Expected :");
+            Expr right = expression();
+            return new Expr.Ternary(condition, left, right);
+        }
+        return condition;
     }
 
     private Token consume(TokenType type, String error) {

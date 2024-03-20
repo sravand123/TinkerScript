@@ -19,5 +19,7 @@ enum TokenType {
     PRINT, RETURN, SUPER, THIS, TRUE, VAR, WHILE,
 
     COMMENT,
+    CONDITIONAL,
+    COLON,
     EOF
 }
