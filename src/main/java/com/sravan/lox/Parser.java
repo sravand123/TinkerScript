@@ -310,9 +310,42 @@ public class Parser {
             Expr right = unary();
             return new Expr.Unary(operator, right);
         }
-        return call();
+        return preFix();
     }
 
+    private Expr preFix() {
+        if (match(DECREMENT, INCREMENT)) {
+            Token operator = previous();
+            Expr expr = postFix();
+            Token token;
+            if (operator.type == INCREMENT) {
+                token = new Token(PLUS, "+", null, operator.line);
+            } else {
+                token = new Token(MINUS, "-", null, operator.line);
+            }
+            Expr right = new Expr.Binary(expr, token, new Expr.Literal(1.0));
+            expr = createAssignmentExpression(expr, token, right);
+            return new Expr.PreFix(operator, expr);
+        }
+        return postFix();
+    }
+
+    private Expr postFix() {
+        Expr expr = call();
+        if (match(DECREMENT, INCREMENT)) {
+            Token operator = previous();
+            Token token;
+            if (operator.type == INCREMENT) {
+                token = new Token(PLUS, "+", null, operator.line);
+            } else {
+                token = new Token(MINUS, "-", null, operator.line);
+            }
+            Expr right = new Expr.Binary(expr, token, new Expr.Literal(1.0));
+            expr = createAssignmentExpression(expr, token, right);
+            expr = new Expr.PostFix(operator, expr);
+        }
+        return expr;
+    }
     private Expr factor() {
         Expr expr = unary();
         while (match(STAR, SLASH)) {
@@ -382,16 +415,7 @@ public class Parser {
         Expr right;
         Token token;
         if (isAssignmentOperator()) {
-            if (isPostFixAssignmentOperatorPresent()) {
-                if (match(INCREMENT)) {
-                    right = new Expr.Binary(expr, new Token(PLUS, "+", 1, previous().line), new Expr.Literal(1.0));
-                } else {
-                    match(DECREMENT);
-                    right = new Expr.Binary(expr, new Token(MINUS, "-", 1, previous().line), new Expr.Literal(1.0));
-                }
-                token = previous();
-
-            } else if (isCompoundAssignmentOperatorPresent()) {
+            if (isCompoundAssignmentOperatorPresent()) {
                 advance();
                 Token arithmeticOperator = createOperatorTokenFromCompoundAssignment(previous());
                 token = previous();
@@ -402,16 +426,21 @@ public class Parser {
                 token = previous();
                 right = assignment();
             }
+            return createAssignmentExpression(expr, token, right);
+        }
+        return expr;
+    }
 
-            if (expr instanceof Expr.Variable) {
-                return new Expr.Assign(((Expr.Variable) expr).name, right);
-            } else if (expr instanceof Expr.Get) {
-                return new Expr.Set(((Expr.Get) expr).object, ((Expr.Get) expr).name, right);
-            } else if (expr instanceof Expr.ArrayAccess) {
-                return new Expr.ArraySet(((Expr.ArrayAccess) expr).array, ((Expr.ArrayAccess) expr).index, right,
-                        token);
-            }
-            error(token, "Invalid assignment target");
+    private Expr createAssignmentExpression(Expr expr, Token token, Expr right) {
+        if (expr instanceof Expr.Variable) {
+            expr = new Expr.Assign(((Expr.Variable) expr).name, right);
+        } else if (expr instanceof Expr.Get) {
+            expr = new Expr.Set(((Expr.Get) expr).object, ((Expr.Get) expr).name, right);
+        } else if (expr instanceof Expr.ArrayAccess) {
+            expr = new Expr.ArraySet(((Expr.ArrayAccess) expr).array, ((Expr.ArrayAccess) expr).index, right,
+                    token);
+        } else {
+            throw error(token, "Invalid assignment target");
         }
         return expr;
     }
@@ -501,11 +530,8 @@ public class Parser {
         return (check(PLUS_ASSIGN, MINUS_ASSIGN, STAR_ASSIGN, SLASH_ASSIGN));
     }
 
-    private boolean isPostFixAssignmentOperatorPresent() {
-        return check(DECREMENT, INCREMENT);
-    }
 
     private boolean isAssignmentOperator() {
-        return isCompoundAssignmentOperatorPresent() || isPostFixAssignmentOperatorPresent() || check(EQUAL);
+        return isCompoundAssignmentOperatorPresent() || check(EQUAL);
     }
 }

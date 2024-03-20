@@ -15,6 +15,10 @@ abstract class Expr {
 
         R visitUnaryExpr(Unary expr);
 
+        R visitPostFixExpr(PostFix expr);
+
+        R visitPreFixExpr(PreFix expr);
+
         R visitCallExpr(Call expr);
 
         R visitVariableExpr(Variable expr);
@@ -106,6 +110,34 @@ abstract class Expr {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitUnaryExpr(this);
+        }
+    }
+
+    static class PostFix extends Expr {
+        PostFix(Token operator, Expr left) {
+            this.operator = operator;
+            this.left = left;
+        }
+
+        final Token operator;
+        final Expr left;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitPostFixExpr(this);
+        }
+    }
+
+    static class PreFix extends Expr {
+        PreFix(Token operator, Expr right) {
+            this.operator = operator;
+            this.right = right;
+        }
+
+        final Token operator;
+        final Expr right;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitPreFixExpr(this);
         }
     }
 

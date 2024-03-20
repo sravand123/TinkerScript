@@ -17,6 +17,8 @@ import com.sravan.lox.Expr.Get;
 import com.sravan.lox.Expr.Grouping;
 import com.sravan.lox.Expr.Literal;
 import com.sravan.lox.Expr.Logical;
+import com.sravan.lox.Expr.PostFix;
+import com.sravan.lox.Expr.PreFix;
 import com.sravan.lox.Expr.Set;
 import com.sravan.lox.Expr.Super;
 import com.sravan.lox.Expr.Ternary;
@@ -445,6 +447,22 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             throw new RuntimeError(expr.equals, "index must be an integer");
         }
         ((LoxArray) array).set(expr.equals, indexValue.intValue(), value);
+        return value;
+    }
+
+    @Override
+    public Object visitPostFixExpr(PostFix expr) {
+        Object value = evaluate(expr.left);
+        if (expr.operator.type == INCREMENT) {
+            return (Double) value - 1;
+        } else {
+            return (Double) value + 1;
+        }
+    }
+
+    @Override
+    public Object visitPreFixExpr(PreFix expr) {
+        Object value = evaluate(expr.right);
         return value;
     }
 }
