@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import com.sravan.lox.Expr.Array;
+import com.sravan.lox.Expr.ArrayAccess;
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Call;
@@ -307,6 +309,21 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         resolve(expr.condition);
         resolve(expr.left);
         resolve(expr.right);
+        return null;
+    }
+
+    @Override
+    public Object visitArrayExpr(Array expr) {
+        for (Expr element : expr.elements) {
+            resolve(element);
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitArrayAccessExpr(ArrayAccess expr) {
+        resolve(expr.array);
+        resolve(expr.index);
         return null;
     }
 

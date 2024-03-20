@@ -232,6 +232,9 @@ public class Parser {
             consume(RIGHT_PAREN, "expected ) after expression.");
             return new Expr.Grouping(expression);
         }
+        if (match(LEFT_SQARE_BRACE)) {
+            return array();
+        }
         if (match(IDENTIFIER))
             return new Expr.Variable(previous());
 
@@ -254,6 +257,10 @@ public class Parser {
             else if (match(DOT)) {
                 Token name = consume(IDENTIFIER, "Expected property name after '.'");
                 expr = new Expr.Get(expr, name);
+            } else if (match(LEFT_SQARE_BRACE)) {
+                Expr indexExpr = expression();
+                Token token = consume(RIGHT_SQUARE_BRACE, "Expected ]");
+                expr = new Expr.ArrayAccess(expr, indexExpr, token);
             }
             else
                 break;
@@ -391,6 +398,17 @@ public class Parser {
             return new Expr.Ternary(condition, left, right);
         }
         return condition;
+    }
+
+    private Expr array() {
+        List<Expr> elements = new ArrayList<>();
+        if (!check(RIGHT_SQUARE_BRACE)) {
+            do {
+                elements.add(expression());
+            } while (match(COMMA));
+        }
+        consume(RIGHT_SQUARE_BRACE, "Expected ]");
+        return new Expr.Array(elements);
     }
 
     private Token consume(TokenType type, String error) {

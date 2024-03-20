@@ -31,6 +31,10 @@ abstract class Expr {
 
         R visitTernaryExpr(Ternary expr);
 
+        R visitArrayExpr(Array expr);
+
+        R visitArrayAccessExpr(ArrayAccess expr);
+
     }
 
     static class Binary extends Expr {
@@ -214,6 +218,34 @@ abstract class Expr {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitTernaryExpr(this);
+        }
+    }
+
+    static class Array extends Expr {
+        Array(List<Expr> elements) {
+            this.elements = elements;
+        }
+
+        final List<Expr> elements;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitArrayExpr(this);
+        }
+    }
+
+    static class ArrayAccess extends Expr {
+        ArrayAccess(Expr array, Expr index, Token token) {
+            this.array = array;
+            this.index = index;
+            this.token = token;
+        }
+
+        final Expr array;
+        final Expr index;
+        final Token token;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitArrayAccessExpr(this);
         }
     }
 

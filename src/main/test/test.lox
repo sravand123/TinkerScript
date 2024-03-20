@@ -1,12 +1,23 @@
-class Person {
-  sayName() {
-     this.name = 0 ? "Kat":"tame";
-     print this.name;
-  }
+var a;
+
+
+
+fun elementThree() {
+    var b = [12,2,3,1,3,1];
+    return b;
 }
 
-var jane = Person();
-jane.name = "Jane";
 
-var method = jane.sayName;
-method(); // ?
+class C {
+    get(index) {
+        return this.array[index];
+    }
+}
+
+var c  = C();
+c.array = elementThree();
+
+for( var i = 0; i < 6; i=i+1) {
+    print c.get(i);
+}
+

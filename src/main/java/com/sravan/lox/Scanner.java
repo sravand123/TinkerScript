@@ -89,6 +89,12 @@ public class Scanner {
             case ':':
                 addToken(COLON);
                 break;
+            case '[':
+                addToken(LEFT_SQARE_BRACE);
+                break;
+            case ']':
+                addToken(RIGHT_SQUARE_BRACE);
+                break;
             case '!':
                 addToken(match('=') ? BANG_EQUAL : BANG);
                 break;

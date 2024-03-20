@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sravan.lox.Expr.Array;
+import com.sravan.lox.Expr.ArrayAccess;
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Call;
@@ -396,5 +398,32 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             return evaluate(expr.left);
         }
         return evaluate(expr.right);
+    }
+
+    @Override
+    public Object visitArrayExpr(Array expr) {
+        List<Object> elements = new ArrayList<>();
+        for (Expr element : expr.elements) {
+            elements.add(evaluate(element));
+        }
+        return new LoxArray(elements);
+    }
+
+    @Override
+    public Object visitArrayAccessExpr(ArrayAccess expr) {
+        Object array = evaluate(expr.array);
+        Object index = evaluate(expr.index);
+        if (!(array instanceof LoxArray)) {
+            throw new RuntimeError(expr.token, "Only arrays can be accessed through [] notation");
+        }
+
+        if (!(index instanceof Double)) {
+            throw new RuntimeError(expr.token, "index must be an integer");
+        }
+        Double indexValue = (Double) index;
+        if (indexValue != indexValue.intValue()) {
+            throw new RuntimeError(expr.token, "index must be an integer");
+        }
+        return ((LoxArray) array).get(expr.token, indexValue.intValue());
     }
 }
