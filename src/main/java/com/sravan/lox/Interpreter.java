@@ -316,7 +316,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitLogicalExpr(Logical expr) {
         Object value = evaluate(expr.left);
-        if (expr.operator.type == OR) {
+        if (expr.operator.type == OR || expr.operator.type == PIPE_PIPE) {
             if (isTruthy(value))
                 return true;
         } else {
@@ -481,7 +481,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitPostFixExpr(PostFix expr) {
         Object value = evaluate(expr.left);
-        if (expr.operator.type == INCREMENT) {
+        if (expr.operator.type == PLUS_PLUS) {
             return (Double) value - 1;
         } else {
             return (Double) value + 1;

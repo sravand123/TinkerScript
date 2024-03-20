@@ -72,16 +72,16 @@ public class Scanner {
                 addToken(DOT);
                 break;
             case '-':
-                addToken(match('-') ? DECREMENT : match('=') ? MINUS_ASSIGN : MINUS);
+                addToken(match('-') ? MINUS_MINUS : match('=') ? MINUS_EQUAL : MINUS);
                 break;
             case '+':
-                addToken(match('+') ? INCREMENT : match('=') ? PLUS_ASSIGN : PLUS);
+                addToken(match('+') ? PLUS_PLUS : match('=') ? PLUS_EQUAL : PLUS);
                 break;
             case ';':
                 addToken(SEMICOLON);
                 break;
             case '*':
-                addToken(match('=') ? STAR_ASSIGN : STAR);
+                addToken(match('=') ? STAR_EQUAL : STAR);
                 break;
             case '?':
                 addToken(CONDITIONAL);
@@ -96,16 +96,34 @@ public class Scanner {
                 addToken(RIGHT_SQUARE_BRACE);
                 break;
             case '|':
-                addToken(match('|') ? PIPE_PIPE : PIPE);
+                if (match('|')) {
+                    if (match('='))
+                        addToken(PIPE_PIPE_EQUAL);
+                    else
+                        addToken(PIPE_PIPE);
+                } else if (match('=')) {
+                    addToken(PIPE_EQUAL);
+                } else {
+                    addToken(PIPE);
+                }
                 break;
             case '&':
-                addToken(match('&') ? AMPERSAND_AMPRESAND : AMPERSAND);
+                if (match('&')) {
+                    if (match('='))
+                        addToken(AMPERSAND_AMPRESAND_EQUAL);
+                    else
+                        addToken(AMPERSAND_AMPRESAND);
+                } else if (match('=')) {
+                    addToken(AMPERSAND_EQUAL);
+                } else {
+                    addToken(AMPERSAND);
+                }
                 break;
             case '~':
                 addToken(TILDA);
                 break;
             case '^':
-                addToken(CARAT);
+                addToken(match('=') ? CARAT_EQUAL : CARAT);
                 break;
             case '!':
                 addToken(match('=') ? BANG_EQUAL : BANG);
@@ -150,7 +168,7 @@ public class Scanner {
                         addToken(COMMENT, source.substring(start + 2, current - 2));
                     }
                 } else
-                    addToken(match('=') ? SLASH_ASSIGN : SLASH);
+                    addToken(match('=') ? SLASH_EQUAL : SLASH);
                 break;
             case ' ':
             case '\r':

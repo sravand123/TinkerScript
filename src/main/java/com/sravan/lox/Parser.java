@@ -314,11 +314,11 @@ public class Parser {
     }
 
     private Expr preFix() {
-        if (match(DECREMENT, INCREMENT)) {
+        if (match(MINUS_MINUS, PLUS_PLUS)) {
             Token operator = previous();
             Expr expr = postFix();
             Token token;
-            if (operator.type == INCREMENT) {
+            if (operator.type == PLUS_PLUS) {
                 token = new Token(PLUS, "+", null, operator.line);
             } else {
                 token = new Token(MINUS, "-", null, operator.line);
@@ -332,10 +332,10 @@ public class Parser {
 
     private Expr postFix() {
         Expr expr = call();
-        if (match(DECREMENT, INCREMENT)) {
+        if (match(MINUS_MINUS, PLUS_PLUS)) {
             Token operator = previous();
             Token token;
-            if (operator.type == INCREMENT) {
+            if (operator.type == PLUS_PLUS) {
                 token = new Token(PLUS, "+", null, operator.line);
             } else {
                 token = new Token(MINUS, "-", null, operator.line);
@@ -346,6 +346,7 @@ public class Parser {
         }
         return expr;
     }
+
     private Expr factor() {
         Expr expr = unary();
         while (match(STAR, SLASH)) {
@@ -392,7 +393,7 @@ public class Parser {
 
     private Expr or() {
         Expr expr = and();
-        while (match(OR)) {
+        while (match(OR, PIPE_PIPE)) {
             Token name = previous();
             Expr right = and();
             expr = new Expr.Logical(expr, name, right);
@@ -402,7 +403,7 @@ public class Parser {
 
     private Expr and() {
         Expr expr = bitWiseOr();
-        while (match(AND)) {
+        while (match(AND, AMPERSAND_AMPRESAND)) {
             Token name = previous();
             Expr right = bitWiseOr();
             expr = new Expr.Logical(expr, name, right);
@@ -442,7 +443,6 @@ public class Parser {
 
     }
 
-
     private Expr assignment() {
         Expr expr = ternary();
         Expr right;
@@ -450,10 +450,14 @@ public class Parser {
         if (isAssignmentOperator()) {
             if (isCompoundAssignmentOperatorPresent()) {
                 advance();
-                Token arithmeticOperator = createOperatorTokenFromCompoundAssignment(previous());
+                Token operator = createOperatorTokenFromCompoundAssignment(previous());
                 token = previous();
                 right = assignment();
-                right = new Expr.Binary(expr, arithmeticOperator, right);
+                if (token.type == PIPE_PIPE_EQUAL || token.type == AMPERSAND_AMPRESAND_EQUAL) {
+                    right = new Expr.Logical(expr, operator, right);
+                } else {
+                    right = new Expr.Binary(expr, operator, right);
+                }
             } else {
                 advance();
                 token = previous();
@@ -539,18 +543,30 @@ public class Parser {
     private Token createOperatorTokenFromCompoundAssignment(Token token) {
         TokenType type;
         String lexeme;
-        if (token.type == PLUS_ASSIGN) {
+        if (token.type == PLUS_EQUAL) {
             type = PLUS;
             lexeme = "+";
-        } else if (token.type == STAR_ASSIGN) {
+        } else if (token.type == STAR_EQUAL) {
             type = STAR;
             lexeme = "*";
-        } else if (token.type == MINUS_ASSIGN) {
+        } else if (token.type == MINUS_EQUAL) {
             type = MINUS;
             lexeme = "-";
-        } else if (token.type == SLASH_ASSIGN) {
+        } else if (token.type == SLASH_EQUAL) {
             type = SLASH;
             lexeme = "/";
+        } else if (token.type == PIPE_PIPE_EQUAL) {
+            type = PIPE_PIPE;
+            lexeme = "||";
+        } else if (token.type == AMPERSAND_AMPRESAND_EQUAL) {
+            type = AMPERSAND_AMPRESAND;
+            lexeme = "&&";
+        } else if (token.type == AMPERSAND_EQUAL) {
+            type = AMPERSAND;
+            lexeme = "&";
+        } else if (token.type == PIPE_EQUAL) {
+            type = PIPE;
+            lexeme = "|";
         } else {
             throw error(token,
                     "Can't create arithmetic operator token as the token is not compound assignment operator");
@@ -560,9 +576,9 @@ public class Parser {
     }
 
     private boolean isCompoundAssignmentOperatorPresent() {
-        return (check(PLUS_ASSIGN, MINUS_ASSIGN, STAR_ASSIGN, SLASH_ASSIGN));
+        return (check(PLUS_EQUAL, MINUS_EQUAL, STAR_EQUAL, SLASH_EQUAL, PIPE_PIPE_EQUAL, AMPERSAND_AMPRESAND_EQUAL,
+                PIPE_EQUAL, AMPERSAND_EQUAL));
     }
-
 
     private boolean isAssignmentOperator() {
         return isCompoundAssignmentOperatorPresent() || check(EQUAL);
