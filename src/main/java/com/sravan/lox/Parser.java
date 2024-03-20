@@ -261,8 +261,7 @@ public class Parser {
                 Expr indexExpr = expression();
                 Token token = consume(RIGHT_SQUARE_BRACE, "Expected ]");
                 expr = new Expr.ArrayAccess(expr, indexExpr, token);
-            }
-            else
+            } else
                 break;
         }
         return expr;
@@ -300,6 +299,7 @@ public class Parser {
         Token paren = consume(RIGHT_PAREN, "Expected )");
         return new Expr.Call(expr, paren, arguments);
     }
+
     private Expr unary() {
         if (match(BANG, MINUS)) {
             Token operator = previous();
@@ -375,19 +375,26 @@ public class Parser {
 
     private Expr assignment() {
         Expr expr = ternary();
-        if (match(EQUAL)) {
-            Token equals = previous();
-            Expr right = assignment();
-
+        if (check(EQUAL) || check(DECREMENT) || check(INCREMENT)) {
+            Expr right;
+            if (match(EQUAL)) {
+                right = assignment();
+            } else if (match(INCREMENT)) {
+                right = new Expr.Binary(expr, new Token(PLUS, "+", 1, previous().line), new Expr.Literal(1.0));
+            } else {
+                match(DECREMENT);
+                right = new Expr.Binary(expr, new Token(MINUS, "-", 1, previous().line), new Expr.Literal(1.0));
+            }
+            Token token = previous();
             if (expr instanceof Expr.Variable) {
                 return new Expr.Assign(((Expr.Variable) expr).name, right);
             } else if (expr instanceof Expr.Get) {
                 return new Expr.Set(((Expr.Get) expr).object, ((Expr.Get) expr).name, right);
             } else if (expr instanceof Expr.ArrayAccess) {
                 return new Expr.ArraySet(((Expr.ArrayAccess) expr).array, ((Expr.ArrayAccess) expr).index, right,
-                        equals);
+                        token);
             }
-            error(equals, "Invalid assignment target");
+            error(token, "Invalid assignment target");
         }
         return expr;
     }

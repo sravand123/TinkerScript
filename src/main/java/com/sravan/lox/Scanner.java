@@ -72,10 +72,10 @@ public class Scanner {
                 addToken(DOT);
                 break;
             case '-':
-                addToken(MINUS);
+                addToken(match('-') ? DECREMENT : MINUS);
                 break;
             case '+':
-                addToken(PLUS);
+                addToken(match('+') ? INCREMENT : PLUS);
                 break;
             case ';':
                 addToken(SEMICOLON);
@@ -232,7 +232,7 @@ public class Scanner {
     }
 
     private boolean isAlpha(char c) {
-        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '-');
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_');
     }
 
     private boolean isAlphaNumeric(char c) {
