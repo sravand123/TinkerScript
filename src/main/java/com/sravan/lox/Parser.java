@@ -206,10 +206,14 @@ public class Parser {
         return tokens.get(current);
     }
 
-    private boolean check(TokenType type) {
-        if (isAtEnd())
-            return false;
-        return peek().type == type;
+    private boolean check(TokenType... type) {
+        for (TokenType tokenType : type) {
+            if (isAtEnd())
+                return false;
+            if (peek().type == tokenType)
+                return true;
+        }
+        return false;
     }
 
     private boolean isAtEnd() {
@@ -375,17 +379,30 @@ public class Parser {
 
     private Expr assignment() {
         Expr expr = ternary();
-        if (check(EQUAL) || check(DECREMENT) || check(INCREMENT)) {
-            Expr right;
-            if (match(EQUAL)) {
+        Expr right;
+        Token token;
+        if (isAssignmentOperator()) {
+            if (isPostFixAssignmentOperatorPresent()) {
+                if (match(INCREMENT)) {
+                    right = new Expr.Binary(expr, new Token(PLUS, "+", 1, previous().line), new Expr.Literal(1.0));
+                } else {
+                    match(DECREMENT);
+                    right = new Expr.Binary(expr, new Token(MINUS, "-", 1, previous().line), new Expr.Literal(1.0));
+                }
+                token = previous();
+
+            } else if (isCompoundAssignmentOperatorPresent()) {
+                advance();
+                Token arithmeticOperator = createOperatorTokenFromCompoundAssignment(previous());
+                token = previous();
                 right = assignment();
-            } else if (match(INCREMENT)) {
-                right = new Expr.Binary(expr, new Token(PLUS, "+", 1, previous().line), new Expr.Literal(1.0));
+                right = new Expr.Binary(expr, arithmeticOperator, right);
             } else {
-                match(DECREMENT);
-                right = new Expr.Binary(expr, new Token(MINUS, "-", 1, previous().line), new Expr.Literal(1.0));
+                advance();
+                token = previous();
+                right = assignment();
             }
-            Token token = previous();
+
             if (expr instanceof Expr.Variable) {
                 return new Expr.Assign(((Expr.Variable) expr).name, right);
             } else if (expr instanceof Expr.Get) {
@@ -455,5 +472,39 @@ public class Parser {
             }
             advance();
         }
+    }
+
+    private Token createOperatorTokenFromCompoundAssignment(Token token) {
+        TokenType type;
+        String lexeme;
+        if (token.type == PLUS_ASSIGN) {
+            type = PLUS;
+            lexeme = "+";
+        } else if (token.type == STAR_ASSIGN) {
+            type = STAR;
+            lexeme = "*";
+        } else if (token.type == MINUS_ASSIGN) {
+            type = MINUS;
+            lexeme = "-";
+        } else if (token.type == SLASH_ASSIGN) {
+            type = SLASH;
+            lexeme = "/";
+        } else {
+            throw new ParseError();
+        }
+        return new Token(type, lexeme, null, token.line);
+
+    }
+
+    private boolean isCompoundAssignmentOperatorPresent() {
+        return (check(PLUS_ASSIGN, MINUS_ASSIGN, STAR_ASSIGN, SLASH_ASSIGN));
+    }
+
+    private boolean isPostFixAssignmentOperatorPresent() {
+        return check(DECREMENT, INCREMENT);
+    }
+
+    private boolean isAssignmentOperator() {
+        return isCompoundAssignmentOperatorPresent() || isPostFixAssignmentOperatorPresent() || check(EQUAL);
     }
 }

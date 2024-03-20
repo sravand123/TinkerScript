@@ -72,16 +72,16 @@ public class Scanner {
                 addToken(DOT);
                 break;
             case '-':
-                addToken(match('-') ? DECREMENT : MINUS);
+                addToken(match('-') ? DECREMENT : match('=') ? MINUS_ASSIGN : MINUS);
                 break;
             case '+':
-                addToken(match('+') ? INCREMENT : PLUS);
+                addToken(match('+') ? INCREMENT : match('=') ? PLUS_ASSIGN : PLUS);
                 break;
             case ';':
                 addToken(SEMICOLON);
                 break;
             case '*':
-                addToken(STAR);
+                addToken(match('=') ? STAR_ASSIGN : STAR);
                 break;
             case '?':
                 addToken(CONDITIONAL);
@@ -138,7 +138,7 @@ public class Scanner {
                         addToken(COMMENT, source.substring(start + 2, current - 2));
                     }
                 } else
-                    addToken(SLASH);
+                    addToken(match('=') ? SLASH_ASSIGN : SLASH);
                 break;
             case ' ':
             case '\r':
