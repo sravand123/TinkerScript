@@ -1,6 +1,7 @@
 class Person {
   sayName() {
-    print this.name;
+     this.name = 0 ? "Kat":"tame";
+     print this.name;
   }
 }
 

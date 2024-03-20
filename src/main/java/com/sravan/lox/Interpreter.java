@@ -149,6 +149,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private boolean isTruthy(Object value) {
         if (value == null)
             return false;
+        if (value instanceof Double) {
+            return (Double) value != 0;
+        }
+        if (value instanceof String) {
+            return !((String) value).equals("");
+        }
         if (value instanceof Boolean)
             return (boolean) value;
         return true;
