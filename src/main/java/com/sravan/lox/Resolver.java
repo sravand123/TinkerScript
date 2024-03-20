@@ -259,7 +259,8 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         for (Stmt.Function function : stmt.methods) {
             if (function.name.lexeme.equals("init"))
                 resolveFunction(function, FunctionType.INITIALIZER);
-            resolveFunction(function, FunctionType.METHOD);
+            else
+                resolveFunction(function, FunctionType.METHOD);
         }
         endScope();
         if (stmt.superClass != null)

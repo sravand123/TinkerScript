@@ -375,7 +375,7 @@ public class Parser {
             if (expr instanceof Expr.Variable) {
                 return new Expr.Assign(((Expr.Variable) expr).name, right);
             } else if (expr instanceof Expr.Get) {
-                return new Expr.Set(((Expr.Get) expr).object, equals, right);
+                return new Expr.Set(((Expr.Get) expr).object, ((Expr.Get) expr).name, right);
             }
             error(equals, "Invalid assignment target");
         }
