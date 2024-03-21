@@ -31,10 +31,10 @@ public class Parser {
 
     private Stmt declaration() {
         try {
-            if (match(VAR))
+            if (checkVariableDeclaration()) {
+                match(VAR);
                 return variableDeclaration();
-            if (check(IDENTIFIER) && checkNext(COLON_EQUAL))
-                return variableDeclaration();
+            }
             if (match(FUN))
                 return function("function");
             if (match(CLASS))
@@ -107,7 +107,8 @@ public class Parser {
         Stmt initializer;
         if (match(SEMICOLON)) {
             initializer = null;
-        } else if (match(VAR)) {
+        } else if (checkVariableDeclaration()) {
+            match(VAR);
             initializer = variableDeclaration();
         } else {
             initializer = expressionStatement();
@@ -530,11 +531,12 @@ public class Parser {
         while (!isAtEnd()) {
             if (previous().type == SEMICOLON)
                 return;
+            if (checkVariableDeclaration())
+                return;
             switch (peek().type) {
                 case CLASS:
                 case FUN:
                 case FOR:
-                case VAR:
                 case IF:
                 case WHILE:
                 case PRINT:
@@ -583,11 +585,27 @@ public class Parser {
 
     }
 
+    /*
+     * Check if the statement is a variable declaration statement. It can be either
+     * long declaration var a = 10; or short declaration a := 10;
+     */
+    private boolean checkVariableDeclaration() {
+        return check(VAR) || (check(IDENTIFIER) && checkNext(COLON_EQUAL));
+    }
+
+    /*
+     * Check if the current token is a compound assignment operator += , -=, *=, /=
+     * , ||=, &&=, |=, &=, ^=
+     */
     private boolean isCompoundAssignmentOperatorPresent() {
         return (check(PLUS_EQUAL, MINUS_EQUAL, STAR_EQUAL, SLASH_EQUAL, PIPE_PIPE_EQUAL, AMPERSAND_AMPRESAND_EQUAL,
                 PIPE_EQUAL, AMPERSAND_EQUAL));
     }
 
+    /*
+     * Check if the current token is an assignment operator = or compound assignment
+     * operator
+     */
     private boolean isAssignmentOperator() {
         return isCompoundAssignmentOperatorPresent() || check(EQUAL);
     }

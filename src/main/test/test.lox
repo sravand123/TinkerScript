@@ -12,10 +12,10 @@ fun do(){
      c  := C();
     c.array = elementThree();
 
-    for( var i = 0; i < 6; i=i+1) {
+    for(  i := 0; i < 6; i++) {
          c.array[i]-=2;
     }
-    for( var i = 0; i < 6; i=i+1) {
+    for( i := 0; i < 6; i++) {
         print c.get(i);
     }
 }
