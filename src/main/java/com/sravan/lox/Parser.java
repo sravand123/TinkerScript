@@ -245,6 +245,9 @@ public class Parser {
             consume(RIGHT_PAREN, "expected ) after expression.");
             return new Expr.Grouping(expression);
         }
+        if (match(LEFT_BRACE)) {
+            return objectNotation();
+        }
         if (match(LEFT_SQARE_BRACE)) {
             return array();
         }
@@ -260,6 +263,24 @@ public class Parser {
 
         throw error(peek(), "expected expression.");
 
+    }
+
+    private Expr objectNotation() {
+        List<Token> keys = new ArrayList<>();
+        List<Expr> values = new ArrayList<>();
+        if (!check(RIGHT_BRACE)) {
+            do {
+                if (match(IDENTIFIER)) {
+                    keys.add(previous());
+                } else {
+                    throw error(peek(), "Expected key");
+                }
+                consume(COLON, "Expected :");
+                values.add(expression());
+            } while (match(COMMA));
+        }
+        consume(RIGHT_BRACE, "Expected }");
+        return new Expr.ObjectLiteral(keys, values);
     }
 
     private Expr call() {

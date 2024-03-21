@@ -30,7 +30,8 @@ public class GenerateAst {
                 "Ternary : Expr condition , Expr left, Expr right",
                 "Array : List<Expr> elements",
                 "ArrayAccess : Expr array, Expr index, Token rightSqParen",
-                "ArraySet : Expr array, Expr index, Expr value , Token equals"));
+                "ArraySet : Expr array, Expr index, Expr value , Token equals",
+                "ObjectLiteral : List<Token> keys, List<Expr> values"));
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                 "Print : Expr expression",
@@ -57,8 +58,8 @@ public class GenerateAst {
         defineVisitor(writer, baseName, types);
         writer.println();
         for (String type : types) {
-            String className = type.split(": ")[0].trim();
-            String fieldList = type.split(": ")[1].trim();
+            String className = type.split(":")[0].trim();
+            String fieldList = type.split(":")[1].trim();
             defineType(writer, baseName, className, fieldList);
             writer.println();
         }

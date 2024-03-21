@@ -33,6 +33,7 @@ public class Environment {
     void assignAt(Token name, Object value, int distance) {
         ancestor(distance).assign(name, value);
     }
+
     Object get(Token name) {
         if (values.containsKey(name.lexeme)) {
             return values.get(name.lexeme);
@@ -40,6 +41,15 @@ public class Environment {
         if (enclosing != null)
             return enclosing.get(name);
         throw new RuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
+    }
+
+    Object get(String name) {
+        if (values.containsKey(name)) {
+            return values.get(name);
+        }
+        if (enclosing != null)
+            return enclosing.get(name);
+        return null;
     }
 
     void assign(Token name, Object value) {

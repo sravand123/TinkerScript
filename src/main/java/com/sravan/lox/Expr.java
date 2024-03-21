@@ -41,6 +41,8 @@ abstract class Expr {
 
         R visitArraySetExpr(ArraySet expr);
 
+        R visitObjectLiteralExpr(ObjectLiteral expr);
+
     }
 
     static class Binary extends Expr {
@@ -298,6 +300,20 @@ abstract class Expr {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitArraySetExpr(this);
+        }
+    }
+
+    static class ObjectLiteral extends Expr {
+        ObjectLiteral(List<Token> keys, List<Expr> values) {
+            this.keys = keys;
+            this.values = values;
+        }
+
+        final List<Token> keys;
+        final List<Expr> values;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitObjectLiteralExpr(this);
         }
     }
 

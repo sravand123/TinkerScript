@@ -11,6 +11,7 @@ import com.sravan.lox.Expr.ArraySet;
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Call;
+import com.sravan.lox.Expr.ObjectLiteral;
 import com.sravan.lox.Expr.Get;
 import com.sravan.lox.Expr.Grouping;
 import com.sravan.lox.Expr.Literal;
@@ -243,6 +244,9 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitClassStmt(Class stmt) {
+        if (stmt.name.lexeme == "Object") {
+            Lox.error(stmt.name, "Can't declare a class with name 'Object'");
+        }
         ClassType enclosingClass = currentClass;
         currentClass = ClassType.CLASS;
         if (stmt.superClass != null)
@@ -251,7 +255,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         define(stmt.name);
         if (stmt.superClass != null) {
             if (stmt.name.lexeme.equals(stmt.superClass.name.lexeme)) {
-                Lox.error(stmt.superClass.name, "a calss can't inherit from itself");
+                Lox.error(stmt.superClass.name, "a class can't inherit from itself");
             }
             resolve(stmt.superClass);
         }
@@ -347,6 +351,14 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitPreFixExpr(PreFix expr) {
         resolve(expr.right);
+        return null;
+    }
+
+    @Override
+    public Object visitObjectLiteralExpr(ObjectLiteral expr) {
+        for (Expr value : expr.values) {
+            resolve(value);
+        }
         return null;
     }
 

@@ -13,6 +13,7 @@ import com.sravan.lox.Expr.ArraySet;
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Call;
+import com.sravan.lox.Expr.ObjectLiteral;
 import com.sravan.lox.Expr.Get;
 import com.sravan.lox.Expr.Grouping;
 import com.sravan.lox.Expr.Literal;
@@ -58,6 +59,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             }
 
         });
+        // define a base class Object which is superclass of all classes
+        LoxClass objectClass = new LoxClass("Object", new HashMap<>(), null);
+        globals.define("Object", objectClass);
     }
 
     void resolve(Expr expression, Integer depth) {
@@ -375,6 +379,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             if (!(superClass instanceof LoxClass)) {
                 throw new RuntimeError(stmt.superClass.name, "Superclass must be a class");
             }
+        } else {
+            superClass = globals.get("Object");
         }
         environment.define(stmt.name.lexeme, null);
         if (stmt.superClass != null) {
@@ -492,5 +498,21 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Object visitPreFixExpr(PreFix expr) {
         Object value = evaluate(expr.right);
         return value;
+    }
+
+    @Override
+    public Object visitObjectLiteralExpr(ObjectLiteral expr) {
+        List<Token> keys = expr.keys;
+        List<Expr> values = expr.values;
+        List<Object> evaluatedValues = new ArrayList<>();
+        for (Expr value : values) {
+            evaluatedValues.add(evaluate(value));
+        }
+        LoxClass klass = (LoxClass) globals.get("Object");
+        LoxInstance instance = new LoxInstance(klass);
+        for (int i = 0; i < keys.size(); i++) {
+            instance.set(keys.get(i), evaluatedValues.get(i));
+        }
+        return instance;
     }
 }
