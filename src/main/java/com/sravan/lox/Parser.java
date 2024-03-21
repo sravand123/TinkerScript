@@ -33,6 +33,8 @@ public class Parser {
         try {
             if (match(VAR))
                 return variableDeclaration();
+            if (check(IDENTIFIER) && checkNext(COLON_EQUAL))
+                return variableDeclaration();
             if (match(FUN))
                 return function("function");
             if (match(CLASS))
@@ -63,7 +65,7 @@ public class Parser {
     private Stmt variableDeclaration() {
         Token name = consume(IDENTIFIER, "Expected Identifier");
         Expr initializer = null;
-        if (match(EQUAL)) {
+        if (match(EQUAL) || match(COLON_EQUAL)) {
             initializer = expression();
         }
         consume(SEMICOLON, "Expected ;");
@@ -214,6 +216,12 @@ public class Parser {
                 return true;
         }
         return false;
+    }
+
+    private boolean checkNext(TokenType type) {
+        if (isAtEnd() || current + 1 >= tokens.size())
+            return false;
+        return tokens.get(current + 1).type == type;
     }
 
     private boolean isAtEnd() {

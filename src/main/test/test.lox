@@ -3,13 +3,13 @@ var a;
 
 
 fun elementThree() {
-    var b = [1,2,3,4,5,6];
+     b := [1,2,3,4,5,6];
     return b;
 }
 
 
 fun do(){
-    var c  = C();
+     c  := C();
     c.array = elementThree();
 
     for( var i = 0; i < 6; i=i+1) {

@@ -87,7 +87,7 @@ public class Scanner {
                 addToken(CONDITIONAL);
                 break;
             case ':':
-                addToken(COLON);
+                addToken(match('=') ? COLON_EQUAL : COLON);
                 break;
             case '[':
                 addToken(LEFT_SQARE_BRACE);
