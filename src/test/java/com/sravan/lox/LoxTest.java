@@ -46,11 +46,11 @@ public class LoxTest {
 
     }
 
-    // object spread operator
-    // @Test
-    // public void objectSpreadOperator() throws IOException {
-    // Lox.runFile("src/test/java/com/sravan/lox/ObjectSpread.Lox");
-    // assertEquals("1234", systemOutRule.getLog());
-    // }
+    // class
+    @Test
+    public void classTest() throws IOException {
+        Lox.runFile("src/test/java/com/sravan/lox/Class.Lox");
+        assertEquals("Hello, my name is Alice and I am 25 years old.", systemOutRule.getLog());
+    }
 
 }

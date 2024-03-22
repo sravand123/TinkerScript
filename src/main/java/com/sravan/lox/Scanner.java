@@ -73,6 +73,8 @@ public class Scanner {
                     advance();
                     advance();
                     addToken(SPREAD);
+                } else {
+                    addToken(DOT);
                 }
                 break;
             case '-':
