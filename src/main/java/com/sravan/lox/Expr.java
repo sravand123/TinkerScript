@@ -43,6 +43,8 @@ abstract class Expr {
 
         R visitObjectLiteralExpr(ObjectLiteral expr);
 
+        R visitSpreadExpr(Spread expr);
+
     }
 
     static class Binary extends Expr {
@@ -314,6 +316,20 @@ abstract class Expr {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitObjectLiteralExpr(this);
+        }
+    }
+
+    static class Spread extends Expr {
+        Spread(Token operator, Expr right) {
+            this.operator = operator;
+            this.right = right;
+        }
+
+        final Token operator;
+        final Expr right;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitSpreadExpr(this);
         }
     }
 

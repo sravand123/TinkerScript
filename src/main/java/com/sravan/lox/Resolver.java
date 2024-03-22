@@ -19,6 +19,7 @@ import com.sravan.lox.Expr.Logical;
 import com.sravan.lox.Expr.PostFix;
 import com.sravan.lox.Expr.PreFix;
 import com.sravan.lox.Expr.Set;
+import com.sravan.lox.Expr.Spread;
 import com.sravan.lox.Expr.Super;
 import com.sravan.lox.Expr.Ternary;
 import com.sravan.lox.Expr.This;
@@ -359,6 +360,12 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         for (Expr value : expr.values) {
             resolve(value);
         }
+        return null;
+    }
+
+    @Override
+    public Object visitSpreadExpr(Spread expr) {
+        resolve(expr.right);
         return null;
     }
 

@@ -527,11 +527,23 @@ public class Parser {
         List<Expr> elements = new ArrayList<>();
         if (!check(RIGHT_SQUARE_BRACE)) {
             do {
-                elements.add(expression());
+                elements.add(arrayElement());
             } while (match(COMMA));
         }
         consume(RIGHT_SQUARE_BRACE, "Expected ]");
         return new Expr.Array(elements);
+    }
+
+    private Expr arrayElement() {
+        // elements can be spread or expression
+        if (match(SPREAD)) {
+            Token spread = previous();
+            Expr expr = expression();
+            return new Expr.Spread(spread, expr);
+        } else {
+            return expression();
+        }
+
     }
 
     private Token consume(TokenType type, String error) {

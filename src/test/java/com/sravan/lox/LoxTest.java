@@ -38,4 +38,19 @@ public class LoxTest {
         assertEquals("4 16", systemOutRule.getLog());
     }
 
+    // spread operator
+    @Test
+    public void spreadOperator() throws IOException {
+        Lox.runFile("src/test/java/com/sravan/lox/ArraySpread.Lox");
+        assertEquals("123456", systemOutRule.getLog());
+
+    }
+
+    // object spread operator
+    // @Test
+    // public void objectSpreadOperator() throws IOException {
+    // Lox.runFile("src/test/java/com/sravan/lox/ObjectSpread.Lox");
+    // assertEquals("1234", systemOutRule.getLog());
+    // }
+
 }

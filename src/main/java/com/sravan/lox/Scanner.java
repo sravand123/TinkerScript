@@ -69,7 +69,11 @@ public class Scanner {
                 addToken(COMMA);
                 break;
             case '.':
-                addToken(DOT);
+                if (checkSequence("..")) {
+                    advance();
+                    advance();
+                    addToken(SPREAD);
+                }
                 break;
             case '-':
                 addToken(match('-') ? MINUS_MINUS : match('=') ? MINUS_EQUAL : MINUS);
@@ -204,6 +208,15 @@ public class Scanner {
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
         tokens.add(new Token(type, text, literal, line));
+    }
+
+    private boolean checkSequence(String expected) {
+        if (isAtEnd())
+            return false;
+        if (current + expected.length() > source.length())
+            return false;
+
+        return source.substring(start, start + expected.length()).equals(expected);
     }
 
     private boolean match(char c) {

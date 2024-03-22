@@ -31,7 +31,8 @@ public class GenerateAst {
                 "Array : List<Expr> elements",
                 "ArrayAccess : Expr array, Expr index, Token rightSqParen",
                 "ArraySet : Expr array, Expr index, Expr value , Token equals",
-                "ObjectLiteral : List<Token> keys, List<Expr> values"));
+                "ObjectLiteral : List<Token> keys, List<Expr> values",
+                "Spread : Token operator, Expr right"));
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                 "Print : Expr expression",

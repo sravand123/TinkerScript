@@ -21,6 +21,7 @@ import com.sravan.lox.Expr.Logical;
 import com.sravan.lox.Expr.PostFix;
 import com.sravan.lox.Expr.PreFix;
 import com.sravan.lox.Expr.Set;
+import com.sravan.lox.Expr.Spread;
 import com.sravan.lox.Expr.Super;
 import com.sravan.lox.Expr.Ternary;
 import com.sravan.lox.Expr.This;
@@ -449,7 +450,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Object visitArrayExpr(Array expr) {
         List<Object> elements = new ArrayList<>();
         for (Expr element : expr.elements) {
-            elements.add(evaluate(element));
+            Object value = evaluate(element);
+            if (element instanceof Expr.Spread) {
+                if (value instanceof List<?>) {
+                    elements.addAll((List<?>) value);
+                }
+            } else {
+                elements.add(value);
+            }
         }
         return new LoxArray(elements);
     }
@@ -514,5 +522,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             instance.set(keys.get(i), evaluatedValues.get(i));
         }
         return instance;
+    }
+
+    @Override
+    public Object visitSpreadExpr(Spread expr) {
+        Object value = evaluate(expr.right);
+        if ((value instanceof LoxArray)) {
+            return ((LoxArray) value).elements;
+        }
+        throw new RuntimeError(expr.operator, "Only arrays can be spread");
     }
 }
