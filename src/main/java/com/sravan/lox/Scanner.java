@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Scanner {
     private final String source;
@@ -240,6 +242,11 @@ public class Scanner {
         while (peek() != '"' && !isAtEnd()) {
             if (peek() == '\n')
                 line++;
+            if (peek() == '\\' && peekNext() == '\\') {
+                advance();
+            } else if (peek() == '\\' && peekNext() == '"') {
+                advance();
+            }
             advance();
         }
         if (isAtEnd()) {
@@ -249,10 +256,63 @@ public class Scanner {
 
         advance();
         String value = source.substring(start + 1, current - 1);
+        value = escapeString(value);
         addToken(STRING, value);
-
     }
 
+    private String escapeString(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '\\') {
+                i++;
+                if (i < s.length()) {
+                    switch (s.charAt(i)) {
+                        case 'n':
+                            sb.append('\n');
+                            break;
+                        case 't':
+                            sb.append('\t');
+                            break;
+                        case 'r':
+                            sb.append('\r');
+                            break;
+                        case 'b':
+                            sb.append('\b');
+                            break;
+                        case 'f':
+                            sb.append('\f');
+                            break;
+                        case '\\':
+                            sb.append('\\');
+                            break;
+                        case '"':
+                            sb.append('"');
+                            break;
+                        case 'u':
+                            if (i + 4 < s.length()) {
+                                String hex = s.substring(i + 1, i + 5);
+                                try {
+                                    int code = Integer.parseInt(hex, 16);
+                                    sb.append((char) code);
+                                    i += 4;
+                                } catch (NumberFormatException e) {
+                                    Lox.error(line, "Invalid unicode escape sequence.");
+                                }
+                            } else {
+                                Lox.error(line, "Invalid unicode escape sequence.");
+                            }
+                            break;
+                        default:
+                            Lox.error(line, "Invalid escape character.");
+                            break;
+                    }
+                }
+            } else {
+                sb.append(s.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
     private char peekNext() {
         if (current + 1 >= source.length())
             return '\0';
