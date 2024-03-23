@@ -467,14 +467,20 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Object visitArrayAccessExpr(ArrayAccess expr) {
         Object array = evaluate(expr.array);
         Object index = evaluate(expr.index);
-        if (!(array instanceof LoxArray)) {
-            throw new RuntimeError(expr.rightSqParen, "Only arrays can be accessed through [] notation");
-        }
-
         if (!checkInteger(index)) {
-            throw new RuntimeError(expr.rightSqParen, "array index must be an integer");
+            throw new RuntimeError(expr.rightSqParen, "Index must be an integer");
         }
-        return ((LoxArray) array).get(expr.rightSqParen, (int) ((double) index));
+        int indexValue = (int) ((double) index);
+        if ((array instanceof LoxArray)) {
+            return ((LoxArray) array).get(expr.rightSqParen, indexValue);
+        }
+        if (array instanceof String) {
+            if (indexValue >= ((String) array).length()) {
+                throw new RuntimeError(expr.rightSqParen, "Index " + indexValue + " out of range");
+            }
+            return String.valueOf(((String) array).charAt(indexValue));
+        }
+        throw new RuntimeError(expr.rightSqParen, "Only arrays or strings can be accessed through [] notation");
     }
 
     @Override
@@ -482,15 +488,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Object array = evaluate(expr.array);
         Object index = evaluate(expr.index);
         Object value = evaluate(expr.value);
-        if (!(array instanceof LoxArray)) {
-            throw new RuntimeError(expr.equals, "Only arrays can be accessed through [] notation");
-        }
-
+        int indexValue = (int) ((double) index);
         if (!checkInteger(index)) {
             throw new RuntimeError(expr.equals, "array index must be an integer");
         }
-        ((LoxArray) array).set(expr.equals, (int) ((double) index), value);
-        return value;
+        if ((array instanceof LoxArray)) {
+            ((LoxArray) array).set(expr.equals, indexValue, value);
+            return value;
+        }
+        if (array instanceof String) {
+            throw new RuntimeError(expr.equals, "Strings are immutable");
+        }
+        throw new RuntimeError(expr.equals, "Only arrays can be accessed through [] notation");
     }
 
     @Override
