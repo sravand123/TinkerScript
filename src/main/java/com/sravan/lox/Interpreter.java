@@ -42,27 +42,17 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private final Map<Expr, Integer> locals = new HashMap<>();
 
     Interpreter() {
-        globals.define("clock", new LoxCallable() {
+        globals.define("clock", new NativeFunction.Clock());
+        globals.define("strlen", new NativeFunction.StringLength());
+        globals.define("read", new NativeFunction.Input());
+        globals.define("len", new NativeFunction.ArrayLength());
+        globals.define("number", new NativeFunction.ToNumber());
 
-            @Override
-            public int arity() {
-                return 0;
-            }
-
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                return (double) System.currentTimeMillis() / 1000.0;
-            }
-
-            @Override
-            public String toString() {
-                return "<native function>";
-            }
-
-        });
         // define a base class Object which is superclass of all classes
         LoxClass objectClass = new LoxClass("Object", new HashMap<>(), null);
         globals.define("Object", objectClass);
+        LoxClass arrayClass = new LoxClass("Array", new HashMap<>(), objectClass);
+        globals.define("Array", arrayClass);
     }
 
     void resolve(Expr expression, Integer depth) {
@@ -252,7 +242,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitPrintStmt(Print stmt) {
         Object value = evaluate(stmt.expression);
-        System.out.print(stringify(value));
+        System.out.println(stringify(value));
         return null;
     }
 
@@ -359,7 +349,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitFunctionStmt(Function stmt) {
-        LoxFunction function = new LoxFunction(stmt, environment, false);
+        LoxFunction function = new UserFunction(stmt, environment, false);
         environment.define(stmt.name.lexeme, function);
         return null;
     }
@@ -390,7 +380,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
         Map<String, LoxFunction> methods = new HashMap<>();
         for (Stmt.Function method : stmt.methods) {
-            LoxFunction function = new LoxFunction(method, environment, method.name.lexeme.equals("init"));
+            LoxFunction function = new UserFunction(method, environment, method.name.lexeme.equals("init"));
             methods.put(method.name.lexeme, function);
         }
         LoxClass klass = new LoxClass(stmt.name.lexeme, methods, (LoxClass) superClass);
@@ -459,7 +449,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 elements.add(value);
             }
         }
-        Object klass = globals.get("Object");
+        Object klass = globals.get("Array");
         return new LoxArray((LoxClass) klass, elements);
     }
 
