@@ -11,10 +11,6 @@ public class LoxInstance {
         this.klass = klass;
     }
 
-    Map<String, Object> getFields() {
-        return fields;
-    }
-
     Object get(Token name) {
         if (fields.containsKey(name.lexeme)) {
             return fields.get(name.lexeme);

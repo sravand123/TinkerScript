@@ -459,7 +459,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 elements.add(value);
             }
         }
-        return new LoxArray(elements);
+        Object klass = globals.get("Object");
+        return new LoxArray((LoxClass) klass, elements);
     }
 
     @Override

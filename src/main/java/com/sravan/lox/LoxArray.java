@@ -2,10 +2,11 @@ package com.sravan.lox;
 
 import java.util.List;
 
-public class LoxArray {
+public class LoxArray extends LoxInstance {
     final List<Object> elements;
 
-    LoxArray(List<Object> elements) {
+    LoxArray(LoxClass klass, List<Object> elements) {
+        super(klass);
         this.elements = elements;
     }
 
