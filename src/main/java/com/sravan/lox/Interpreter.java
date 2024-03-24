@@ -47,6 +47,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         globals.define("read", new NativeFunction.Input());
         globals.define("len", new NativeFunction.ArrayLength());
         globals.define("number", new NativeFunction.ToNumber());
+        globals.define("string", new NativeFunction.ToString());
 
         // define a base class Object which is superclass of all classes
         LoxClass objectClass = new LoxClass("Object", new HashMap<>(), null);
@@ -217,18 +218,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         throw new RuntimeError(operator, "Operand must be a number");
     }
 
-    private String stringify(Object value) {
-        if (value == null)
-            return "nil";
-        String text = value.toString();
-        if (value instanceof Double) {
-            if (text.endsWith(".0")) {
-                return text.substring(0, text.length() - 2);
-            }
-            return text;
-        }
-        return text;
-    }
+
 
     public Object lookUpVariable(Token name, Expr expr) {
         Integer distance = locals.get(expr);
@@ -242,7 +232,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitPrintStmt(Print stmt) {
         Object value = evaluate(stmt.expression);
-        System.out.println(stringify(value));
+        System.out.print(Lox.stringify(value));
         return null;
     }
 

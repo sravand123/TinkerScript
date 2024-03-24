@@ -101,4 +101,17 @@ public class Lox {
         });
     }
 
+    public static String stringify(Object value) {
+        if (value == null)
+            return "nil";
+        String text = value.toString();
+        if (value instanceof Double) {
+            if (text.endsWith(".0")) {
+                return text.substring(0, text.length() - 2);
+            }
+            return text;
+        }
+        return text;
+    }
+
 }

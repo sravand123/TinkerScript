@@ -116,6 +116,23 @@ public abstract class NativeFunction implements LoxFunction {
         }
     }
 
+    static class ToString extends NativeFunction {
+        @Override
+        public int arity() {
+            return 1;
+        }
+
+        @Override
+        public Object call(Interpreter interpreter, List<Object> arguments) {
+            return Lox.stringify(arguments.get(0));
+        }
+
+        @Override
+        public LoxFunction bind(LoxInstance instance) {
+            return this;
+        }
+    }
+
     @Override
     public String toString() {
         return "<native fn>";
