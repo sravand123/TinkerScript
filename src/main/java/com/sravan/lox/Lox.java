@@ -2,14 +2,18 @@ package com.sravan.lox;
 
 import static com.sravan.lox.TokenType.EOF;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Predicate;
+
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.UserInterruptException;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
 public class Lox {
     static boolean hadError = false;
@@ -37,17 +41,26 @@ public class Lox {
     }
 
     public static void runPrompt() throws IOException {
-        InputStreamReader input = new InputStreamReader(System.in);
-        BufferedReader reader = new BufferedReader(input);
-        while (true) {
-            System.out.print("> ");
-            String line = reader.readLine();
-            if (line == null)
-                break;
-            run(line);
-            hadError = false;
-            hadRuntimeError = false;
+        try {
+            System.out.println("Lox REPL");
+            System.out.println("Press Ctrl+C to exit");
+            Terminal terminal = TerminalBuilder.builder().system(true).build();
+            LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
 
+            while (true) {
+                String line = reader.readLine("> ");
+                if (line == null)
+                    break;
+                run(line);
+                hadError = false;
+                hadRuntimeError = false;
+
+            }
+        } catch (UserInterruptException e) {
+            System.out.println("Exiting...");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            System.err.println("Exiting...");
         }
     }
 
