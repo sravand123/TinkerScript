@@ -1,5 +1,6 @@
 package com.sravan.lox;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class NativeFunction implements LoxFunction {
@@ -136,6 +137,54 @@ public abstract class NativeFunction implements LoxFunction {
     @Override
     public String toString() {
         return "<native fn>";
+    }
+
+    // print
+    static class Print extends NativeFunction {
+        @Override
+        public int arity() {
+            return -1;
+        }
+
+        @Override
+        public Object call(Interpreter interpreter, List<Object> arguments) {
+            List<String> strings = new ArrayList<>();
+            for (Object arg : arguments) {
+                strings.add(Lox.stringify(arg));
+            }
+            String formattedString = String.join(" ", strings);
+            System.out.print(formattedString);
+            return null;
+        }
+
+        @Override
+        public LoxFunction bind(LoxInstance instance) {
+            return this;
+        }
+    }
+
+    // println
+    static class Println extends NativeFunction {
+        @Override
+        public int arity() {
+            return -1;
+        }
+
+        @Override
+        public Object call(Interpreter interpreter, List<Object> arguments) {
+            List<String> strings = new ArrayList<>();
+            for (Object arg : arguments) {
+                strings.add(Lox.stringify(arg));
+            }
+            String formattedString = String.join(" ", strings);
+            System.out.println(formattedString);
+            return null;
+        }
+
+        @Override
+        public LoxFunction bind(LoxInstance instance) {
+            return this;
+        }
     }
 
 }

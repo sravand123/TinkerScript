@@ -73,8 +73,6 @@ public class Parser {
     }
 
     private Stmt statement() {
-        if (match(PRINT))
-            return printStatement();
         if (match(LEFT_BRACE)) {
             return new Stmt.Block(block());
         }
@@ -172,11 +170,6 @@ public class Parser {
         return statements;
     }
 
-    private Stmt printStatement() {
-        Expr expr = expression();
-        consume(SEMICOLON, "Expected ;");
-        return new Stmt.Print(expr);
-    }
 
     private Stmt expressionStatement() {
         Expr expr = expression();
@@ -572,7 +565,6 @@ public class Parser {
                 case FOR:
                 case IF:
                 case WHILE:
-                case PRINT:
                 case RETURN:
                     return;
 

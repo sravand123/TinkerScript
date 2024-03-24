@@ -5,9 +5,7 @@ class Person {
     }
 
     sayHello() {
-        print "Hello, my name is " + this.name + " and I am ";
-        print this.age ;
-        print  " years old.";
+        print("Hello, my name is", this.name, "and I am", this.age, "years old.");
     }
 }
 

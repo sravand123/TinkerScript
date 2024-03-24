@@ -35,7 +35,6 @@ public class GenerateAst {
                 "Spread : Token operator, Expr right"));
 
         defineAst(outputDir, "Stmt", Arrays.asList(
-                "Print : Expr expression",
                 "Expression : Expr expression",
                 "Var : Token name, Expr initializer",
                 "Block : List<Stmt> statements",

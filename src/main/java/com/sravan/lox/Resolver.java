@@ -30,7 +30,6 @@ import com.sravan.lox.Stmt.Class;
 import com.sravan.lox.Stmt.Expression;
 import com.sravan.lox.Stmt.Function;
 import com.sravan.lox.Stmt.If;
-import com.sravan.lox.Stmt.Print;
 import com.sravan.lox.Stmt.Return;
 import com.sravan.lox.Stmt.Var;
 import com.sravan.lox.Stmt.While;
@@ -120,11 +119,6 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         currentFunction = enclosingFunction;
     }
 
-    @Override
-    public Void visitPrintStmt(Print stmt) {
-        resolve(stmt.expression);
-        return null;
-    }
 
     @Override
     public Void visitExpressionStmt(Expression stmt) {

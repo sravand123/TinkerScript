@@ -26,6 +26,15 @@ public class LoxArray extends LoxInstance {
 
     @Override
     public String toString() {
-        return "<array>";
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (int i = 0; i < elements.size(); i++) {
+            builder.append(Lox.stringify(elements.get(i)));
+            if (i != elements.size() - 1) {
+                builder.append(", ");
+            }
+        }
+        builder.append("]");
+        return builder.toString();
     }
 }

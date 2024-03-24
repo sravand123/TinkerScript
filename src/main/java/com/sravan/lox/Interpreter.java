@@ -32,7 +32,6 @@ import com.sravan.lox.Stmt.Class;
 import com.sravan.lox.Stmt.Expression;
 import com.sravan.lox.Stmt.Function;
 import com.sravan.lox.Stmt.If;
-import com.sravan.lox.Stmt.Print;
 import com.sravan.lox.Stmt.Var;
 import com.sravan.lox.Stmt.While;
 
@@ -48,6 +47,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         globals.define("len", new NativeFunction.ArrayLength());
         globals.define("number", new NativeFunction.ToNumber());
         globals.define("string", new NativeFunction.ToString());
+        globals.define("print", new NativeFunction.Print());
+        globals.define("println", new NativeFunction.Println());
 
         // define a base class Object which is superclass of all classes
         LoxClass objectClass = new LoxClass("Object", new HashMap<>(), null);
@@ -230,13 +231,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Void visitPrintStmt(Print stmt) {
-        Object value = evaluate(stmt.expression);
-        System.out.print(Lox.stringify(value));
-        return null;
-    }
-
-    @Override
     public Void visitExpressionStmt(Expression stmt) {
         evaluate(stmt.expression);
         return null;
@@ -330,7 +324,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             throw new RuntimeError(expr.paren, "Can only call functions and classes");
         }
         LoxCallable function = (LoxCallable) callee;
-        if (arguments.size() != function.arity()) {
+        if (function.arity() != -1 && arguments.size() != function.arity()) {
             throw new RuntimeError(expr.paren,
                     "Expected " + function.arity() + " arguments but found " + arguments.size());
         }
