@@ -30,6 +30,9 @@ public class Scanner {
         keywords.put("true", TRUE);
         keywords.put("var", VAR);
         keywords.put("while", WHILE);
+        keywords.put("try", TRY);
+        keywords.put("catch", CATCH);
+        keywords.put("throw", THROW);
     }
 
     Scanner(String source) {

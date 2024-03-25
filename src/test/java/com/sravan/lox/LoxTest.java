@@ -78,4 +78,12 @@ public class LoxTest {
         assertEquals("Test passed!", result);
     }
 
+    // trycatch
+    @Test
+    public void testTryCatch() throws IOException {
+        Lox.runFile("src/test/java/com/sravan/lox/TryCatch.lox");
+        String result = systemOutRule.getLog();
+        assertEquals("Test passed!", result);
+    }
+
 }

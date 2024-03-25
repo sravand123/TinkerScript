@@ -86,8 +86,31 @@ public class Parser {
             return ifStatement();
         if (match(RETURN))
             return returnStatement();
+        if (match(TRY))
+            return tryCatch();
+        if (match(THROW))
+            return throwStatement();
         return expressionStatement();
 
+    }
+
+    private Stmt throwStatement() {
+        Token keyword = previous();
+        Expr value = expression();
+        consume(SEMICOLON, "Expected ;");
+        return new Stmt.Throw(keyword, value);
+    }
+
+    private Stmt tryCatch() {
+        consume(LEFT_BRACE, "Expected { after try");
+        List<Stmt> tryBlock = block();
+        consume(CATCH, "Expected catch after try block");
+        consume(LEFT_PAREN, "Expected ( after catch");
+        Token exception = consume(IDENTIFIER, "Expected exception name");
+        consume(RIGHT_PAREN, "Expected )");
+        consume(LEFT_BRACE, "Expected  { after catch");
+        List<Stmt> catchBlock = block();
+        return new Stmt.TryCatch(tryBlock, catchBlock, exception);
     }
 
     private Stmt returnStatement() {

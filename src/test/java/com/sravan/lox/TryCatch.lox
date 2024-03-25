@@ -1,0 +1,15 @@
+
+
+fun error() {
+    try{
+        throw "Hello Error";    
+    } catch(error){
+        return error;
+    }
+}
+
+if(error()=="Hello Error"){
+    print("Test passed!");
+} else {
+    print("Test failed!");
+}

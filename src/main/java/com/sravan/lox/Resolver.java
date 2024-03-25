@@ -31,6 +31,8 @@ import com.sravan.lox.Stmt.Expression;
 import com.sravan.lox.Stmt.Function;
 import com.sravan.lox.Stmt.If;
 import com.sravan.lox.Stmt.Return;
+import com.sravan.lox.Stmt.Throw;
+import com.sravan.lox.Stmt.TryCatch;
 import com.sravan.lox.Stmt.Var;
 import com.sravan.lox.Stmt.While;
 
@@ -363,6 +365,25 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitSpreadExpr(Spread expr) {
         resolve(expr.right);
+        return null;
+    }
+
+    @Override
+    public Void visitTryCatchStmt(TryCatch stmt) {
+        beginScope();
+        resolve(stmt.tryBlock);
+        endScope();
+        beginScope();
+        declare(stmt.exception);
+        define(stmt.exception);
+        resolve(stmt.catchBlock);
+        endScope();
+        return null;
+    }
+
+    @Override
+    public Void visitThrowStmt(Throw stmt) {
+        resolve(stmt.value);
         return null;
     }
 

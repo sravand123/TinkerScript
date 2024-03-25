@@ -21,6 +21,10 @@ abstract class Stmt {
 
         R visitClassStmt(Class stmt);
 
+        R visitTryCatchStmt(TryCatch stmt);
+
+        R visitThrowStmt(Throw stmt);
+
     }
 
     static class Expression extends Stmt {
@@ -136,6 +140,36 @@ abstract class Stmt {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitClassStmt(this);
+        }
+    }
+
+    static class TryCatch extends Stmt {
+        TryCatch(List<Stmt> tryBlock, List<Stmt> catchBlock, Token exception) {
+            this.tryBlock = tryBlock;
+            this.catchBlock = catchBlock;
+            this.exception = exception;
+        }
+
+        final List<Stmt> tryBlock;
+        final List<Stmt> catchBlock;
+        final Token exception;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitTryCatchStmt(this);
+        }
+    }
+
+    static class Throw extends Stmt {
+        Throw(Token keyword, Expr value) {
+            this.keyword = keyword;
+            this.value = value;
+        }
+
+        final Token keyword;
+        final Expr value;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitThrowStmt(this);
         }
     }
 

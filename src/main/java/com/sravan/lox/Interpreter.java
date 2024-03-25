@@ -32,6 +32,8 @@ import com.sravan.lox.Stmt.Class;
 import com.sravan.lox.Stmt.Expression;
 import com.sravan.lox.Stmt.Function;
 import com.sravan.lox.Stmt.If;
+import com.sravan.lox.Stmt.Throw;
+import com.sravan.lox.Stmt.TryCatch;
 import com.sravan.lox.Stmt.Var;
 import com.sravan.lox.Stmt.While;
 
@@ -68,6 +70,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             for (Stmt stmt : statements) {
                 execute(stmt);
             }
+        } catch (Catch error) {
+            System.err.println("Uncaught exception: " + Lox.stringify(error.value) + " at line " + error.token.line);
         } catch (RuntimeError error) {
             Lox.runtimeError(error);
         }
@@ -550,5 +554,22 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             return ((LoxArray) value).elements;
         }
         throw new RuntimeError(expr.operator, "Only arrays can be spread");
+    }
+
+    @Override
+    public Void visitTryCatchStmt(TryCatch stmt) {
+        try {
+            executeBlock(stmt.tryBlock, environment);
+        } catch (Catch error) {
+            environment.define(stmt.exception.lexeme, error.value);
+            executeBlock(stmt.catchBlock, environment);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitThrowStmt(Throw stmt) {
+        Object value = evaluate(stmt.value);
+        throw new Catch(stmt.keyword, value);
     }
 }
