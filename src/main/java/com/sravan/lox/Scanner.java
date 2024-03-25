@@ -130,6 +130,9 @@ public class Scanner {
             case '^':
                 addToken(match('=') ? CARAT_EQUAL : CARAT);
                 break;
+            case '%':
+                addToken(match('=') ? PERCENTAGE_EQUAL : PERCENTAGE);
+                break;
             case '!':
                 addToken(match('=') ? BANG_EQUAL : BANG);
                 break;

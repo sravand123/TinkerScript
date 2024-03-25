@@ -116,6 +116,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             case CARAT:
                 checkIntegerOperands(expr.operator, leftVal, rightVal);
                 return (double) ((int) (double) leftVal ^ (int) (double) rightVal);
+            case PERCENTAGE:
+                checkNumberOperands(expr.operator, leftVal, rightVal);
+                return (double) leftVal % (double) rightVal;
             case PLUS:
                 if (leftVal instanceof Double && rightVal instanceof Double) {
                     return (double) leftVal + (double) rightVal;

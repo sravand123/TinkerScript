@@ -375,7 +375,7 @@ public class Parser {
 
     private Expr factor() {
         Expr expr = unary();
-        while (match(STAR, SLASH)) {
+        while (match(STAR, SLASH, PERCENTAGE)) {
             Token operator = previous();
             Expr right = unary();
             expr = new Expr.Binary(expr, operator, right);
@@ -605,6 +605,12 @@ public class Parser {
         } else if (token.type == PIPE_EQUAL) {
             type = PIPE;
             lexeme = "|";
+        } else if (token.type == CARAT_EQUAL) {
+            type = CARAT;
+            lexeme = "^";
+        } else if (token.type == PERCENTAGE_EQUAL) {
+            type = PERCENTAGE;
+            lexeme = "%";
         } else {
             throw error(token,
                     "Can't create arithmetic operator token as the token is not compound assignment operator");
@@ -627,7 +633,7 @@ public class Parser {
      */
     private boolean isCompoundAssignmentOperatorPresent() {
         return (check(PLUS_EQUAL, MINUS_EQUAL, STAR_EQUAL, SLASH_EQUAL, PIPE_PIPE_EQUAL, AMPERSAND_AMPRESAND_EQUAL,
-                PIPE_EQUAL, AMPERSAND_EQUAL));
+                PIPE_EQUAL, AMPERSAND_EQUAL, CARAT_EQUAL, PERCENTAGE_EQUAL));
     }
 
     /*
