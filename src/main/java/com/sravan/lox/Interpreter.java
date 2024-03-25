@@ -475,22 +475,27 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Object object = evaluate(expr.object);
         Object key = evaluate(expr.key);
         Object value = evaluate(expr.value);
-        if (!checkInteger(key)) {
-            throw new RuntimeError(expr.equals, "array index must be an integer");
-        }
-        int index = (int) ((double) key);
-        if ((object instanceof LoxArray)) {
-            ((LoxArray) object).set(expr.equals, index, value);
-            return value;
-        }
-        if (object instanceof String) {
-            throw new RuntimeError(expr.equals, "Strings are immutable");
+        if (object instanceof LoxArray || object instanceof String) {
+            if (!checkInteger(key)) {
+                throw new RuntimeError(expr.equals, "array index must be an integer");
+            }
+            int index = (int) ((double) key);
+            if ((object instanceof LoxArray)) {
+                ((LoxArray) object).set(expr.equals, index, value);
+                return value;
+            }
+            if (object instanceof String) {
+                throw new RuntimeError(expr.equals, "Strings are immutable");
+            }
         }
         if (object instanceof LoxMapInstance) {
-            ((LoxMapInstance) object).set(expr.equals, key, value);
-            return value;
+            if (key instanceof String || key instanceof Double || key instanceof Boolean || key instanceof Integer) {
+                ((LoxMapInstance) object).set(expr.equals, key, value);
+                return value;
+            }
+            throw new RuntimeError(expr.equals, "Only strings, numbers, booleans can be keys in a map");
         }
-        throw new RuntimeError(expr.equals, "Only arrays and maps can be set through [] notations");
+        throw new RuntimeError(expr.equals, "Only arrays and maps can be set through [] notation");
     }
 
     @Override

@@ -263,11 +263,7 @@ public class Parser {
         List<Expr> values = new ArrayList<>();
         if (!check(RIGHT_BRACE)) {
             do {
-                if (check(NUMBER, STRING, TRUE, FALSE)) {
-                    keys.add(primary());
-                } else {
-                    throw error(peek(), "Expected key");
-                }
+                keys.add(expression());
                 consume(COLON, "Expected :");
                 values.add(expression());
             } while (match(COMMA));

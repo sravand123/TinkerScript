@@ -351,6 +351,9 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Object visitDictionaryExpr(Dictionary expr) {
+        for (Expr key : expr.keys) {
+            resolve(key);
+        }
         for (Expr value : expr.values) {
             resolve(value);
         }
