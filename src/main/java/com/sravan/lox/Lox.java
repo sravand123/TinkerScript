@@ -48,7 +48,7 @@ public class Lox {
             LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
 
             while (true) {
-                String line = reader.readLine("> ");
+                String line = multiLine(reader);
                 if (line == null)
                     break;
                 run(line);
@@ -62,6 +62,34 @@ public class Lox {
             System.err.println("Error: " + e.getMessage());
             System.err.println("Exiting...");
         }
+    }
+
+    private static String multiLine(LineReader reader) {
+        String line = reader.readLine("> ");
+        if (line == null)
+            return null;
+        int openBraces = 0;
+        for (char c : line.toCharArray()) {
+            if (c == '{' || c == '(' || c == '[') {
+                openBraces++;
+            } else if (c == '}' || c == ')' || c == ']') {
+                openBraces--;
+            }
+        }
+        while (openBraces > 0) {
+            String nextLine = reader.readLine("... ");
+            if (nextLine == null)
+                break;
+            line += "\n" + nextLine;
+            for (char c : nextLine.toCharArray()) {
+                if (c == '{' || c == '(' || c == '[') {
+                    openBraces++;
+                } else if (c == '}' || c == ')' || c == ']') {
+                    openBraces--;
+                }
+            }
+        }
+        return line;
     }
 
     public static void run(String source) {
