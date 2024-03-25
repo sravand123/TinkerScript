@@ -14,9 +14,11 @@ package:
 clean:
 	@mvn clean
 
-$(TARGET_DIR)/$(MAIN_JAR_NAME): package
+$(TARGET_DIR)/$(MAIN_JAR_NAME):
+	@mvn package
 
-$(TARGET_DIR)/$(TOOL_JAR_NAME): package
+$(TARGET_DIR)/$(TOOL_JAR_NAME):
+	@mvn package
 
 # Run target
 run: $(TARGET_DIR)/$(MAIN_JAR_NAME)
@@ -25,4 +27,4 @@ run: $(TARGET_DIR)/$(MAIN_JAR_NAME)
 generate-ast: ${TARGET_DIR}/${TOOL_JAR_NAME}
 	@java -jar $< ${SRC_DIR}/com/sravan/lox
 
-.PHONY: all clean compile package run build-and-run
+.PHONY: all clean package run
