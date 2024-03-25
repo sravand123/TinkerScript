@@ -3,8 +3,8 @@
 # Variables
 SRC_DIR := src/main/java
 TARGET_DIR := target
-MAIN_JAR_NAME := jlox-app.jar
-TOOL_JAR_NAME := generate-ast-tool.jar
+MAIN_JAR_NAME := jlox.jar
+TOOL_JAR_NAME := generate-ast.jar
 
 # Default target
 all: clean compile package run

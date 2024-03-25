@@ -72,7 +72,7 @@
               <descriptorRefs>
                 <descriptorRef>jar-with-dependencies</descriptorRef>
               </descriptorRefs>
-              <finalName>jlox-app</finalName>
+              <finalName>jlox</finalName>
               <appendAssemblyId>false</appendAssemblyId>
               <archive>
                 <manifest>
@@ -93,7 +93,7 @@
               <descriptorRefs>
                 <descriptorRef>jar-with-dependencies</descriptorRef>
               </descriptorRefs>
-              <finalName>generate-tool</finalName>
+              <finalName>generate-ast</finalName>
               <appendAssemblyId>false</appendAssemblyId>
               <archive>
                 <manifest>
