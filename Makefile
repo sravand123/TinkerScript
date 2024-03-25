@@ -7,30 +7,22 @@ MAIN_JAR_NAME := jlox.jar
 TOOL_JAR_NAME := generate-ast.jar
 
 # Default target
-all: clean compile package run
+all: package run
 
-# Clean target
+package:
+	@mvn package
 clean:
 	@mvn clean
 
-# Compile target
-compile:
-	@mvn compile
+$(TARGET_DIR)/$(MAIN_JAR_NAME): package
 
-# Package target
-package:
-	@mvn package
+$(TARGET_DIR)/$(TOOL_JAR_NAME): package
 
 # Run target
 run: $(TARGET_DIR)/$(MAIN_JAR_NAME)
-	@mvn package
 	@java -jar $<
 
 generate-ast: ${TARGET_DIR}/${TOOL_JAR_NAME}
-	@mvn package
 	@java -jar $< ${SRC_DIR}/com/sravan/lox
-
-# Build and run target
-build-and-run: all run
 
 .PHONY: all clean compile package run build-and-run
