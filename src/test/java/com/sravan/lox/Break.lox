@@ -1,0 +1,14 @@
+fun testBreak(value) {
+    var i = 0;
+    for(i:=0; i < 10;) {
+        if(i==value) {
+            break;
+        }
+        i++;
+    }
+    return i;
+}
+
+if(testBreak(5) == 5) {
+    print("Test passed!");
+}

@@ -33,6 +33,8 @@ public class Scanner {
         keywords.put("try", TRY);
         keywords.put("catch", CATCH);
         keywords.put("throw", THROW);
+        keywords.put("break", BREAK);
+        keywords.put("continue", CONTINUE);
     }
 
     Scanner(String source) {

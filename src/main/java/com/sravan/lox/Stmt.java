@@ -15,6 +15,8 @@ abstract class Stmt {
 
         R visitWhileStmt(While stmt);
 
+        R visitForStmt(For stmt);
+
         R visitFunctionStmt(Function stmt);
 
         R visitReturnStmt(Return stmt);
@@ -24,6 +26,10 @@ abstract class Stmt {
         R visitTryCatchStmt(TryCatch stmt);
 
         R visitThrowStmt(Throw stmt);
+
+        R visitBreakStmt(Break stmt);
+
+        R visitContinueStmt(Continue stmt);
 
     }
 
@@ -92,6 +98,24 @@ abstract class Stmt {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitWhileStmt(this);
+        }
+    }
+
+    static class For extends Stmt {
+        For(Stmt initializer, Expr condition, Expr increment, Stmt body) {
+            this.initializer = initializer;
+            this.condition = condition;
+            this.increment = increment;
+            this.body = body;
+        }
+
+        final Stmt initializer;
+        final Expr condition;
+        final Expr increment;
+        final Stmt body;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitForStmt(this);
         }
     }
 
@@ -170,6 +194,30 @@ abstract class Stmt {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitThrowStmt(this);
+        }
+    }
+
+    static class Break extends Stmt {
+        Break(Token keyword) {
+            this.keyword = keyword;
+        }
+
+        final Token keyword;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitBreakStmt(this);
+        }
+    }
+
+    static class Continue extends Stmt {
+        Continue(Token keyword) {
+            this.keyword = keyword;
+        }
+
+        final Token keyword;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitContinueStmt(this);
         }
     }
 

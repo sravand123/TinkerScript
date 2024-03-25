@@ -86,4 +86,20 @@ public class LoxTest {
         assertEquals("Test passed!", result);
     }
 
+    // break
+    @Test
+    public void testBreak() throws IOException {
+        Lox.runFile("src/test/java/com/sravan/lox/Break.lox");
+        String result = systemOutRule.getLog();
+        assertEquals("Test passed!", result);
+    }
+
+    // continue
+    @Test
+    public void testContinue() throws IOException {
+        Lox.runFile("src/test/java/com/sravan/lox/Continue.lox");
+        String result = systemOutRule.getLog();
+        assertEquals("Test passed!", result);
+    }
+
 }

@@ -28,8 +28,11 @@ import com.sravan.lox.Expr.This;
 import com.sravan.lox.Expr.Unary;
 import com.sravan.lox.Expr.Variable;
 import com.sravan.lox.Stmt.Block;
+import com.sravan.lox.Stmt.Break;
 import com.sravan.lox.Stmt.Class;
+import com.sravan.lox.Stmt.Continue;
 import com.sravan.lox.Stmt.Expression;
+import com.sravan.lox.Stmt.For;
 import com.sravan.lox.Stmt.Function;
 import com.sravan.lox.Stmt.If;
 import com.sravan.lox.Stmt.Throw;
@@ -317,7 +320,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitWhileStmt(While stmt) {
         while (isTruthy(evaluate(stmt.condition))) {
-            execute(stmt.body);
+            try {
+                execute(stmt.body);
+            } catch (BreakOut breakOut) {
+                break;
+            } catch (ContinueHere continueHere) {
+                continue;
+            }
         }
         return null;
     }
@@ -574,5 +583,44 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Void visitThrowStmt(Throw stmt) {
         Object value = evaluate(stmt.value);
         throw new Catch(stmt.keyword, value);
+    }
+
+    @Override
+    public Void visitBreakStmt(Break stmt) {
+        throw new BreakOut(stmt.keyword);
+    }
+
+    @Override
+    public Void visitContinueStmt(Continue stmt) {
+        throw new ContinueHere(stmt.keyword);
+    }
+
+    @Override
+    public Void visitForStmt(For stmt) {
+        Environment previous = environment;
+        try {
+            environment = new Environment(environment);
+            if (stmt.initializer != null) {
+                execute(stmt.initializer);
+            }
+            while (isTruthy(evaluate(stmt.condition))) {
+                try {
+                    execute(stmt.body);
+                } catch (BreakOut breakOut) {
+                    break;
+                } catch (ContinueHere continueHere) {
+                    if (stmt.increment != null) {
+                        evaluate(stmt.increment);
+                    }
+                    execute(stmt.body);
+                }
+                if (stmt.increment != null) {
+                    evaluate(stmt.increment);
+                }
+            }
+        } finally {
+            environment = previous;
+        }
+        return null;
     }
 }

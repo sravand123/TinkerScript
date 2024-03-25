@@ -26,8 +26,11 @@ import com.sravan.lox.Expr.This;
 import com.sravan.lox.Expr.Unary;
 import com.sravan.lox.Expr.Variable;
 import com.sravan.lox.Stmt.Block;
+import com.sravan.lox.Stmt.Break;
 import com.sravan.lox.Stmt.Class;
+import com.sravan.lox.Stmt.Continue;
 import com.sravan.lox.Stmt.Expression;
+import com.sravan.lox.Stmt.For;
 import com.sravan.lox.Stmt.Function;
 import com.sravan.lox.Stmt.If;
 import com.sravan.lox.Stmt.Return;
@@ -384,6 +387,30 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitThrowStmt(Throw stmt) {
         resolve(stmt.value);
+        return null;
+    }
+
+    @Override
+    public Void visitBreakStmt(Break stmt) {
+        return null;
+    }
+
+    @Override
+    public Void visitContinueStmt(Continue stmt) {
+        return null;
+    }
+
+    @Override
+    public Void visitForStmt(For stmt) {
+        beginScope();
+        if (stmt.initializer != null)
+            resolve(stmt.initializer);
+        if (stmt.condition != null)
+            resolve(stmt.condition);
+        if (stmt.increment != null)
+            resolve(stmt.increment);
+        resolve(stmt.body);
+        endScope();
         return null;
     }
 
