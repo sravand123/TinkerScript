@@ -71,4 +71,11 @@ public class LoxTest {
         assertEquals("1 2 true 2.3", result);
     }
 
+    @Test
+    public void testVariadicFunction() throws IOException {
+        Lox.runFile("src/test/java/com/sravan/lox/VariadicFunc.lox");
+        String result = systemOutRule.getLog();
+        assertEquals("Test passed!", result);
+    }
+
 }

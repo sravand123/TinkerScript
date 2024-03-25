@@ -59,6 +59,7 @@ public class Lox {
         } catch (UserInterruptException e) {
             System.out.println("Exiting...");
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.println("Error: " + e.getMessage());
             System.err.println("Exiting...");
         }

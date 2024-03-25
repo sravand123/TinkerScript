@@ -15,14 +15,25 @@ public class UserFunction implements LoxFunction {
 
     @Override
     public int arity() {
+        if (declaration.spread != null)
+            return -1;
         return declaration.params.size();
     }
 
     @Override
     public Object call(Interpreter interpreter, List<Object> arguments) {
         Environment environment = new Environment(closure);
-        for (int i = 0; i < declaration.params.size(); i++) {
+        for (int i = 0; i < declaration.params.size() - 1; i++) {
             environment.define(declaration.params.get(i).lexeme, arguments.get(i));
+        }
+        if (arguments.size() > 0) {
+            Object lastArgument = arguments.get(arguments.size() - 1);
+            if (declaration.spread != null) {
+                List<Object> subList = arguments.subList(declaration.params.size() - 1, arguments.size());
+                LoxClass arrayClass = (LoxClass) interpreter.globals.get("Array");
+                lastArgument = new LoxArray(arrayClass, subList);
+            }
+            environment.define(declaration.params.get(declaration.params.size() - 1).lexeme, lastArgument);
         }
         try {
             interpreter.executeBlock(declaration.body, environment);

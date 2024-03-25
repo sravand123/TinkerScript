@@ -92,14 +92,16 @@ abstract class Stmt {
     }
 
     static class Function extends Stmt {
-        Function(Token name, List<Token> params, List<Stmt> body) {
+        Function(Token name, List<Token> params, Token spread , List<Stmt> body) {
             this.name = name;
             this.params = params;
+            this.spread = spread;
             this.body = body;
         }
 
         final Token name;
         final List<Token> params;
+        final Token spread;
         final List<Stmt> body;
 
         <R> R accept(Visitor<R> visitor) {

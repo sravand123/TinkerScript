@@ -288,7 +288,7 @@ abstract class Expr {
     }
 
     static class KeySet extends Expr {
-        KeySet(Expr object, Expr key, Expr value, Token equals) {
+        KeySet(Expr object, Expr key, Expr value , Token equals) {
             this.object = object;
             this.key = key;
             this.value = value;
