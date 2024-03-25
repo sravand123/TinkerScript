@@ -17,7 +17,7 @@ public abstract class NativeFunction implements LoxFunction {
             if (!(instance instanceof LoxArray)) {
                 throw new RuntimeError(null, "Invalid argument type. Expected array.");
             }
-            return ((LoxArray) instance).elements.size();
+            return (double) ((LoxArray) instance).elements.size();
         }
 
         @Override
@@ -55,7 +55,7 @@ public abstract class NativeFunction implements LoxFunction {
             if (!(arguments.get(0) instanceof String)) {
                 throw new RuntimeError(null, "Invalid argument type. Expected string.");
             }
-            return ((String) arguments.get(0)).length();
+            return (double) ((String) arguments.get(0)).length();
         }
 
         @Override
