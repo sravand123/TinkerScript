@@ -73,8 +73,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             for (Stmt stmt : statements) {
                 execute(stmt);
             }
-        } catch (Catch error) {
-            System.err.println("Uncaught exception: " + Lox.stringify(error.value) + " at line " + error.token.line);
         } catch (RuntimeError error) {
             Lox.runtimeError(error);
         }
