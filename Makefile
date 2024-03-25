@@ -7,7 +7,7 @@ MAIN_JAR_NAME := jlox.jar
 TOOL_JAR_NAME := generate-ast.jar
 
 # Default target
-all: package run
+all: package
 
 package:
 	@mvn package
