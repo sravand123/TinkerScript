@@ -37,11 +37,11 @@ abstract class Expr {
 
         R visitArrayExpr(Array expr);
 
-        R visitArrayAccessExpr(ArrayAccess expr);
+        R visitKeyAccessExpr(KeyAccess expr);
 
-        R visitArraySetExpr(ArraySet expr);
+        R visitKeySetExpr(KeySet expr);
 
-        R visitObjectLiteralExpr(ObjectLiteral expr);
+        R visitDictionaryExpr(Dictionary expr);
 
         R visitSpreadExpr(Spread expr);
 
@@ -271,51 +271,51 @@ abstract class Expr {
         }
     }
 
-    static class ArrayAccess extends Expr {
-        ArrayAccess(Expr array, Expr index, Token rightSqParen) {
-            this.array = array;
-            this.index = index;
+    static class KeyAccess extends Expr {
+        KeyAccess(Expr object, Expr key, Token rightSqParen) {
+            this.object = object;
+            this.key = key;
             this.rightSqParen = rightSqParen;
         }
 
-        final Expr array;
-        final Expr index;
+        final Expr object;
+        final Expr key;
         final Token rightSqParen;
 
         <R> R accept(Visitor<R> visitor) {
-            return visitor.visitArrayAccessExpr(this);
+            return visitor.visitKeyAccessExpr(this);
         }
     }
 
-    static class ArraySet extends Expr {
-        ArraySet(Expr array, Expr index, Expr value , Token equals) {
-            this.array = array;
-            this.index = index;
+    static class KeySet extends Expr {
+        KeySet(Expr object, Expr key, Expr value, Token equals) {
+            this.object = object;
+            this.key = key;
             this.value = value;
             this.equals = equals;
         }
 
-        final Expr array;
-        final Expr index;
+        final Expr object;
+        final Expr key;
         final Expr value;
         final Token equals;
 
         <R> R accept(Visitor<R> visitor) {
-            return visitor.visitArraySetExpr(this);
+            return visitor.visitKeySetExpr(this);
         }
     }
 
-    static class ObjectLiteral extends Expr {
-        ObjectLiteral(List<Token> keys, List<Expr> values) {
+    static class Dictionary extends Expr {
+        Dictionary(List<Expr> keys, List<Expr> values) {
             this.keys = keys;
             this.values = values;
         }
 
-        final List<Token> keys;
+        final List<Expr> keys;
         final List<Expr> values;
 
         <R> R accept(Visitor<R> visitor) {
-            return visitor.visitObjectLiteralExpr(this);
+            return visitor.visitDictionaryExpr(this);
         }
     }
 

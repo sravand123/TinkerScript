@@ -64,4 +64,11 @@ public class LoxTest {
         assertEquals(expectedOutput, result);
     }
 
+    @Test
+    public void testMap() throws IOException {
+        Lox.runFile("src/test/java/com/sravan/lox/Map.lox");
+        String result = systemOutRule.getLog();
+        assertEquals("1 2 true 2.3", result);
+    }
+
 }

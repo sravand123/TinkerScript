@@ -239,7 +239,7 @@ public class Parser {
             return new Expr.Grouping(expression);
         }
         if (match(LEFT_BRACE)) {
-            return objectNotation();
+            return dictionary();
         }
         if (match(LEFT_SQARE_BRACE)) {
             return array();
@@ -258,13 +258,13 @@ public class Parser {
 
     }
 
-    private Expr objectNotation() {
-        List<Token> keys = new ArrayList<>();
+    private Expr dictionary() {
+        List<Expr> keys = new ArrayList<>();
         List<Expr> values = new ArrayList<>();
         if (!check(RIGHT_BRACE)) {
             do {
-                if (match(IDENTIFIER)) {
-                    keys.add(previous());
+                if (check(NUMBER, STRING, TRUE, FALSE)) {
+                    keys.add(primary());
                 } else {
                     throw error(peek(), "Expected key");
                 }
@@ -273,7 +273,7 @@ public class Parser {
             } while (match(COMMA));
         }
         consume(RIGHT_BRACE, "Expected }");
-        return new Expr.ObjectLiteral(keys, values);
+        return new Expr.Dictionary(keys, values);
     }
 
     private Expr call() {
@@ -287,7 +287,7 @@ public class Parser {
             } else if (match(LEFT_SQARE_BRACE)) {
                 Expr indexExpr = expression();
                 Token token = consume(RIGHT_SQUARE_BRACE, "Expected ]");
-                expr = new Expr.ArrayAccess(expr, indexExpr, token);
+                expr = new Expr.KeyAccess(expr, indexExpr, token);
             } else
                 break;
         }
@@ -496,8 +496,8 @@ public class Parser {
             expr = new Expr.Assign(((Expr.Variable) expr).name, right);
         } else if (expr instanceof Expr.Get) {
             expr = new Expr.Set(((Expr.Get) expr).object, ((Expr.Get) expr).name, right);
-        } else if (expr instanceof Expr.ArrayAccess) {
-            expr = new Expr.ArraySet(((Expr.ArrayAccess) expr).array, ((Expr.ArrayAccess) expr).index, right,
+        } else if (expr instanceof Expr.KeyAccess) {
+            expr = new Expr.KeySet(((Expr.KeyAccess) expr).object, ((Expr.KeyAccess) expr).key, right,
                     token);
         } else {
             throw error(token, "Invalid assignment target");

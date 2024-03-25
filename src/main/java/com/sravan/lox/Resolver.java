@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.Stack;
 
 import com.sravan.lox.Expr.Array;
-import com.sravan.lox.Expr.ArrayAccess;
-import com.sravan.lox.Expr.ArraySet;
+import com.sravan.lox.Expr.KeyAccess;
+import com.sravan.lox.Expr.KeySet;
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Call;
-import com.sravan.lox.Expr.ObjectLiteral;
+import com.sravan.lox.Expr.Dictionary;
 import com.sravan.lox.Expr.Get;
 import com.sravan.lox.Expr.Grouping;
 import com.sravan.lox.Expr.Literal;
@@ -323,16 +323,16 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visitArrayAccessExpr(ArrayAccess expr) {
-        resolve(expr.array);
-        resolve(expr.index);
+    public Object visitKeyAccessExpr(KeyAccess expr) {
+        resolve(expr.object);
+        resolve(expr.key);
         return null;
     }
 
     @Override
-    public Object visitArraySetExpr(ArraySet expr) {
-        resolve(expr.array);
-        resolve(expr.index);
+    public Object visitKeySetExpr(KeySet expr) {
+        resolve(expr.object);
+        resolve(expr.key);
         resolve(expr.value);
         return null;
     }
@@ -350,7 +350,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visitObjectLiteralExpr(ObjectLiteral expr) {
+    public Object visitDictionaryExpr(Dictionary expr) {
         for (Expr value : expr.values) {
             resolve(value);
         }

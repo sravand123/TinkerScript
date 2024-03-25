@@ -29,9 +29,9 @@ public class GenerateAst {
                 "Super : Token keyword , Token method",
                 "Ternary : Expr condition , Expr left, Expr right",
                 "Array : List<Expr> elements",
-                "ArrayAccess : Expr array, Expr index, Token rightSqParen",
-                "ArraySet : Expr array, Expr index, Expr value , Token equals",
-                "ObjectLiteral : List<Token> keys, List<Expr> values",
+                "KeyAccess : Expr object, Expr key, Token rightSqParen",
+                "KeySet : Expr object, Expr key, Expr value , Token equals",
+                "Dictionary : List<Expr> keys, List<Expr> values",
                 "Spread : Token operator, Expr right"));
 
         defineAst(outputDir, "Stmt", Arrays.asList(

@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.sravan.lox.Expr.Array;
-import com.sravan.lox.Expr.ArrayAccess;
-import com.sravan.lox.Expr.ArraySet;
+import com.sravan.lox.Expr.KeyAccess;
+import com.sravan.lox.Expr.KeySet;
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Call;
-import com.sravan.lox.Expr.ObjectLiteral;
+import com.sravan.lox.Expr.Dictionary;
 import com.sravan.lox.Expr.Get;
 import com.sravan.lox.Expr.Grouping;
 import com.sravan.lox.Expr.Literal;
@@ -55,6 +55,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         globals.define("Object", objectClass);
         LoxClass arrayClass = new LoxClass("Array", new HashMap<>(), objectClass);
         globals.define("Array", arrayClass);
+        LoxClass mapClass = new LoxClass("Map", new HashMap<>(), objectClass);
+        globals.define("Map", mapClass);
     }
 
     void resolve(Expr expression, Integer depth) {
@@ -438,42 +440,57 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visitArrayAccessExpr(ArrayAccess expr) {
-        Object array = evaluate(expr.array);
-        Object index = evaluate(expr.index);
-        if (!checkInteger(index)) {
-            throw new RuntimeError(expr.rightSqParen, "Index must be an integer");
+    public Object visitKeyAccessExpr(KeyAccess expr) {
+        Object object = evaluate(expr.object);
+        Object key = evaluate(expr.key);
+        if (object instanceof LoxArray || object instanceof String) {
+            return arrayAccess(expr.rightSqParen, object, key);
         }
-        int indexValue = (int) ((double) index);
-        if ((array instanceof LoxArray)) {
-            return ((LoxArray) array).get(expr.rightSqParen, indexValue);
+        if (object instanceof LoxMapInstance) {
+            return ((LoxMapInstance) object).get(expr.rightSqParen, key);
         }
-        if (array instanceof String) {
-            if (indexValue >= ((String) array).length()) {
-                throw new RuntimeError(expr.rightSqParen, "Index " + indexValue + " out of range");
-            }
-            return String.valueOf(((String) array).charAt(indexValue));
-        }
-        throw new RuntimeError(expr.rightSqParen, "Only arrays or strings can be accessed through [] notation");
+        throw new RuntimeError(expr.rightSqParen, "Only arrays,strings and maps can be accessed through [] notation");
     }
 
+    private Object arrayAccess(Token token, Object object, Object key) {
+        if (!checkInteger(key)) {
+            throw new RuntimeError(token, "Index must be an integer");
+        }
+        int index = (int) ((double) key);
+        if ((object instanceof LoxArray)) {
+            return ((LoxArray) object).get(token, index);
+        }
+        if (object instanceof String) {
+            if (index >= ((String) object).length()) {
+                throw new RuntimeError(token, "Index " + index + " out of range");
+            }
+            return String.valueOf(((String) object).charAt(index));
+        }
+        throw new RuntimeError(token, "Only arrays or strings can be accessed through [] notation");
+    }
+
+
     @Override
-    public Object visitArraySetExpr(ArraySet expr) {
-        Object array = evaluate(expr.array);
-        Object index = evaluate(expr.index);
+    public Object visitKeySetExpr(KeySet expr) {
+        Object object = evaluate(expr.object);
+        Object key = evaluate(expr.key);
         Object value = evaluate(expr.value);
-        int indexValue = (int) ((double) index);
-        if (!checkInteger(index)) {
+        if (!checkInteger(key)) {
             throw new RuntimeError(expr.equals, "array index must be an integer");
         }
-        if ((array instanceof LoxArray)) {
-            ((LoxArray) array).set(expr.equals, indexValue, value);
+        int index = (int) ((double) key);
+        if ((object instanceof LoxArray)) {
+            ((LoxArray) object).set(expr.equals, index, value);
             return value;
         }
-        if (array instanceof String) {
+        if (object instanceof String) {
             throw new RuntimeError(expr.equals, "Strings are immutable");
         }
-        throw new RuntimeError(expr.equals, "Only arrays can be accessed through [] notation");
+        if (object instanceof LoxMapInstance) {
+            ((LoxMapInstance) object).set(expr.equals, key, value);
+            return value;
+        }
+        throw new RuntimeError(expr.equals, "Only arrays and maps can be set through [] notations");
     }
 
     @Override
@@ -493,18 +510,21 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visitObjectLiteralExpr(ObjectLiteral expr) {
-        List<Token> keys = expr.keys;
-        List<Expr> values = expr.values;
-        List<Object> evaluatedValues = new ArrayList<>();
-        for (Expr value : values) {
-            evaluatedValues.add(evaluate(value));
+    public Object visitDictionaryExpr(Dictionary expr) {
+        List<Object> keys = new ArrayList<>();
+        for (Expr key : expr.keys) {
+            keys.add(evaluate(key));
         }
-        LoxClass klass = (LoxClass) globals.get("Object");
-        LoxInstance instance = new LoxInstance(klass);
+        List<Object> values = new ArrayList<>();
+        for (Expr value : expr.values) {
+            values.add(evaluate(value));
+        }
+        LoxClass klass = (LoxClass) globals.get("Map");
+        Map<Object, Object> keyValues = new HashMap<>();
         for (int i = 0; i < keys.size(); i++) {
-            instance.set(keys.get(i), evaluatedValues.get(i));
+            keyValues.put(keys.get(i), values.get(i));
         }
+        LoxInstance instance = new LoxMapInstance(klass, keyValues);
         return instance;
     }
 
