@@ -563,6 +563,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         } catch (Catch error) {
             environment.define(stmt.exception.lexeme, error.value);
             executeBlock(stmt.catchBlock, environment);
+        } catch (RuntimeError error) {
+            environment.define(stmt.exception.lexeme, error.getMessage());
+            executeBlock(stmt.catchBlock, environment);
         }
         return null;
     }
