@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
@@ -57,6 +58,8 @@ public class Lox {
 
             }
         } catch (UserInterruptException e) {
+            System.out.println("Exiting...");
+        } catch (EndOfFileException e) {
             System.out.println("Exiting...");
         } catch (Exception e) {
             e.printStackTrace();
