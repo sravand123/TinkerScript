@@ -317,7 +317,13 @@ public class Parser {
         List<Expr> arguments = new ArrayList<>();
         if (!check(RIGHT_PAREN)) {
             do {
-                arguments.add(expression());
+                if (match(SPREAD)) {
+                    Token spread = previous();
+                    Expr argument = expression();
+                    arguments.add(new Expr.Spread(spread, argument));
+                } else {
+                    arguments.add(expression());
+                }
             } while (match(COMMA));
         }
         Token paren = consume(RIGHT_PAREN, "Expected )");
