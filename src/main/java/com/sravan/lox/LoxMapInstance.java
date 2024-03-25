@@ -27,7 +27,11 @@ public class LoxMapInstance extends LoxInstance {
         StringBuilder builder = new StringBuilder();
         builder.append("{");
         for (Map.Entry<Object, Object> entry : fields.entrySet()) {
-            builder.append(entry.getKey()).append(": ").append(entry.getValue()).append(", ");
+            builder.append(Lox.stringify(entry.getKey())).append(": ").append(Lox.stringify(entry.getValue()))
+                    .append(", ");
+        }
+        if (!fields.isEmpty()) {
+            builder.delete(builder.length() - 2, builder.length());
         }
         builder.append("}");
         return builder.toString();
