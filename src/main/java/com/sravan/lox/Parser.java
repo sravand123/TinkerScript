@@ -31,7 +31,6 @@ public class Parser {
     private Stmt declaration() {
         try {
             if (checkVariableDeclaration()) {
-                match(VAR);
                 return variableDeclaration();
             }
             if (match(FUN))
@@ -138,7 +137,6 @@ public class Parser {
         if (match(SEMICOLON)) {
             initializer = null;
         } else if (checkVariableDeclaration()) {
-            match(VAR);
             initializer = variableDeclaration();
         } else {
             initializer = expressionStatement();
@@ -644,7 +642,7 @@ public class Parser {
      * long declaration var a = 10; or short declaration a := 10;
      */
     private boolean checkVariableDeclaration() {
-        return check(VAR) || (check(IDENTIFIER) && checkNext(COLON_EQUAL));
+        return (check(IDENTIFIER) && checkNext(COLON_EQUAL));
     }
 
     /*

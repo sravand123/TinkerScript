@@ -9,5 +9,5 @@ class Person {
     }
 }
 
-var person1 = Person("Alice", 25);
+person1 := Person("Alice", 25);
 person1.sayHello();

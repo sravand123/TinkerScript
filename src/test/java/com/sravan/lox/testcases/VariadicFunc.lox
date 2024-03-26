@@ -9,7 +9,7 @@ fun sum(...numbers) {
 }
 
 fun testSum() {
-    var result = sum(1, 2, 3, 4, 5);
+    result := sum(1, 2, 3, 4, 5);
     if (result == 15) {
         print("Test passed!");
     } else {
