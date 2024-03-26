@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+script_dir=$(dirname "$0")
+java -jar target/jlox.jar "$@"
