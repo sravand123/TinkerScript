@@ -57,10 +57,15 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         SUBCLASS,
     }
 
+    private enum LoopType {
+        NONE,
+        LOOP
+    }
     private ClassType currentClass = ClassType.NONE;
 
     private FunctionType currentFunction = FunctionType.NONE;
 
+    private LoopType currentLoop = LoopType.NONE;
     Resolver(Interpreter interpreter) {
         this.interpreter = interpreter;
     }
@@ -160,7 +165,10 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitWhileStmt(While stmt) {
         resolve(stmt.condition);
+        LoopType enclosingLoop = currentLoop;
+        currentLoop = LoopType.LOOP;
         resolve(stmt.body);
+        currentLoop = enclosingLoop;
         return null;
     }
 
@@ -392,11 +400,15 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitBreakStmt(Break stmt) {
+        if (currentLoop == LoopType.NONE)
+            Lox.error(stmt.keyword, "Can't use 'break' outside of a loop.");
         return null;
     }
 
     @Override
     public Void visitContinueStmt(Continue stmt) {
+        if (currentLoop == LoopType.NONE)
+            Lox.error(stmt.keyword, "Can't use 'continue' outside of a loop.");
         return null;
     }
 
@@ -409,7 +421,10 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             resolve(stmt.condition);
         if (stmt.increment != null)
             resolve(stmt.increment);
+        LoopType enclosingLoop = currentLoop;
+        currentLoop = LoopType.LOOP;
         resolve(stmt.body);
+        currentLoop = enclosingLoop;
         endScope();
         return null;
     }
