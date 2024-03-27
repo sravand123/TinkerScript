@@ -56,11 +56,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         globals.define("println", new NativeFunction.Println());
 
         // define a base class Object which is superclass of all classes
-        LoxClass objectClass = new LoxClass("Object", new HashMap<>(), null);
-        globals.define("Object", objectClass);
-        LoxClass arrayClass = new LoxClass("Array", new HashMap<>(), objectClass);
+
+        LoxClass arrayClass = new LoxClass("Array", new HashMap<>(), null);
         globals.define("Array", arrayClass);
-        LoxClass mapClass = new LoxClass("Map", new HashMap<>(), objectClass);
+        LoxClass mapClass = new LoxClass("Map", new HashMap<>(), null);
         globals.define("Map", mapClass);
     }
 
@@ -377,8 +376,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             if (!(superClass instanceof LoxClass)) {
                 throw new RuntimeError(stmt.superClass.name, "Superclass must be a class");
             }
-        } else {
-            superClass = globals.get("Object");
         }
         environment.define(stmt.name.lexeme, null);
         if (superClass != null) {
