@@ -27,7 +27,7 @@ enum TokenType {
 
     // Keywords.
     AND, CLASS, ELSE, FALSE, FUN, FOR, IF, NIL, OR,
-    RETURN, SUPER, THIS, TRUE, WHILE,
+    RETURN, SUPER, THIS, TRUE, VAR, WHILE,
     TRY, CATCH, THROW, BREAK, CONTINUE,
 
     COMMENT,
