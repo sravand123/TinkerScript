@@ -69,9 +69,6 @@ public class Lox {
     }
 
     private static String multiLine(LineReader reader) {
-        if (reader.getBuffer().length() > 0) {
-            System.out.println();
-        }
         String line = reader.readLine("> ");
         if (line == null)
             return null;
