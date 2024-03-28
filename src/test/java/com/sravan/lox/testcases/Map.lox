@@ -1,3 +1,4 @@
 map := {"a":1, 2:"2", true: true, false: 2.3};
 
-print(map["a"], map[2] , map[true], map[false]);
+println(map["a"], map[2] , map[true], map[false]); 
+// expect: 1 2 true 2.3

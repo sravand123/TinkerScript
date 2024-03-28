@@ -1,0 +1,14 @@
+fun testContinue(value) {
+    cnt:=0;
+    for(i:=0; i < 10;i++) {
+        if(i==value) {
+            continue;
+        }
+        cnt++;
+    }
+    return cnt;
+}
+
+if(testContinue(5) == 9) {
+    println("Test passed!"); // expect: Test passed!
+}

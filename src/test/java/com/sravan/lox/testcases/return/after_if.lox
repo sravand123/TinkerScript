@@ -1,0 +1,5 @@
+fun f() {
+  if (true) return "ok";
+}
+
+println(f()); // expect: ok

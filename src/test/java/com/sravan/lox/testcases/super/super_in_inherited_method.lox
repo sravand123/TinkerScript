@@ -1,0 +1,23 @@
+class A {
+  say() {
+    println("A");
+  }
+}
+
+class B < A {
+  test() {
+    super.say();
+  }
+
+  say() {
+    println("B");
+  }
+}
+
+class C < B {
+  say() {
+    println("C");
+  }
+}
+
+C().test(); // expect: A

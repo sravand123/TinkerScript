@@ -1,0 +1,14 @@
+var f;
+
+{
+  var a = "a";
+  fun f_() {
+    println(a);
+    println(a);
+  }
+  f = f_;
+}
+
+f();
+// expect: a
+// expect: a

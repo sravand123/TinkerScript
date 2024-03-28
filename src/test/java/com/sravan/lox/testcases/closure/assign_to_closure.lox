@@ -1,0 +1,27 @@
+var f;
+var g;
+
+{
+  var local = "local";
+  fun f_() {
+    println(local);
+    local = "after f";
+    println(local);
+  }
+  f = f_;
+
+  fun g_() {
+    println(local);
+    local = "after g";
+    println(local);
+  }
+  g = g_;
+}
+
+f();
+// expect: local
+// expect: after f
+
+g();
+// expect: after f
+// expect: after g

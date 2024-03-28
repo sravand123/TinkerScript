@@ -1,0 +1,2 @@
+fun f() {}
+println(f()); // expect: nil

@@ -1,0 +1,16 @@
+
+
+fun error() {
+    try{
+        throw "Hello Error";    
+    } catch(error){
+        return error;
+    }
+}
+
+if(error()=="Hello Error"){
+    println("Test passed!");
+} else {
+    println("Test failed!");
+}
+// expect: Test passed! 

@@ -1,0 +1,8 @@
+{
+  var a = "local";
+  {
+    var a = "shadow";
+    println(a); // expect: shadow
+  }
+  println(a); // expect: local
+}

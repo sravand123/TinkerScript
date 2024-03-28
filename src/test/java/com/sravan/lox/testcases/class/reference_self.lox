@@ -1,0 +1,7 @@
+class Foo {
+  returnSelf() {
+    return Foo;
+  }
+}
+
+println(Foo().returnSelf()); // expect: Foo
