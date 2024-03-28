@@ -56,7 +56,7 @@ public class UserFunction implements LoxFunction {
 
     @Override
     public String toString() {
-        return "<fn " + declaration.name + ">";
+        return "<fn " + declaration.name.lexeme + ">";
     }
 
 }
