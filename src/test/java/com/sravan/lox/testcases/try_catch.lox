@@ -13,4 +13,4 @@ if(error()=="Hello Error"){
 } else {
     println("Test failed!");
 }
-// expect: Test passed! 
+// expect: Test passed!
