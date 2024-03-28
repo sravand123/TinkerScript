@@ -43,8 +43,9 @@ public class GenerateTest {
         writer.println("    private static final String testDir = \"src/test/java/com/sravan/lox/testcases\";");
         writer.println();
         writer.println("    private static final void runFile(String path) throws IOException {");
+        writer.println("        Compiler compiler = new Compiler();");
         writer.println("        byte[] bytes = Files.readAllBytes(Paths.get(path));");
-        writer.println("        Lox.run(new String(bytes, Charset.defaultCharset()));");
+        writer.println("        compiler.run(new String(bytes, Charset.defaultCharset()));");
         writer.println("    }");
         writer.println();
         writer.println("    @Rule");

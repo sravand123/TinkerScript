@@ -16,8 +16,9 @@ public class LoxTest {
     private static final String testDir = "src/test/java/com/sravan/lox/testcases";
 
     private static final void runFile(String path) throws IOException {
+        Compiler compiler = new Compiler();
         byte[] bytes = Files.readAllBytes(Paths.get(path));
-        Lox.run(new String(bytes, Charset.defaultCharset()));
+        compiler.run(new String(bytes, Charset.defaultCharset()));
     }
 
     @Rule
@@ -135,7 +136,7 @@ public class LoxTest {
 
         runFile(testDir + "/map.lox");
         String result = systemOutRule.getLog();
-        assertEquals("", result);
+        assertEquals("1 2 true 2.3\n", result);
     }
 
     @Test
@@ -175,7 +176,7 @@ public class LoxTest {
 
         runFile(testDir + "/break_stmt.lox");
         String result = systemOutRule.getLog();
-        assertEquals("", result);
+        assertEquals("5\n", result);
     }
 
     @Test
@@ -199,7 +200,7 @@ public class LoxTest {
 
         runFile(testDir + "/try_catch.lox");
         String result = systemOutRule.getLog();
-        assertEquals("", result);
+        assertEquals("Test passed!\n", result);
     }
 
     @Test
@@ -887,7 +888,7 @@ public class LoxTest {
 
         runFile(testDir + "/variadic_function.lox");
         String result = systemOutRule.getLog();
-        assertEquals("", result);
+        assertEquals("Test passed!\n", result);
     }
 
     @Test

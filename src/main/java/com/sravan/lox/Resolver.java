@@ -43,6 +43,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     private final Stack<Map<String, Boolean>> scopes = new Stack<>();
     private final Interpreter interpreter;
+    public Boolean hadError = false;
 
     private enum FunctionType {
         NONE,
@@ -70,6 +71,10 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         this.interpreter = interpreter;
     }
 
+    void error(Token token, String message) {
+        Compiler.error(token, message);
+        hadError = true;
+    }
     void resolve(List<Stmt> statements) {
         for (Stmt stmt : statements) {
             resolve(stmt);
@@ -96,7 +101,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         if (scopes.isEmpty())
             return;
         if (scopes.peek().containsKey(name.lexeme)) {
-            Lox.error(name, "Already a variable with this name in the scope.");
+            error(name, "Already a variable with this name in the scope.");
         }
         scopes.peek().put(name.lexeme, false);
     }
@@ -184,11 +189,11 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitReturnStmt(Return stmt) {
         if (currentFunction == FunctionType.NONE) {
-            Lox.error(stmt.keyword, "Can't return from top-level code.");
+            error(stmt.keyword, "Can't return from top-level code.");
         }
         if (stmt.value != null) {
             if (currentFunction == FunctionType.INITIALIZER) {
-                Lox.error(stmt.keyword, "Can't return a value from an initializer.");
+                error(stmt.keyword, "Can't return a value from an initializer.");
             }
             resolve(stmt.value);
         }
@@ -238,7 +243,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitVariableExpr(Variable expr) {
         if (!scopes.isEmpty() && scopes.peek().get(expr.name.lexeme) == Boolean.FALSE) {
-            Lox.error(expr.name, "Can't read local variable in it's own initializer");
+            error(expr.name, "Can't read local variable in it's own initializer");
         }
         resolveLocal(expr, expr.name);
         return null;
@@ -254,7 +259,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitClassStmt(Class stmt) {
         if (stmt.name.lexeme == "Object") {
-            Lox.error(stmt.name, "Can't declare a class with name 'Object'");
+            error(stmt.name, "Can't declare a class with name 'Object'");
         }
         ClassType enclosingClass = currentClass;
         currentClass = ClassType.CLASS;
@@ -264,7 +269,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         define(stmt.name);
         if (stmt.superClass != null) {
             if (stmt.name.lexeme.equals(stmt.superClass.name.lexeme)) {
-                Lox.error(stmt.superClass.name, "a class can't inherit from itself");
+                error(stmt.superClass.name, "a class can't inherit from itself");
             }
             resolve(stmt.superClass);
         }
@@ -303,7 +308,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitThisExpr(This expr) {
         if (currentClass == ClassType.NONE) {
-            Lox.error(expr.keyword, "Can't use 'this' outside of a class.");
+            error(expr.keyword, "Can't use 'this' outside of a class.");
         }
         resolveLocal(expr, expr.keyword);
         return null;
@@ -312,9 +317,9 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitSuperExpr(Super expr) {
         if (currentClass == ClassType.NONE) {
-            Lox.error(expr.keyword, "Can't use super outside of a class.");
+            error(expr.keyword, "Can't use super outside of a class.");
         } else if (currentClass != ClassType.SUBCLASS) {
-            Lox.error(expr.keyword, "Can't use super in a class with no super class");
+            error(expr.keyword, "Can't use super in a class with no super class");
         }
         resolveLocal(expr, expr.keyword);
         return null;
@@ -402,14 +407,14 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitBreakStmt(Break stmt) {
         if (currentLoop == LoopType.NONE)
-            Lox.error(stmt.keyword, "Can't use 'break' outside of a loop.");
+            error(stmt.keyword, "Can't use 'break' outside of a loop.");
         return null;
     }
 
     @Override
     public Void visitContinueStmt(Continue stmt) {
         if (currentLoop == LoopType.NONE)
-            Lox.error(stmt.keyword, "Can't use 'continue' outside of a loop.");
+            error(stmt.keyword, "Can't use 'continue' outside of a loop.");
         return null;
     }
 

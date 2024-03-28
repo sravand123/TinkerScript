@@ -44,6 +44,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();
     private Environment environment = globals;
     private final Map<Expr, Integer> locals = new HashMap<>();
+    public Boolean hadRuntimeError = false;
 
     Interpreter() {
         globals.define("clock", new NativeFunction.Clock());
@@ -73,7 +74,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 execute(stmt);
             }
         } catch (RuntimeError error) {
-            Lox.runtimeError(error);
+            hadRuntimeError = true;
+            Compiler.runtimeError(error);
         }
     }
 

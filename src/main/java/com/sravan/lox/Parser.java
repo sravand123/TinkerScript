@@ -8,6 +8,7 @@ import java.util.List;
 public class Parser {
     private final List<Token> tokens;
     private int current = 0;
+    public Boolean hadError = false;
 
     private static class ParseError extends RuntimeException {
     };
@@ -571,7 +572,8 @@ public class Parser {
     }
 
     private ParseError error(Token token, String error) {
-        Lox.error(token, error);
+        Compiler.error(token, error);
+        hadError = true;
         return new ParseError();
     }
 

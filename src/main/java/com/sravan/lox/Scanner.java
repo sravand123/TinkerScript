@@ -13,6 +13,7 @@ public class Scanner {
     private int start = 0;
     private int current = 0;
     private int line = 1;
+    public Boolean hadError = false;
     private static final Map<String, TokenType> keywords = new HashMap<>();
     static {
         keywords.put("and", AND);
@@ -41,6 +42,10 @@ public class Scanner {
         this.source = source;
     }
 
+    private void error(int line, String message) {
+        Compiler.error(line, message);
+        hadError = true;
+    }
     List<Token> scanTokens() {
         while (!isAtEnd()) {
             start = current;
@@ -197,7 +202,7 @@ public class Scanner {
                 } else if (isAlpha(c))
                     identifier();
                 else {
-                    Lox.error(line, "Unexpected Error.");
+                    error(line, "Unexpected Error.");
                 }
                 break;
         }
@@ -252,7 +257,7 @@ public class Scanner {
             advance();
         }
         if (isAtEnd()) {
-            Lox.error(line, "Unterminated String .");
+            error(line, "Unterminated String .");
             return;
         }
 
@@ -298,14 +303,14 @@ public class Scanner {
                                     sb.append((char) code);
                                     i += 4;
                                 } catch (NumberFormatException e) {
-                                    Lox.error(line, "Invalid unicode escape sequence.");
+                                    error(line, "Invalid unicode escape sequence.");
                                 }
                             } else {
-                                Lox.error(line, "Invalid unicode escape sequence.");
+                                error(line, "Invalid unicode escape sequence.");
                             }
                             break;
                         default:
-                            Lox.error(line, "Invalid escape character.");
+                            error(line, "Invalid escape character.");
                             break;
                     }
                 }
