@@ -46,13 +46,13 @@ public class Compiler {
 
     static void runtimeError(RuntimeError error) {
         if (error.token == null)
-            System.err.println("Runtime error: " + error.getMessage());
+            System.err.println("runtime error: " + error.getMessage());
         else
-            System.err.println("Runtime error: " + error.getMessage() + "\n[line " + error.token.line + "]");
+            System.err.println("runtime error: " + error.getMessage() + " [line " + error.token.line + "]");
     }
 
     public static void report(int line, String where, String message) {
         System.err.println(
-                "[line " + line + "] Error " + where + ": " + message);
+                "[line " + line + "] Error" + where + ": " + message);
     }
 }

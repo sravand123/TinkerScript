@@ -101,7 +101,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         if (scopes.isEmpty())
             return;
         if (scopes.peek().containsKey(name.lexeme)) {
-            error(name, "Already a variable with this name in the scope.");
+            error(name, "Already a variable with this name in this scope.");
         }
         scopes.peek().put(name.lexeme, false);
     }
@@ -243,7 +243,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitVariableExpr(Variable expr) {
         if (!scopes.isEmpty() && scopes.peek().get(expr.name.lexeme) == Boolean.FALSE) {
-            error(expr.name, "Can't read local variable in it's own initializer");
+            error(expr.name, "Can't read local variable in its own initializer.");
         }
         resolveLocal(expr, expr.name);
         return null;
@@ -259,7 +259,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitClassStmt(Class stmt) {
         if (stmt.name.lexeme == "Object") {
-            error(stmt.name, "Can't declare a class with name 'Object'");
+            error(stmt.name, "Can't declare a class with name 'Object'.");
         }
         ClassType enclosingClass = currentClass;
         currentClass = ClassType.CLASS;
@@ -269,7 +269,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         define(stmt.name);
         if (stmt.superClass != null) {
             if (stmt.name.lexeme.equals(stmt.superClass.name.lexeme)) {
-                error(stmt.superClass.name, "a class can't inherit from itself");
+                error(stmt.superClass.name, "A class can't inherit from itself.");
             }
             resolve(stmt.superClass);
         }
@@ -317,9 +317,9 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitSuperExpr(Super expr) {
         if (currentClass == ClassType.NONE) {
-            error(expr.keyword, "Can't use super outside of a class.");
+            error(expr.keyword, "Can't use 'super' outside of a class.");
         } else if (currentClass != ClassType.SUBCLASS) {
-            error(expr.keyword, "Can't use super in a class with no super class");
+            error(expr.keyword, "Can't use 'super' in a class with no superclass.");
         }
         resolveLocal(expr, expr.keyword);
         return null;

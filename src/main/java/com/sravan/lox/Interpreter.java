@@ -132,7 +132,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 if (leftVal instanceof String && rightVal instanceof String) {
                     return (String) leftVal + (String) rightVal;
                 }
-                throw new RuntimeError(expr.operator, "Operands must be two numbers or two string");
+                throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings.");
             default:
                 return null;
         }
@@ -190,7 +190,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private void checkNumberOperands(Token operator, Object left, Object right) {
         if (left instanceof Double && right instanceof Double)
             return;
-        throw new RuntimeError(operator, "Operands must be numbers");
+        throw new RuntimeError(operator, "Operands must be numbers.");
     }
 
     private boolean checkInteger(Object value) {
@@ -209,18 +209,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private void checkIntegerOperands(Token operator, Object left, Object right) {
         if (checkInteger(left) && checkInteger(right))
             return;
-        throw new RuntimeError(operator, "Operands must be integers");
+        throw new RuntimeError(operator, "Operands must be integers.");
     }
 
     private void checkIntegerOperand(Token operator, Object val) {
         if (checkInteger(val))
             return;
-        throw new RuntimeError(operator, "Operand must be integer");
+        throw new RuntimeError(operator, "Operand must be integer.");
     }
     private void checkNumberOperand(Token operator, Object right) {
         if (right instanceof Double)
             return;
-        throw new RuntimeError(operator, "Operand must be a number");
+        throw new RuntimeError(operator, "Operand must be a number.");
     }
 
 
@@ -338,12 +338,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             }
         }
         if (!(callee instanceof LoxCallable)) {
-            throw new RuntimeError(expr.paren, "Can only call functions and classes");
+            throw new RuntimeError(expr.paren, "Can only call functions and classes.");
         }
         LoxCallable function = (LoxCallable) callee;
         if (function.arity() != -1 && arguments.size() != function.arity()) {
             throw new RuntimeError(expr.paren,
-                    "Expected " + function.arity() + " arguments but found " + arguments.size());
+                    "Expected " + function.arity() + " arguments but got " + arguments.size() + ".");
         }
         return function.call(this, arguments);
     }
@@ -369,7 +369,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         if (stmt.superClass != null) {
             superClass = evaluate(stmt.superClass);
             if (!(superClass instanceof LoxClass)) {
-                throw new RuntimeError(stmt.superClass.name, "Superclass must be a class");
+                throw new RuntimeError(stmt.superClass.name, "Superclass must be a class.");
             }
         }
         environment.define(stmt.name.lexeme, null);
@@ -396,14 +396,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         if (value instanceof LoxInstance) {
             return ((LoxInstance) value).get(expr.name);
         }
-        throw new RuntimeError(expr.name, "Only instances have properties");
+        throw new RuntimeError(expr.name, "Only instances have properties.");
     }
 
     @Override
     public Object visitSetExpr(Set expr) {
         Object object = evaluate(expr.object);
         if (!(object instanceof LoxInstance)) {
-            throw new RuntimeError(expr.name, "Only instances have feilds");
+            throw new RuntimeError(expr.name, "Only instances have fields.");
         }
         Object value = evaluate(expr.value);
         ((LoxInstance) object).set(expr.name, value);
@@ -422,7 +422,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         LoxInstance object = (LoxInstance) environment.getAt("this", distance - 1);
         LoxFunction method = superClass.findMethod(expr.method.lexeme);
         if (method == null) {
-            throw new RuntimeError(expr.method, "Undefined propert '" + expr.method.lexeme + "'.");
+            throw new RuntimeError(expr.method, "Undefined property '" + expr.method.lexeme + "'.");
         }
         return method.bind(object);
     }

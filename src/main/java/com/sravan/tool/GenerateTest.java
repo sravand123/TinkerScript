@@ -42,17 +42,35 @@ public class GenerateTest {
         writer.println("public class LoxTest {");
         writer.println("    private static final String testDir = \"src/test/java/com/sravan/lox/testcases\";");
         writer.println();
-        writer.println("    private static final void runFile(String path) throws IOException {");
-        writer.println("        Compiler compiler = new Compiler();");
-        writer.println("        byte[] bytes = Files.readAllBytes(Paths.get(path));");
-        writer.println("        compiler.run(new String(bytes, Charset.defaultCharset()));");
-        writer.println("    }");
         writer.println();
         writer.println("    @Rule");
         writer.println("    public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();");
         writer.println();
         writer.println("    @Rule");
         writer.println("    public final SystemErrRule systemErrRule = new SystemErrRule().enableLog();");
+        writer.println();
+        writer.println("    private final String getFinalConsoleOutput(String result, String error) {");
+        writer.println("        if (error.startsWith(\"runtime error:\")) {");
+        writer.println("            error = error.replaceAll(\" \\\\[line \\\\d+\\\\]\", \"\");");
+        writer.println("        }");
+        writer.println("        if (result.isEmpty() && error.isEmpty())");
+        writer.println("            return \"\";");
+        writer.println("        if (error.isEmpty())");
+        writer.println("            return result;");
+        writer.println("        if (result.isEmpty())");
+        writer.println("            return error;");
+        writer.println("        return result + error;");
+        writer.println("    }");
+        writer.println(
+                "    private final String testFile(String path) throws IOException {");
+        writer.println("        Compiler compiler = new Compiler();");
+        writer.println("        byte[] bytes = Files.readAllBytes(Paths.get(path));");
+        writer.println("        compiler.run(new String(bytes, Charset.defaultCharset()));");
+        writer.println("        String result = systemOutRule.getLog();");
+        writer.println("        String error = systemErrRule.getLog();");
+        writer.println("        String output = getFinalConsoleOutput(result, error);");
+        writer.println("        return output;");
+        writer.println("    }");
         writer.println();
         List<String> testFiles = getTestFiles();
         for (String testFile : testFiles) {
@@ -63,10 +81,8 @@ public class GenerateTest {
             String expectedOutput = getExpectedOutput(testFile);
             writer.println("    @Test");
             writer.println("    public void " + testName + "() throws IOException {");
-            writer.println();
-            writer.println("        runFile(testDir + \"/" + fileNameForTest + "\");");
-            writer.println("        String result = systemOutRule.getLog();");
-            writer.println("        assertEquals(\"" + (expectedOutput) + "\", result);");
+            writer.println("        String output= testFile(testDir + \"/" + fileNameForTest + "\");");
+            writer.println("        assertEquals(" + "\"" + expectedOutput + "\"" + ", output);");
             writer.println("    }");
             writer.println();
         }
@@ -78,9 +94,34 @@ public class GenerateTest {
 
         File file = new File(testFile);
         String content = new String(Files.readAllBytes(file.toPath()));
-        Pattern pattern = Pattern.compile("// expect: (.*)\n");
-        Matcher matcher = pattern.matcher(content);
+
+        String expectedResult = getExpectedOutFromPattern(content, "// expect: (.*)\n");
+
+        String expectedError = getExpectedOutFromPattern(content, "// (\\[line .*\\] Error.*)\n");
+        String expectedRuntimeError = getExpectedOutFromPattern(content, "// expect (runtime error: .*)\n");
+        if (expectedError.length() > 0 && expectedRuntimeError.length() > 0) {
+            System.err.println(
+                    "Error: A program cannot have both compile time error and runtime error at the same time.");
+            System.exit(1);
+        }
+        if (expectedError.length() > 0 && expectedResult.length() > 0) {
+            System.err.println(
+                    "Error: A program cannot have both compile time error and expected output at the same time.");
+            System.exit(1);
+        }
+        String expectedOutput = "";
+        if (expectedError.length() > 0) {
+            expectedOutput = expectedError;
+        } else {
+            expectedOutput = expectedResult + expectedRuntimeError;
+        }
+        return expectedOutput;
+    }
+
+    private static String getExpectedOutFromPattern(String content, String regex) {
         StringBuilder sb = new StringBuilder();
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(content);
         while (matcher.find()) {
             sb.append(matcher.group(1)).append("\\n");
         }

@@ -1,2 +1,2 @@
-super.foo("bar"); // Error at 'super': Can't use 'super' outside of a class.
-super.foo; // Error at 'super': Can't use 'super' outside of a class.
+super.foo("bar"); // [line 1] Error at 'super': Can't use 'super' outside of a class.
+super.foo; // [line 2] Error at 'super': Can't use 'super' outside of a class.

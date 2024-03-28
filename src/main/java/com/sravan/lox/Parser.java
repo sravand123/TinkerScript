@@ -50,25 +50,25 @@ public class Parser {
         Token name = consume(IDENTIFIER, "Expected class name.");
         Expr.Variable superClass = null;
         if (match(LESS)) {
-            superClass = new Expr.Variable(consume(IDENTIFIER, "Expected super class name"));
+            superClass = new Expr.Variable(consume(IDENTIFIER, "Expected superclass name."));
         }
-        consume(LEFT_BRACE, "Expected {");
+        consume(LEFT_BRACE, "Expected '{'.");
         List<Stmt.Function> methods = new ArrayList<>();
         while (!isAtEnd() && !check(RIGHT_BRACE)) {
             methods.add(function("method"));
         }
-        consume(RIGHT_BRACE, "Expected } after class body");
+        consume(RIGHT_BRACE, "Expected '}' after class body.");
         return new Stmt.Class(name, methods, superClass);
 
     }
 
     private Stmt variableDeclaration() {
-        Token name = consume(IDENTIFIER, "Expected Identifier");
+        Token name = consume(IDENTIFIER, "Expected variable name.");
         Expr initializer = null;
         if (match(EQUAL) || match(COLON_EQUAL)) {
             initializer = expression();
         }
-        consume(SEMICOLON, "Expected ;");
+        consume(SEMICOLON, "Expected ';'.");
         return new Stmt.Var(name, initializer);
     }
 
@@ -92,12 +92,12 @@ public class Parser {
             return throwStatement();
         if (match(BREAK)) {
             Token keyword = previous();
-            consume(SEMICOLON, "Expected ;");
+            consume(SEMICOLON, "Expected ';'.");
             return new Stmt.Break(keyword);
         }
         if (match(CONTINUE)) {
             Token keyword = previous();
-            consume(SEMICOLON, "Expected ;");
+            consume(SEMICOLON, "Expected ';'.");
             return new Stmt.Continue(keyword);
         }
         return expressionStatement();
@@ -107,18 +107,18 @@ public class Parser {
     private Stmt throwStatement() {
         Token keyword = previous();
         Expr value = expression();
-        consume(SEMICOLON, "Expected ;");
+        consume(SEMICOLON, "Expected ';'.");
         return new Stmt.Throw(keyword, value);
     }
 
     private Stmt tryCatch() {
-        consume(LEFT_BRACE, "Expected { after try");
+        consume(LEFT_BRACE, "Expected '{' after try.");
         List<Stmt> tryBlock = block();
-        consume(CATCH, "Expected catch after try block");
-        consume(LEFT_PAREN, "Expected ( after catch");
-        Token exception = consume(IDENTIFIER, "Expected exception name");
-        consume(RIGHT_PAREN, "Expected )");
-        consume(LEFT_BRACE, "Expected  { after catch");
+        consume(CATCH, "Expected catch after try block.");
+        consume(LEFT_PAREN, "Expected '(' after catch.");
+        Token exception = consume(IDENTIFIER, "Expected exception name.");
+        consume(RIGHT_PAREN, "Expected ')'.");
+        consume(LEFT_BRACE, "Expected  '{' after catch.");
         List<Stmt> catchBlock = block();
         return new Stmt.TryCatch(tryBlock, catchBlock, exception);
     }
@@ -129,12 +129,12 @@ public class Parser {
         if (!check(SEMICOLON)) {
             value = expression();
         }
-        consume(SEMICOLON, "Expected ;");
+        consume(SEMICOLON, "Expected ';'.");
         return new Stmt.Return(keyword, value);
     }
 
     private Stmt forLoop() {
-        consume(LEFT_PAREN, "Expected (");
+        consume(LEFT_PAREN, "Expected (.");
         Stmt initializer;
         if (match(SEMICOLON)) {
             initializer = null;
@@ -150,30 +150,30 @@ public class Parser {
         if (!check(SEMICOLON)) {
             condition = expression();
         }
-        consume(SEMICOLON, "Expected ;");
+        consume(SEMICOLON, "Expected ';'.");
 
         Expr increment = null;
 
         if (!check(RIGHT_PAREN)) {
             increment = expression();
         }
-        consume(RIGHT_PAREN, "Expected )");
+        consume(RIGHT_PAREN, "Expected ).");
         Stmt body = statement();
         return new Stmt.For(initializer, condition, increment, body);
     }
 
     private Stmt whileStatement() {
-        consume(LEFT_PAREN, "Expected (");
+        consume(LEFT_PAREN, "Expected (.");
         Expr condition = expression();
-        consume(RIGHT_PAREN, "Expected )");
+        consume(RIGHT_PAREN, "Expected ).");
         Stmt body = statement();
         return new Stmt.While(condition, body);
     }
 
     private Stmt ifStatement() {
-        consume(LEFT_PAREN, "Expected (");
+        consume(LEFT_PAREN, "Expected (.");
         Expr condition = expression();
-        consume(RIGHT_PAREN, "Expected )");
+        consume(RIGHT_PAREN, "Expected ).");
         Stmt thenStatement = statement();
         Stmt elseStatement = null;
         if (match(ELSE)) {
@@ -187,14 +187,14 @@ public class Parser {
         while (!isAtEnd() && !check(RIGHT_BRACE)) {
             statements.add(declaration());
         }
-        consume(RIGHT_BRACE, "Expected }");
+        consume(RIGHT_BRACE, "Expected '}'.");
         return statements;
     }
 
 
     private Stmt expressionStatement() {
         Expr expr = expression();
-        consume(SEMICOLON, "Expected ;");
+        consume(SEMICOLON, "Expected ';' after expression.");
         return new Stmt.Expression(expr);
     }
 
@@ -256,7 +256,7 @@ public class Parser {
             return new Expr.Literal(previous().literal);
         if (match(LEFT_PAREN)) {
             Expr expression = expression();
-            consume(RIGHT_PAREN, "expected ) after expression.");
+            consume(RIGHT_PAREN, "Expected ) after expression.");
             return new Expr.Grouping(expression);
         }
         if (match(LEFT_BRACE)) {
@@ -270,12 +270,12 @@ public class Parser {
 
         if (match(SUPER)) {
             Token keyword = previous();
-            consume(DOT, "Expected . after super");
-            Token method = consume(IDENTIFIER, "expected super class method name");
+            consume(DOT, "Expected '.' after 'super'.");
+            Token method = consume(IDENTIFIER, "Expected superclass method name.");
             return new Expr.Super(keyword, method);
         }
 
-        throw error(peek(), "expected expression.");
+        throw error(peek(), "Expected expression.");
 
     }
 
@@ -285,11 +285,11 @@ public class Parser {
         if (!check(RIGHT_BRACE)) {
             do {
                 keys.add(expression());
-                consume(COLON, "Expected :");
+                consume(COLON, "Expected :.");
                 values.add(expression());
             } while (match(COMMA));
         }
-        consume(RIGHT_BRACE, "Expected }");
+        consume(RIGHT_BRACE, "Expected '}'.");
         return new Expr.Dictionary(keys, values);
     }
 
@@ -299,11 +299,11 @@ public class Parser {
             if (match(LEFT_PAREN))
                 expr = finishCall(expr);
             else if (match(DOT)) {
-                Token name = consume(IDENTIFIER, "Expected property name after '.'");
+                Token name = consume(IDENTIFIER, "Expected property name after '.'.");
                 expr = new Expr.Get(expr, name);
             } else if (match(LEFT_SQARE_BRACE)) {
                 Expr indexExpr = expression();
-                Token token = consume(RIGHT_SQUARE_BRACE, "Expected ]");
+                Token token = consume(RIGHT_SQUARE_BRACE, "Expected ].");
                 expr = new Expr.KeyAccess(expr, indexExpr, token);
             } else
                 break;
@@ -312,8 +312,8 @@ public class Parser {
     }
 
     private Stmt.Function function(String kind) {
-        Token name = consume(IDENTIFIER, "Expected function name");
-        consume(LEFT_PAREN, "Expected ( after " + kind + " name");
+        Token name = consume(IDENTIFIER, "Expected function name.");
+        consume(LEFT_PAREN, "Expected ( after " + kind + " name.");
         List<Token> parameters = new ArrayList<>();
         Token spread = null;
         if (!check(RIGHT_PAREN)) {
@@ -325,11 +325,11 @@ public class Parser {
                     spread = previous();
                 }
                 parameters.add(
-                        consume(IDENTIFIER, "Expected parameter name"));
+                        consume(IDENTIFIER, "Expected parameter name."));
             } while (match(COMMA));
         }
-        consume(RIGHT_PAREN, "Expected )");
-        consume(LEFT_BRACE, "expected { before " + kind + " body");
+        consume(RIGHT_PAREN, "Expected ')' after parameters.");
+        consume(LEFT_BRACE, "Expected '{' before " + kind + " body.");
         List<Stmt> body = block();
         return new Stmt.Function(name, parameters, spread, body);
     }
@@ -347,7 +347,7 @@ public class Parser {
                 }
             } while (match(COMMA));
         }
-        Token paren = consume(RIGHT_PAREN, "Expected )");
+        Token paren = consume(RIGHT_PAREN, "Expected ).");
         return new Expr.Call(expr, paren, arguments);
     }
 
@@ -524,7 +524,7 @@ public class Parser {
             expr = new Expr.KeySet(((Expr.KeyAccess) expr).object, ((Expr.KeyAccess) expr).key, right,
                     token);
         } else {
-            throw error(token, "Invalid assignment target");
+            throw error(token, "Invalid assignment target.");
         }
         return expr;
     }
@@ -533,7 +533,7 @@ public class Parser {
         Expr condition = or();
         if (match(CONDITIONAL)) {
             Expr left = expression();
-            consume(COLON, "Expected :");
+            consume(COLON, "Expected :.");
             Expr right = expression();
             return new Expr.Ternary(condition, left, right);
         }
@@ -547,7 +547,7 @@ public class Parser {
                 elements.add(arrayElement());
             } while (match(COMMA));
         }
-        consume(RIGHT_SQUARE_BRACE, "Expected ]");
+        consume(RIGHT_SQUARE_BRACE, "Expected ].");
         return new Expr.Array(elements);
     }
 

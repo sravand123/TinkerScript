@@ -257,7 +257,7 @@ public class Scanner {
             advance();
         }
         if (isAtEnd()) {
-            error(line, "Unterminated String .");
+            error(line, "Unterminated string.");
             return;
         }
 
