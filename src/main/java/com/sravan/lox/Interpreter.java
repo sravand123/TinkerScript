@@ -169,13 +169,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return expr.accept(this);
     }
 
-    private boolean isTruthy(Object value) {
-        if (value == null)
+    private boolean isTruthy(Object object) {
+        if (object == null)
             return false;
-        if (value instanceof Boolean)
-            return (boolean) value == true;
-        return false;
-
+        if (object instanceof Boolean)
+            return (boolean) object;
+        return true;
     }
 
     private boolean isEqual(Object a, Object b) {
@@ -300,10 +299,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Object value = evaluate(expr.left);
         if (expr.operator.type == OR || expr.operator.type == PIPE_PIPE) {
             if (isTruthy(value))
-                return true;
+                return value;
         } else {
             if (!isTruthy(value))
-                return false;
+                return value;
         }
         return evaluate(expr.right);
     }
@@ -592,7 +591,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             if (stmt.initializer != null) {
                 execute(stmt.initializer);
             }
-            while (isTruthy(evaluate(stmt.condition))) {
+            while (stmt.condition == null || isTruthy(evaluate(stmt.condition))) {
                 try {
                     execute(stmt.body);
                 } catch (BreakOut breakOut) {
