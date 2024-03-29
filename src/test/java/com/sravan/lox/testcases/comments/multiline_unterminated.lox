@@ -1,0 +1,3 @@
+/** multiline with
+    Unterminated comment
+// [line 3] Error: Unterminated comment.

@@ -129,6 +129,18 @@ public class LoxTest {
     }
 
     @Test
+    public void comments_multiline_with_nesting() throws IOException {
+        String output= testFile(testDir + "/comments/multiline_with_nesting.lox");
+        assertEquals("", output);
+    }
+
+    @Test
+    public void comments_multiline_nested_unterminated() throws IOException {
+        String output= testFile(testDir + "/comments/multiline_nested_unterminated.lox");
+        assertEquals("[line 4] Error: Unterminated comment.\n", output);
+    }
+
+    @Test
     public void comments_line_at_eof() throws IOException {
         String output= testFile(testDir + "/comments/line_at_eof.lox");
         assertEquals("ok\n", output);
@@ -150,6 +162,24 @@ public class LoxTest {
     public void comments_only_line_comment_and_line() throws IOException {
         String output= testFile(testDir + "/comments/only_line_comment_and_line.lox");
         assertEquals("", output);
+    }
+
+    @Test
+    public void comments_multiline() throws IOException {
+        String output= testFile(testDir + "/comments/multiline.lox");
+        assertEquals("", output);
+    }
+
+    @Test
+    public void comments_multiline_single_unterminated() throws IOException {
+        String output= testFile(testDir + "/comments/multiline_single_unterminated.lox");
+        assertEquals("[line 1] Error: Unterminated comment.\n", output);
+    }
+
+    @Test
+    public void comments_multiline_unterminated() throws IOException {
+        String output= testFile(testDir + "/comments/multiline_unterminated.lox");
+        assertEquals("[line 3] Error: Unterminated comment.\n", output);
     }
 
     @Test

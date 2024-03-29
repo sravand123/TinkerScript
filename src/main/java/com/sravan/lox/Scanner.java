@@ -180,7 +180,7 @@ public class Scanner {
                             break;
                     }
                     if (isAtEnd() && nestedLevel > 0) {
-                        error(line, "Unterminated comment");
+                        error(line, "Unterminated comment.");
                     }
                 } else
                     addToken(match('=') ? SLASH_EQUAL : SLASH);
