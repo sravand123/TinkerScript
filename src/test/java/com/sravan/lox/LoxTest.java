@@ -1119,9 +1119,21 @@ public class LoxTest {
     }
 
     @Test
+    public void string_print_with_escap_characters() throws IOException {
+        String output= testFile(testDir + "/string/print_with_escap_characters.lox");
+        assertEquals("H\ne\rll\to\b,\f \"World\"\n", output);
+    }
+
+    @Test
     public void string_error_after_multiline() throws IOException {
         String output= testFile(testDir + "/string/error_after_multiline.lox");
         assertEquals("runtime error: Undefined variable 'err'.\n", output);
+    }
+
+    @Test
+    public void string_with_esacape_characters() throws IOException {
+        String output= testFile(testDir + "/string/with_esacape_characters.lox");
+        assertEquals("", output);
     }
 
     @Test
@@ -1131,15 +1143,51 @@ public class LoxTest {
     }
 
     @Test
+    public void string_unicode() throws IOException {
+        String output= testFile(testDir + "/string/unicode.lox");
+        assertEquals("", output);
+    }
+
+    @Test
+    public void string_invalid_unicode() throws IOException {
+        String output= testFile(testDir + "/string/invalid_unicode.lox");
+        assertEquals("[line 1] Error: Invalid unicode sequence.\n", output);
+    }
+
+    @Test
+    public void string_invalid_unicode_length() throws IOException {
+        String output= testFile(testDir + "/string/invalid_unicode_length.lox");
+        assertEquals("[line 1] Error: Invalid unicode sequence.\n", output);
+    }
+
+    @Test
     public void string_multiline() throws IOException {
         String output= testFile(testDir + "/string/multiline.lox");
         assertEquals("1\n2\n3\n", output);
     }
 
     @Test
+    public void string_print_unicode() throws IOException {
+        String output= testFile(testDir + "/string/print_unicode.lox");
+        assertEquals("Money₹\n", output);
+    }
+
+    @Test
     public void string_unterminated() throws IOException {
         String output= testFile(testDir + "/string/unterminated.lox");
         assertEquals("[line 2] Error: Unterminated string.\n", output);
+    }
+
+    @Test
+    public void string_unterminated_with_escaping() throws IOException {
+        String output= testFile(testDir + "/string/unterminated_with_escaping.lox");
+        assertEquals("[line 1] Error: Unterminated string.\n", output);
+    }
+
+    @Test
+    public void string_invalid_escaping() throws IOException {
+        String output= testFile(testDir + "/string/invalid_escaping.lox");
+        assertEquals("[line 1] Error: Invalid escape character.\n", output);
     }
 
     @Test

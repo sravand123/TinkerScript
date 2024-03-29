@@ -256,7 +256,7 @@ public class Scanner {
             }
             advance();
         }
-        if (isAtEnd()) {
+        if (peek() != '"') {
             error(line, "Unterminated string.");
             return;
         }
@@ -303,16 +303,18 @@ public class Scanner {
                                     sb.append((char) code);
                                     i += 4;
                                 } catch (NumberFormatException e) {
-                                    error(line, "Invalid unicode escape sequence.");
+                                    error(line, "Invalid unicode sequence.");
                                 }
                             } else {
-                                error(line, "Invalid unicode escape sequence.");
+                                error(line, "Invalid unicode sequence.");
                             }
                             break;
                         default:
                             error(line, "Invalid escape character.");
                             break;
                     }
+                } else {
+                    error(line, "Invalid escape character.");
                 }
             } else {
                 sb.append(s.charAt(i));
