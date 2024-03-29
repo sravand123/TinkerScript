@@ -41,6 +41,8 @@ public class Lox {
             System.out.println("Press Ctrl+C to exit");
             Terminal terminal = TerminalBuilder.builder().system(true).build();
             LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
+            // don't escape characters
+            reader.setOpt(LineReader.Option.DISABLE_EVENT_EXPANSION);
             Compiler compiler = new Compiler();
             while (true) {
                 String line = multiLine(reader);
