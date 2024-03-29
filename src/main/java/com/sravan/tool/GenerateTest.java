@@ -95,10 +95,10 @@ public class GenerateTest {
         File file = new File(testFile);
         String content = new String(Files.readAllBytes(file.toPath()));
 
-        String expectedResult = getExpectedOutFromPattern(content, "// expect: (.*)\n");
+        String expectedResult = getExpectedOutFromPattern(content, "// expect: (.*)");
 
-        String expectedError = getExpectedOutFromPattern(content, "// (\\[line .*\\] Error.*)\n");
-        String expectedRuntimeError = getExpectedOutFromPattern(content, "// expect (runtime error: .*)\n");
+        String expectedError = getExpectedOutFromPattern(content, "// (\\[line .*\\] Error.*)");
+        String expectedRuntimeError = getExpectedOutFromPattern(content, "// expect (runtime error: .*)");
         if (expectedError.length() > 0 && expectedRuntimeError.length() > 0) {
             System.err.println(
                     "Error: A program cannot have both compile time error and runtime error at the same time.");
