@@ -45,6 +45,42 @@ public class LoxTest {
     }
 
     @Test
+    public void ternary_syntax_error() throws IOException {
+        String output= testFile(testDir + "/ternary/syntax_error.lox");
+        assertEquals("[line 1] Error at '?': Expected expression.\n[line 2] Error at ':': Expected expression.\n[line 3] Error at ';': Expected expression.\n[line 5] Error at 'var': Expected expression.\n[line 6] Error at 'var': Expected expression.\n", output);
+    }
+
+    @Test
+    public void ternary_evaluation() throws IOException {
+        String output= testFile(testDir + "/ternary/evaluation.lox");
+        assertEquals("func1\nfunc3\n100 101\n", output);
+    }
+
+    @Test
+    public void ternary_comparison_condition() throws IOException {
+        String output= testFile(testDir + "/ternary/comparison_condition.lox");
+        assertEquals("200\n100\n100\n200\n100\n200\n", output);
+    }
+
+    @Test
+    public void ternary_literal_condition() throws IOException {
+        String output= testFile(testDir + "/ternary/literal_condition.lox");
+        assertEquals("1\n2\n1\n1\n2\n", output);
+    }
+
+    @Test
+    public void ternary_precedence() throws IOException {
+        String output= testFile(testDir + "/ternary/precedence.lox");
+        assertEquals("1\n1\n", output);
+    }
+
+    @Test
+    public void ternary_statement() throws IOException {
+        String output= testFile(testDir + "/ternary/statement.lox");
+        assertEquals("", output);
+    }
+
+    @Test
     public void closure_reuse_closure_slot() throws IOException {
         String output= testFile(testDir + "/closure/reuse_closure_slot.lox");
         assertEquals("a\n", output);

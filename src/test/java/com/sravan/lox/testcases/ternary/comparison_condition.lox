@@ -1,0 +1,22 @@
+x := 100;
+y := x == 100 ? 2*x : x/2;
+
+println(y); // expect: 200
+
+y = y < 100 ? 50 : 100;
+println(y); // expect: 100
+
+y = y > 100 ? 200 : 100;
+println(y); // expect: 100
+
+y = y != 100 ? 100 : 200;
+println(y); // expect: 200
+
+y = 90;
+y = y <= 100 ? 100 : 200;
+println(y); // expect: 100
+
+y = 220;
+
+y = y >= 200 ? 200 : 300;
+println(y); // expect: 200

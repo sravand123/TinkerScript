@@ -1,0 +1,19 @@
+fun func1() {
+    println("func1");
+}
+fun func2() {
+    println("func2");
+}
+fun func3() {
+    println("func3");
+}
+
+x := func1() ? func2() : func3();
+// expect: func1
+// expect: func3
+
+y := 100;
+x:= y == 100 ? y++ : y+=2;
+println(x,y); // expect: 100 101
+
+
