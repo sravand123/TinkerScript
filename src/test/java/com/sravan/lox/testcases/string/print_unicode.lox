@@ -1,0 +1,1 @@
+println("Money\u20B9"); // expect: Money₹
