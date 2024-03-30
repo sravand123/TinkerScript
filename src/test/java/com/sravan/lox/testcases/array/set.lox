@@ -1,0 +1,24 @@
+x := [1,2,3];
+
+x[1] = 4;
+
+println(x[1]); // expect: 4
+
+for(i := 0; i < 3; i++) x[i] = x[i]+1;
+
+println(x); // expect: [2, 5, 4]
+
+x[0] = "string";
+
+println(x); // expect: [string, 5, 4]
+
+x[2] = [1,2,3];
+
+println(x); // expect: [string, 5, [1, 2, 3]]
+
+x = [[1,2,3], [4,5,6],[7,8,9]];
+
+for(i := 0; i < 3; i++) 
+    for(j:=0; j < 3; j++) x[i][j]+=1;
+
+println(x); // expect: [[2, 3, 4], [5, 6, 7], [8, 9, 10]]

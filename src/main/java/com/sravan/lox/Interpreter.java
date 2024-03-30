@@ -462,24 +462,26 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         if (object instanceof LoxMapInstance) {
             return ((LoxMapInstance) object).get(expr.rightSqParen, key);
         }
-        throw new RuntimeError(expr.rightSqParen, "Only arrays,strings and maps can be accessed through [] notation");
+        throw new RuntimeError(expr.rightSqParen, "Incorrect usage of [].");
     }
 
     private Object arrayAccess(Token token, Object object, Object key) {
         if (!checkInteger(key)) {
-            throw new RuntimeError(token, "Index must be an integer");
+            throw new RuntimeError(token, "Invalid index.");
         }
         int index = (int) ((double) key);
+        if (index < 0)
+            throw new RuntimeError(token, "Invalid index.");
         if ((object instanceof LoxArray)) {
             return ((LoxArray) object).get(token, index);
         }
         if (object instanceof String) {
             if (index >= ((String) object).length()) {
-                throw new RuntimeError(token, "Index " + index + " out of range");
+                throw new RuntimeError(token, "Index " + index + " out of range.");
             }
             return String.valueOf(((String) object).charAt(index));
         }
-        throw new RuntimeError(token, "Only arrays or strings can be accessed through [] notation");
+        throw new RuntimeError(token, "Invalid key.");
     }
 
 
@@ -490,7 +492,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Object value = evaluate(expr.value);
         if (object instanceof LoxArray || object instanceof String) {
             if (!checkInteger(key)) {
-                throw new RuntimeError(expr.equals, "array index must be an integer");
+                throw new RuntimeError(expr.equals, "Invalid index.");
             }
             int index = (int) ((double) key);
             if ((object instanceof LoxArray)) {
@@ -506,9 +508,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 ((LoxMapInstance) object).set(expr.equals, key, value);
                 return value;
             }
-            throw new RuntimeError(expr.equals, "Only strings, numbers, booleans can be keys in a map");
+            throw new RuntimeError(expr.equals, "Invalid key.");
         }
-        throw new RuntimeError(expr.equals, "Only arrays and maps can be set through [] notation");
+        throw new RuntimeError(expr.equals, "Incorrect usage of [].");
     }
 
     @Override

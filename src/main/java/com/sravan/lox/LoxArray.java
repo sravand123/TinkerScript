@@ -12,14 +12,14 @@ public class LoxArray extends LoxInstance {
 
     Object get(Token token, int index) {
         if (index >= this.elements.size()) {
-            throw new RuntimeError(token, "Index " + index + "out of range");
+            throw new RuntimeError(token, "Index " + index + " out of range.");
         }
         return this.elements.get(index);
     }
 
     void set(Token token, int index, Object value) {
         if (index >= this.elements.size()) {
-            throw new RuntimeError(token, "Index " + index + "out of range");
+            throw new RuntimeError(token, "Index " + index + " out of range.");
         }
         this.elements.set(index, value);
     }

@@ -1,0 +1,24 @@
+x := [1,2,3];
+println(x[0]); // expect: 1
+println(x[1]); // expect: 2
+println(x[2]); // expect: 3
+
+for (i:=0; i < 3; i++) print(x[i],""); // expect: 1 2 3 
+println();
+
+x = [1,2.3,true,"hello"];
+for (i:=0; i < 4; i++) print(x[i],""); // expect: 1 2.3 true hello 
+println();
+
+x = [[1,2,3],[4,5,6],[7,8,9]];
+
+fun printArray(a) {
+    for (i:=0; i < 3; i++) {
+        for (j:=0; j < 3; j++) {
+           print(a[i][j],"");
+        }
+    }
+    println();
+}
+printArray(x);
+// expect: 1 2 3 4 5 6 7 8 9 

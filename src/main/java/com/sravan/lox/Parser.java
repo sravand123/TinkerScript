@@ -303,7 +303,7 @@ public class Parser {
                 expr = new Expr.Get(expr, name);
             } else if (match(LEFT_SQARE_BRACE)) {
                 Expr indexExpr = expression();
-                Token token = consume(RIGHT_SQUARE_BRACE, "Expected ].");
+                Token token = consume(RIGHT_SQUARE_BRACE, "Expected ']'.");
                 expr = new Expr.KeyAccess(expr, indexExpr, token);
             } else
                 break;
@@ -547,7 +547,7 @@ public class Parser {
                 elements.add(arrayElement());
             } while (match(COMMA));
         }
-        consume(RIGHT_SQUARE_BRACE, "Expected ].");
+        consume(RIGHT_SQUARE_BRACE, "Expected ']'.");
         return new Expr.Array(elements);
     }
 

@@ -1,0 +1,9 @@
+[1,]; // [line 1] Error at ']': Expected expression.
+
+1,2]; // [line 3] Error at ',': Expected ';' after expression.
+
+[1,2; // [line 5] Error at ';': Expected ']'.
+
+[,]; // [line 7] Error at ',': Expected expression.
+
+[var x= 2, 3]; // [line 9] Error at 'var': Expected expression.

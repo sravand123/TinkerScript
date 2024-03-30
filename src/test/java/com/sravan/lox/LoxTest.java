@@ -381,6 +381,60 @@ public class LoxTest {
     }
 
     @Test
+    public void array_syntax() throws IOException {
+        String output= testFile(testDir + "/array/syntax.lox");
+        assertEquals("[line 1] Error at ']': Expected expression.\n[line 3] Error at ',': Expected ';' after expression.\n[line 5] Error at ';': Expected ']'.\n[line 7] Error at ',': Expected expression.\n[line 9] Error at 'var': Expected expression.\n", output);
+    }
+
+    @Test
+    public void array_access() throws IOException {
+        String output= testFile(testDir + "/array/access.lox");
+        assertEquals("1\n2\n3\n1 2 3 \n1 2.3 true hello \n1 2 3 4 5 6 7 8 9 \n", output);
+    }
+
+    @Test
+    public void array_invalid_access_string_index() throws IOException {
+        String output= testFile(testDir + "/array/invalid_access_string_index.lox");
+        assertEquals("runtime error: Invalid index.\n", output);
+    }
+
+    @Test
+    public void array_invalid_access_decimal_index() throws IOException {
+        String output= testFile(testDir + "/array/invalid_access_decimal_index.lox");
+        assertEquals("runtime error: Invalid index.\n", output);
+    }
+
+    @Test
+    public void array_assignment() throws IOException {
+        String output= testFile(testDir + "/array/assignment.lox");
+        assertEquals("[1, 2, 3]\n[4, 5, 6]\n", output);
+    }
+
+    @Test
+    public void array_set_out_of_range() throws IOException {
+        String output= testFile(testDir + "/array/set_out_of_range.lox");
+        assertEquals("runtime error: Index 4 out of range.\n", output);
+    }
+
+    @Test
+    public void array_set() throws IOException {
+        String output= testFile(testDir + "/array/set.lox");
+        assertEquals("4\n[2, 5, 4]\n[string, 5, 4]\n[string, 5, [1, 2, 3]]\n[[2, 3, 4], [5, 6, 7], [8, 9, 10]]\n", output);
+    }
+
+    @Test
+    public void array_invalid_set() throws IOException {
+        String output= testFile(testDir + "/array/invalid_set.lox");
+        assertEquals("runtime error: Invalid index.\n", output);
+    }
+
+    @Test
+    public void array_access_out_of_range() throws IOException {
+        String output= testFile(testDir + "/array/access_out_of_range.lox");
+        assertEquals("runtime error: Index 4 out of range.\n", output);
+    }
+
+    @Test
     public void unexpected_character() throws IOException {
         String output= testFile(testDir + "/unexpected_character.lox");
         assertEquals("runtime error: Undefined variable 'foo'.\n", output);
