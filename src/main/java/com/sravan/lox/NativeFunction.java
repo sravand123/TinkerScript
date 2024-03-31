@@ -57,7 +57,7 @@ public abstract class NativeFunction implements LoxFunction {
             @Override
             public Object call(Interpreter interpreter, List<Object> arguments) {
                 Object value = arguments.get(0);
-                instance.elements.add(value);
+                instance.push(value);
                 return null;
             }
 
@@ -82,10 +82,7 @@ public abstract class NativeFunction implements LoxFunction {
 
             @Override
             public Object call(Interpreter interpreter, List<Object> arguments) {
-                if (instance.elements.size() == 0) {
-                    throw new RuntimeError(null, "Cann't pop from an empty array.");
-                }
-                return instance.elements.remove(instance.elements.size() - 1);
+                return instance.pop();
             }
 
             @Override

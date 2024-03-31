@@ -1,13 +1,14 @@
 package com.sravan.lox;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoxArray extends LoxInstance {
-    final List<Object> elements;
+    List<Object> elements;
 
     LoxArray(LoxClass klass, List<Object> elements) {
         super(klass);
-        this.elements = elements;
+        this.elements = new ArrayList<>(elements);
     }
 
     Object get(Token token, int index) {
@@ -22,6 +23,17 @@ public class LoxArray extends LoxInstance {
             throw new RuntimeError(token, "Index " + index + " out of range.");
         }
         this.elements.set(index, value);
+    }
+
+    void push(Object value) {
+        this.elements.add(value);
+    }
+
+    Object pop() {
+        if (this.elements.size() == 0) {
+            throw new RuntimeError(null, "Can't pop from an empty array.");
+        }
+        return this.elements.remove(this.elements.size() - 1);
     }
 
     @Override
