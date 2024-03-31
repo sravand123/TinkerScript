@@ -44,6 +44,61 @@ public abstract class NativeFunction implements LoxFunction {
         }
     }
 
+    static class ArrayFunction {
+        static class Push extends NativeFunction {
+
+            private LoxArray instance;
+
+            @Override
+            public int arity() {
+                return 1;
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                Object value = arguments.get(0);
+                instance.elements.add(value);
+                return null;
+            }
+
+            @Override
+            public LoxFunction bind(LoxInstance instance) {
+                if (!(instance instanceof LoxArray)) {
+                    throw new RuntimeError(null, "Invalid instance. Expected array.");
+                }
+                this.instance = (LoxArray) instance;
+                return this;
+            }
+        }
+
+        static class Pop extends NativeFunction {
+
+            private LoxArray instance;
+
+            @Override
+            public int arity() {
+                return 0;
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                if (instance.elements.size() == 0) {
+                    throw new RuntimeError(null, "Cann't pop from an empty array.");
+                }
+                return instance.elements.remove(instance.elements.size() - 1);
+            }
+
+            @Override
+            public LoxFunction bind(LoxInstance instance) {
+                if (!(instance instanceof LoxArray)) {
+                    throw new RuntimeError(null, "Invalid instance. Expected array.");
+                }
+                this.instance = (LoxArray) instance;
+                return this;
+            }
+        }
+    }
+
     static class StringLength extends NativeFunction {
         @Override
         public int arity() {

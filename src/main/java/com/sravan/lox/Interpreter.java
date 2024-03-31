@@ -58,7 +58,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
         // define a base class Object which is superclass of all classes
 
-        LoxClass arrayClass = new LoxClass("Array", new HashMap<>(), null);
+        LoxClass arrayClass = new LoxClass("Array", new HashMap<>(
+                Map.of("push", new NativeFunction.ArrayFunction.Push(),
+                        "pop", new NativeFunction.ArrayFunction.Pop())),
+                null);
         globals.define("Array", arrayClass);
         LoxClass mapClass = new LoxClass("Map", new HashMap<>(), null);
         globals.define("Map", mapClass);
