@@ -34,6 +34,12 @@ public class UserFunction implements LoxFunction {
                 lastArgument = new LoxArray(arrayClass, subList);
             }
             environment.define(declaration.params.get(declaration.params.size() - 1).lexeme, lastArgument);
+        } else {
+            if (declaration.spread != null) {
+                LoxClass arrayClass = (LoxClass) interpreter.globals.get("Array");
+                environment.define(declaration.params.get(declaration.params.size() - 1).lexeme,
+                        new LoxArray(arrayClass, List.of()));
+            }
         }
         try {
             interpreter.executeBlock(declaration.body, environment);
