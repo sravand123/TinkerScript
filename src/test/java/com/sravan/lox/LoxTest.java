@@ -387,6 +387,12 @@ public class LoxTest {
     }
 
     @Test
+    public void array_inside_class() throws IOException {
+        String output= testFile(testDir + "/array/inside_class.lox");
+        assertEquals("10\n[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n9\n[0, 1, 2, 3, 4, 5, 6, 7, 8]\n9\n[0, 1, 2, 3, 4, 5, 6, 7, 8, 10]\n", output);
+    }
+
+    @Test
     public void array_access() throws IOException {
         String output= testFile(testDir + "/array/access.lox");
         assertEquals("1\n2\n3\n1 2 3 \n1 2.3 true hello \n1 2 3 4 5 6 7 8 9 \n", output);

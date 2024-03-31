@@ -1,0 +1,41 @@
+class Arr < Array {
+   init(...elements){
+        this.elements = elements;
+        this.length = len(elements);
+   } 
+    get(index){
+         return this.elements[index];
+    }
+    set(index, value){
+        this.elements[index] = value;
+    }
+    append(...values){
+        for(i:=0; i < len(values); i++){
+            this.elements.push(values[i]);
+            this.length = this.length + 1;
+        }
+    }
+    pop(){
+        this.length = this.length - 1;
+        return this.elements.pop();
+    }
+    getElements(){
+        return this.elements;
+    }
+}
+a := Arr();
+for(i:=0; i < 10; i++){
+    a.append(i);
+}
+println(a.length);  // expect: 10
+
+println(a.getElements()); // expect: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+println(a.pop()); // expect: 9
+
+println(a.getElements()); // expect: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+println(a.length); // expect: 9
+a.elements.push(10);
+
+println(a.getElements()); // expect: [0, 1, 2, 3, 4, 5, 6, 7, 8, 10]
