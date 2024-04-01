@@ -837,6 +837,36 @@ public class LoxTest {
     }
 
     @Test
+    public void map_syntax() throws IOException {
+        String output= testFile(testDir + "/map/syntax.lox");
+        assertEquals("[line 1] Error at ')': Expected expression.\n[line 2] Error at '}': Expected expression.\n[line 3] Error at ';': Expected expression.\n[line 4] Error at '}': Expected expression.\n", output);
+    }
+
+    @Test
+    public void map_access() throws IOException {
+        String output= testFile(testDir + "/map/access.lox");
+        assertEquals("1\n2\n3\n3\n4\n5\n[1, 2, 3]\n", output);
+    }
+
+    @Test
+    public void map_invalid_access() throws IOException {
+        String output= testFile(testDir + "/map/invalid_access.lox");
+        assertEquals("Undefined key 'b'.\nInvalid key [1, 2].\nInvalid key <fn f>.\nInvalid key {}.\nInvalid key A.\nInvalid key A instance.\nUndefined property 'a'.\n", output);
+    }
+
+    @Test
+    public void map_set() throws IOException {
+        String output= testFile(testDir + "/map/set.lox");
+        assertEquals("2\n3\n4\n5\n6\n7\n[4, 5, 6]\n8\n", output);
+    }
+
+    @Test
+    public void map_invalid_set() throws IOException {
+        String output= testFile(testDir + "/map/invalid_set.lox");
+        assertEquals("Invalid key [1, 2].\nInvalid key <fn f>.\nInvalid key {}.\nInvalid key A.\nInvalid key A instance.\n", output);
+    }
+
+    @Test
     public void call_nil() throws IOException {
         String output= testFile(testDir + "/call/nil.lox");
         assertEquals("runtime error: Can only call functions and classes.\n", output);

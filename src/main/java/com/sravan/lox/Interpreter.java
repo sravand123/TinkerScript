@@ -223,13 +223,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             return;
         throw new RuntimeError(operator, "Operand must be integer.");
     }
+
     private void checkNumberOperand(Token operator, Object right) {
         if (right instanceof Double)
             return;
         throw new RuntimeError(operator, "Operand must be a number.");
     }
-
-
 
     public Object lookUpVariable(Token name, Expr expr) {
         Integer distance = locals.get(expr);
@@ -466,9 +465,16 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             return arrayAccess(expr.rightSqParen, object, key);
         }
         if (object instanceof LoxMapInstance) {
+            checkMapKey(key);
             return ((LoxMapInstance) object).get(expr.rightSqParen, key);
         }
         throw new RuntimeError(expr.rightSqParen, "Incorrect usage of [].");
+    }
+
+    private void checkMapKey(Object key) {
+        if (!(key instanceof String || key instanceof Double || key instanceof Boolean)) {
+            throw new RuntimeError(null, "Invalid key " + Lox.stringify(key) + ".");
+        }
     }
 
     private Object arrayAccess(Token token, Object object, Object key) {
@@ -490,7 +496,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         throw new RuntimeError(token, "Invalid key.");
     }
 
-
     @Override
     public Object visitKeySetExpr(KeySet expr) {
         Object object = evaluate(expr.object);
@@ -510,11 +515,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             }
         }
         if (object instanceof LoxMapInstance) {
-            if (key instanceof String || key instanceof Double || key instanceof Boolean || key instanceof Integer) {
-                ((LoxMapInstance) object).set(expr.equals, key, value);
-                return value;
-            }
-            throw new RuntimeError(expr.equals, "Invalid key.");
+            checkMapKey(key);
+            ((LoxMapInstance) object).set(expr.equals, key, value);
+            return value;
         }
         throw new RuntimeError(expr.equals, "Incorrect usage of [].");
     }
@@ -539,7 +542,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Object visitDictionaryExpr(Dictionary expr) {
         List<Object> keys = new ArrayList<>();
         for (Expr key : expr.keys) {
-            keys.add(evaluate(key));
+            Object keyObject = evaluate(key);
+            checkMapKey(keyObject);
+            keys.add(keyObject);
         }
         List<Object> values = new ArrayList<>();
         for (Expr value : expr.values) {

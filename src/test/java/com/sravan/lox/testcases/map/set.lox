@@ -1,0 +1,25 @@
+a := {"a":1, true:2, false:3, 2:3, 3:4, 1.2:5, "a"+"b":[1,2,3]};
+
+a["a"] =2;
+println(a["a"]); // expect: 2
+
+a[true] =3;
+println(a[true]); // expect: 3
+
+a[false] =4;
+println(a[false]); // expect: 4
+
+a[2] =5;
+println(a[2]); // expect: 5
+
+a[3] =6;
+println(a[3]); // expect: 6
+
+a[1.2] =7;
+println(a[1.2]); // expect: 7
+
+a["a"+"b"] = [4,5,6];
+println(a["a"+"b"]); // expect: [4, 5, 6]
+
+a["a"+"b"] = 8;
+println(a["a"+"b"]); // expect: 8

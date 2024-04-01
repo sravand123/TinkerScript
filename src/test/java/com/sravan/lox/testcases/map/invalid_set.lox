@@ -1,0 +1,40 @@
+
+try{
+    a := {"a":1, 2:"2"};
+    a[[1,2]] = 3;
+} catch(e){
+    println(e); // expect: Invalid key [1, 2].
+}
+
+try{
+    fun f(){}
+    a := {"a":1, 2:"2"};
+    a[f] = 3;
+} catch(e){
+    println(e); // expect: Invalid key <fn f>.
+}
+
+try{
+    b := {};
+    a := {"a":1, 2:"2"};
+    a[b] = 3;
+} catch(e){
+    println(e); // expect: Invalid key {}.
+}
+
+
+try{
+    class A{}
+    a := {"a":1, 2:"2"};
+    a[A] = 3;
+} catch(e){
+    println(e); // expect: Invalid key A.
+}
+
+try{
+    class A{}
+    a := {"a":1, 2:"2"};
+    a[A()] = 3;
+} catch(e){
+    println(e); // expect: Invalid key A instance.
+}

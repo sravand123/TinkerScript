@@ -1,0 +1,8 @@
+a := {"a":1, true:2, false:3, 2:3, 3:4, 1.2:5, "a"+"b":[1,2,3]};
+println(a["a"]); // expect: 1
+println(a[true]); // expect: 2
+println(a[false]); // expect: 3
+println(a[2]); // expect: 3
+println(a[3]); // expect: 4
+println(a[1.2]); // expect: 5
+println(a["a"+"b"]); // expect: [1, 2, 3]

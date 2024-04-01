@@ -1,0 +1,54 @@
+try{
+    a := {"a":1, 2:"2"};
+    println(a["b"]);
+} catch(e){
+    println(e); // expect: Undefined key 'b'.
+}
+
+try{
+    a := {"a":1, 2:"2"};
+    println(a[[1,2]]);
+} catch(e){
+    println(e); // expect: Invalid key [1, 2].
+}
+
+try{
+    fun f(){}
+    a := {"a":1, 2:"2"};
+    println(a[f]);
+} catch(e){
+    println(e); // expect: Invalid key <fn f>.
+}
+
+try{
+    b := {};
+    a := {"a":1, 2:"2"};
+    println(a[b]);
+} catch(e){
+    println(e); // expect: Invalid key {}.
+}
+
+
+try{
+    class A{}
+    a := {"a":1, 2:"2"};
+    println(a[A]);
+} catch(e){
+    println(e); // expect: Invalid key A.
+}
+
+try{
+    class A{}
+    a := {"a":1, 2:"2"};
+    println(a[A()]);
+} catch(e){
+    println(e); // expect: Invalid key A instance.
+}
+
+
+try{
+    a := {"a":1, 2:"2"};
+    println(a.a);
+} catch(e){
+    println(e); // expect: Undefined property 'a'.
+}
