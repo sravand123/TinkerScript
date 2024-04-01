@@ -63,7 +63,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                         "pop", new NativeFunction.ArrayFunction.Pop())),
                 null);
         globals.define("Array", arrayClass);
-        LoxClass mapClass = new LoxClass("Map", new HashMap<>(), null);
+        LoxClass mapClass = new LoxClass("Map", new HashMap<>(
+                Map.of("keys", new NativeFunction.MapFunction.Keys(),
+                        "values", new NativeFunction.MapFunction.Values())),
+                null);
         globals.define("Map", mapClass);
     }
 

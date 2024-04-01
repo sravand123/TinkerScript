@@ -96,6 +96,58 @@ public abstract class NativeFunction implements LoxFunction {
         }
     }
 
+    static class MapFunction {
+        static class Keys extends NativeFunction {
+            private LoxMapInstance instance;
+
+            @Override
+            public int arity() {
+                return 0;
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                LoxClass klass = (LoxClass) interpreter.globals.get("Array");
+                LoxArray array = new LoxArray(klass, instance.getKeys());
+                return array;
+            }
+
+            @Override
+            public LoxFunction bind(LoxInstance instance) {
+                if (!(instance instanceof LoxMapInstance)) {
+                    throw new RuntimeError(null, "Invalid instance. Expected map.");
+                }
+                this.instance = (LoxMapInstance) instance;
+                return this;
+            }
+        }
+
+        static class Values extends NativeFunction {
+
+            private LoxMapInstance instance;
+
+            @Override
+            public int arity() {
+                return 0;
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                LoxClass klass = (LoxClass) interpreter.globals.get("Array");
+                LoxArray array = new LoxArray(klass, instance.getValues());
+                return array;
+            }
+
+            @Override
+            public LoxFunction bind(LoxInstance instance) {
+                if (!(instance instanceof LoxMapInstance)) {
+                    throw new RuntimeError(null, "Invalid instance. Expected map.");
+                }
+                this.instance = (LoxMapInstance) instance;
+                return this;
+            }
+        }
+    }
     static class StringLength extends NativeFunction {
         @Override
         public int arity() {

@@ -1,6 +1,8 @@
 package com.sravan.lox;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LoxMapInstance extends LoxInstance {
@@ -20,6 +22,14 @@ public class LoxMapInstance extends LoxInstance {
 
     void set(Token token, Object key, Object value) {
         fields.put(key, value);
+    }
+
+    public List<Object> getKeys() {
+        return new ArrayList<>(fields.keySet());
+    }
+
+    public List<Object> getValues() {
+        return new ArrayList<>(fields.values());
     }
 
     @Override
