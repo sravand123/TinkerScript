@@ -1,0 +1,15 @@
+sum  := fun(...values){
+     s := 0;
+     for(i:=0; i < len(values); i++){
+         s+=values[i];
+     }
+     return s;
+};
+
+println(sum(1, 2, 3, 4)); // expect: 10
+
+
+fact := fun(n){
+    if(n==0) return 1;
+    return n*fact(n-1);
+};

@@ -626,4 +626,16 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
         return null;
     }
+
+    @Override
+    public Object visitFunctionExpr(com.sravan.lox.Expr.Function expr) {
+        Environment current = environment;
+        environment = new Environment(current);
+        LoxFunction function = new UserFunction(expr.function, environment, false);
+        if (expr.function.name != null) {
+            environment.define(expr.function.name.lexeme, function);
+        }
+        environment = current;
+        return function;
+    }
 }

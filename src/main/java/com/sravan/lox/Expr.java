@@ -45,6 +45,8 @@ abstract class Expr {
 
         R visitSpreadExpr(Spread expr);
 
+        R visitFunctionExpr(Function expr);
+
     }
 
     static class Binary extends Expr {
@@ -330,6 +332,18 @@ abstract class Expr {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitSpreadExpr(this);
+        }
+    }
+
+    static class Function extends Expr {
+        Function(Stmt.Function function) {
+            this.function = function;
+        }
+
+        final Stmt.Function function;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitFunctionExpr(this);
         }
     }
 

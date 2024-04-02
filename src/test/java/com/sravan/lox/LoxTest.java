@@ -441,6 +441,30 @@ public class LoxTest {
     }
 
     @Test
+    public void function_expression_use() throws IOException {
+        String output= testFile(testDir + "/function_expression/use.lox");
+        assertEquals("[<fn anonymous>]\n14\n{a: <fn anonymous>}\n10\n10\n<fn anonymous>\nhello\nhello\n120\n", output);
+    }
+
+    @Test
+    public void function_expression_syntax() throws IOException {
+        String output= testFile(testDir + "/function_expression/syntax.lox");
+        assertEquals("[line 1] Error at '(': Expected function name.\n[line 3] Error at '}': Expected expression.\n", output);
+    }
+
+    @Test
+    public void function_expression_access() throws IOException {
+        String output= testFile(testDir + "/function_expression/access.lox");
+        assertEquals("<fn anonymous>\n<fn anonymous>\n<fn anonymous>\n<fn c>\n", output);
+    }
+
+    @Test
+    public void function_expression_call() throws IOException {
+        String output= testFile(testDir + "/function_expression/call.lox");
+        assertEquals("10\n", output);
+    }
+
+    @Test
     public void unexpected_character() throws IOException {
         String output= testFile(testDir + "/unexpected_character.lox");
         assertEquals("runtime error: Undefined variable 'foo'.\n", output);
@@ -467,7 +491,7 @@ public class LoxTest {
     @Test
     public void if_fun_in_else() throws IOException {
         String output= testFile(testDir + "/if/fun_in_else.lox");
-        assertEquals("[line 2] Error at 'fun': Expected expression.\n", output);
+        assertEquals("[line 2] Error at end: Expected ';' after expression.\n", output);
     }
 
     @Test
@@ -485,7 +509,7 @@ public class LoxTest {
     @Test
     public void if_fun_in_then() throws IOException {
         String output= testFile(testDir + "/if/fun_in_then.lox");
-        assertEquals("[line 2] Error at 'fun': Expected expression.\n", output);
+        assertEquals("[line 2] Error at end: Expected ';' after expression.\n", output);
     }
 
     @Test
@@ -1133,19 +1157,19 @@ public class LoxTest {
     @Test
     public void for_statement_initializer() throws IOException {
         String output= testFile(testDir + "/for/statement_initializer.lox");
-        assertEquals("[line 3] Error at 'fun': Expected expression.\n[line 3] Error at ')': Expected ';' after expression.\n", output);
+        assertEquals("[line 3] Error at 'if': Expected expression.\n[line 3] Error at ')': Expected ';' after expression.\n", output);
     }
 
     @Test
     public void for_statement_increment() throws IOException {
         String output= testFile(testDir + "/for/statement_increment.lox");
-        assertEquals("[line 2] Error at 'fun': Expected expression.\n", output);
+        assertEquals("[line 2] Error at 'if': Expected expression.\n", output);
     }
 
     @Test
     public void for_statement_condition() throws IOException {
         String output= testFile(testDir + "/for/statement_condition.lox");
-        assertEquals("[line 3] Error at 'fun': Expected expression.\n[line 3] Error at ')': Expected ';' after expression.\n", output);
+        assertEquals("[line 3] Error at 'if': Expected expression.\n[line 3] Error at ')': Expected ';' after expression.\n", output);
     }
 
     @Test
@@ -1163,7 +1187,7 @@ public class LoxTest {
     @Test
     public void for_fun_in_body() throws IOException {
         String output= testFile(testDir + "/for/fun_in_body.lox");
-        assertEquals("[line 2] Error at 'fun': Expected expression.\n", output);
+        assertEquals("[line 2] Error at end: Expected ';' after expression.\n", output);
     }
 
     @Test
@@ -1373,7 +1397,7 @@ public class LoxTest {
     @Test
     public void while_fun_in_body() throws IOException {
         String output= testFile(testDir + "/while/fun_in_body.lox");
-        assertEquals("[line 2] Error at 'fun': Expected expression.\n", output);
+        assertEquals("[line 2] Error at end: Expected ';' after expression.\n", output);
     }
 
     @Test

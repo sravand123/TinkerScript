@@ -1,0 +1,47 @@
+
+sum  := fun(...values){
+     s := 0;
+     for(i:=0; i < len(values); i++){
+         s+=values[i];
+     }
+     return s;
+};
+
+array := [sum];
+println(array); // expect: [<fn anonymous>]
+
+println(array[0](2, 3, 4, 5)); // expect: 14
+
+
+
+map := {"a":sum};
+println(map); // expect: {a: <fn anonymous>}
+
+println(map["a"](1, 2, 3, 4)); // expect: 10
+
+add := sum;
+println(add(1, 2, 3, 4)); // expect: 10
+
+
+class A{
+     a(){
+       return fun (){
+           println("hello");        
+       };
+    }
+}
+
+
+a := A();
+println(a.a()); // expect: <fn anonymous>
+
+a.a()(); // expect: hello
+
+a.method = a.a();
+a.method(); // expect: hello
+
+fact := fun(n){
+    if(n==0) return 1;
+    return n*fact(n-1);
+};
+println(fact(5)); // expect: 120

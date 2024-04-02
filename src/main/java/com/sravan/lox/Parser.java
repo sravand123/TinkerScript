@@ -267,7 +267,8 @@ public class Parser {
         }
         if (match(IDENTIFIER))
             return new Expr.Variable(previous());
-
+        if (match(FUN))
+            return new Expr.Function(function("expression_function"));
         if (match(SUPER)) {
             Token keyword = previous();
             consume(DOT, "Expected '.' after 'super'.");
@@ -312,8 +313,21 @@ public class Parser {
     }
 
     private Stmt.Function function(String kind) {
-        Token name = consume(IDENTIFIER, "Expected function name.");
-        consume(LEFT_PAREN, "Expected ( after " + kind + " name.");
+        Token name = null;
+        if (!kind.equals("expression_function")) {
+            name = consume(IDENTIFIER, "Expected function name.");
+        } else if (match(IDENTIFIER)) {
+            name = previous();
+        }
+        if (kind.equals("expression_function")) {
+            if (name == null) {
+                consume(LEFT_PAREN, "Expected ( after 'fun'.");
+            } else {
+                consume(LEFT_PAREN, "Expected ( after function name.");
+            }
+        } else {
+            consume(LEFT_PAREN, "Expected '(' after " + kind + " name.");
+        }
         List<Token> parameters = new ArrayList<>();
         Token spread = null;
         if (!check(RIGHT_PAREN)) {

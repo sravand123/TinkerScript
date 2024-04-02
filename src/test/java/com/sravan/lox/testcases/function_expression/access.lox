@@ -1,0 +1,18 @@
+a := fun (){
+    println("hello");
+};
+
+println(a); // expect: <fn anonymous>
+
+b := a;
+
+println(b); // expect: <fn anonymous>
+
+c := [fun(){
+    println("hello");
+}, fun c(){
+    println("goodbye");
+}];
+
+println(c[0]); // expect: <fn anonymous>
+println(c[1]); // expect: <fn c>

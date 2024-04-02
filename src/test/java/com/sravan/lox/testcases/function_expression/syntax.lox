@@ -1,0 +1,13 @@
+fun (){
+    println("hello");
+}
+// [line 1] Error at '(': Expected function name.
+// [line 3] Error at '}': Expected expression.
+
+a := fun (){
+    println("hello");
+};
+
+c := fun b(){
+    println("hello");
+};

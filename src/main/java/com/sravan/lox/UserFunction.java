@@ -62,6 +62,9 @@ public class UserFunction implements LoxFunction {
 
     @Override
     public String toString() {
+        if (declaration.name == null) {
+            return "<fn anonymous>";
+        }
         return "<fn " + declaration.name.lexeme + ">";
     }
 

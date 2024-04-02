@@ -435,4 +435,16 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Object visitFunctionExpr(com.sravan.lox.Expr.Function expr) {
+        beginScope();
+        if (expr.function.name != null) {
+            declare(expr.function.name);
+            define(expr.function.name);
+        }
+        resolveFunction(expr.function, FunctionType.FUNCTION);
+        endScope();
+        return null;
+    }
+
 }
