@@ -465,6 +465,48 @@ public class LoxTest {
     }
 
     @Test
+    public void static_methods_use() throws IOException {
+        String output= testFile(testDir + "/static_methods/use.lox");
+        assertEquals("foo\nFoo instance\nhi\ntest foo\nfoo\ntest foo\n", output);
+    }
+
+    @Test
+    public void static_methods_syntax() throws IOException {
+        String output= testFile(testDir + "/static_methods/syntax.lox");
+        assertEquals("[line 8] Error at 'static': Expected expression.\n[line 16] Error at 'static': Expected expression.\n[line 26] Error at '{': Expected function name.\n", output);
+    }
+
+    @Test
+    public void static_methods_inheritance() throws IOException {
+        String output= testFile(testDir + "/static_methods/inheritance.lox");
+        assertEquals("foo\nbarr\n", output);
+    }
+
+    @Test
+    public void static_methods_invalid_use_of_super() throws IOException {
+        String output= testFile(testDir + "/static_methods/invalid_use_of_super.lox");
+        assertEquals("runtime error: Invalid use of 'super' outside of an instance method.\n", output);
+    }
+
+    @Test
+    public void static_methods_invalid_use_of_this() throws IOException {
+        String output= testFile(testDir + "/static_methods/invalid_use_of_this.lox");
+        assertEquals("runtime error: Undefined variable 'this'.\n", output);
+    }
+
+    @Test
+    public void static_methods_this() throws IOException {
+        String output= testFile(testDir + "/static_methods/this.lox");
+        assertEquals("bar\n", output);
+    }
+
+    @Test
+    public void static_methods_invalid_access() throws IOException {
+        String output= testFile(testDir + "/static_methods/invalid_access.lox");
+        assertEquals("runtime error: Undefined property 'test'.\n", output);
+    }
+
+    @Test
     public void function_expression_use() throws IOException {
         String output= testFile(testDir + "/function_expression/use.lox");
         assertEquals("[<fn anonymous>]\n14\n{a: <fn anonymous>}\n10\n10\n<fn anonymous>\nhello\nhello\n120\n", output);
@@ -731,7 +773,7 @@ public class LoxTest {
     @Test
     public void field_get_on_string() throws IOException {
         String output= testFile(testDir + "/field/get_on_string.lox");
-        assertEquals("runtime error: Only instances have properties.\n", output);
+        assertEquals("runtime error: Only instances and classes can be accessed through dot notation.\n", output);
     }
 
     @Test
@@ -767,7 +809,7 @@ public class LoxTest {
     @Test
     public void field_get_on_nil() throws IOException {
         String output= testFile(testDir + "/field/get_on_nil.lox");
-        assertEquals("runtime error: Only instances have properties.\n", output);
+        assertEquals("runtime error: Only instances and classes can be accessed through dot notation.\n", output);
     }
 
     @Test
@@ -791,7 +833,7 @@ public class LoxTest {
     @Test
     public void field_get_on_function() throws IOException {
         String output= testFile(testDir + "/field/get_on_function.lox");
-        assertEquals("runtime error: Only instances have properties.\n", output);
+        assertEquals("runtime error: Only instances and classes can be accessed through dot notation.\n", output);
     }
 
     @Test
@@ -819,12 +861,6 @@ public class LoxTest {
     }
 
     @Test
-    public void field_get_on_class() throws IOException {
-        String output= testFile(testDir + "/field/get_on_class.lox");
-        assertEquals("runtime error: Only instances have properties.\n", output);
-    }
-
-    @Test
     public void field_get_and_set_method() throws IOException {
         String output= testFile(testDir + "/field/get_and_set_method.lox");
         assertEquals("other\n1\nmethod\n2\n", output);
@@ -833,13 +869,13 @@ public class LoxTest {
     @Test
     public void field_get_on_bool() throws IOException {
         String output= testFile(testDir + "/field/get_on_bool.lox");
-        assertEquals("runtime error: Only instances have properties.\n", output);
+        assertEquals("runtime error: Only instances and classes can be accessed through dot notation.\n", output);
     }
 
     @Test
     public void field_get_on_num() throws IOException {
         String output= testFile(testDir + "/field/get_on_num.lox");
-        assertEquals("runtime error: Only instances have properties.\n", output);
+        assertEquals("runtime error: Only instances and classes can be accessed through dot notation.\n", output);
     }
 
     @Test

@@ -1,0 +1,49 @@
+class Foo {
+    static foo() {
+        return "foo";
+    }
+
+    static test(){
+        return "test "+Foo.foo();
+    }
+    hi(){
+        return "hi";
+    }
+}
+
+println(Foo.foo()); // expect: foo
+
+class FooFactory {
+    static create() {
+        return Foo();
+    }
+}
+
+foo := FooFactory.create();
+println(foo); // expect: Foo instance
+println(foo.hi()); // expect: hi
+
+
+println(Foo.test()); // expect: test foo
+
+
+class Foo {
+    static init() {
+        return "foo";
+    }
+}
+
+println(Foo.init()); // expect: foo
+
+class Foo {
+    static test() {
+        return "foo";
+    }
+
+    test(){
+        return "test "+ Foo.test();
+    }
+}
+
+foo := Foo();
+println(foo.test()); // expect: test foo

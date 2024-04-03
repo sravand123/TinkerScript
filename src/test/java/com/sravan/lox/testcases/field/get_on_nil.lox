@@ -1,1 +1,1 @@
-nil.foo; // expect runtime error: Only instances have properties.
+nil.foo; // expect runtime error: Only instances and classes can be accessed through dot notation.

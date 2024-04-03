@@ -1,0 +1,7 @@
+class Foo {
+    static foo() {
+        return this.name;
+    }
+}
+
+println(Foo.foo()); // expect runtime error: Undefined variable 'this'.

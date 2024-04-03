@@ -1,0 +1,19 @@
+class Foo {
+    static foo() {
+        return "foo";
+    }
+}
+
+class Bar < Foo {
+
+}
+
+println(Bar.foo()); // expect: foo
+
+class Barr < Foo {
+    static foo() {
+        return "barr";
+    }
+}
+
+println(Barr.foo()); // expect: barr

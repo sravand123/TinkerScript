@@ -6,12 +6,16 @@ import java.util.Map;
 public class LoxClass implements LoxCallable {
     final String name;
     private final Map<String, LoxFunction> methods;
+    private final Map<String, LoxFunction> staticMethods;
     final LoxClass superClass;
 
-    LoxClass(String name, Map<String, LoxFunction> methods, LoxClass superClass) {
+    LoxClass(String name, Map<String, LoxFunction> methods,
+            Map<String, LoxFunction> staticMethods,
+            LoxClass superClass) {
         this.name = name;
         this.methods = methods;
         this.superClass = superClass;
+        this.staticMethods = staticMethods;
     }
 
     LoxFunction findMethod(String name) {
@@ -22,6 +26,15 @@ public class LoxClass implements LoxCallable {
         }
 
         return null;
+    }
+
+    LoxFunction getStaticMethod(Token name) {
+        if (staticMethods.containsKey(name.lexeme))
+            return staticMethods.get(name.lexeme);
+        if (superClass != null) {
+            return superClass.getStaticMethod(name);
+        }
+        throw new RuntimeError(name, "Undefined property '" + name.lexeme + "'.");
     }
 
     @Override

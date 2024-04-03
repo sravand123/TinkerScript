@@ -62,11 +62,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         LoxClass arrayClass = new LoxClass("Array", new HashMap<>(
                 Map.of("push", new NativeFunction.ArrayFunction.Push(),
                         "pop", new NativeFunction.ArrayFunction.Pop())),
+                new HashMap<>(),
                 null);
         globals.define("Array", arrayClass);
         LoxClass mapClass = new LoxClass("Map", new HashMap<>(
                 Map.of("keys", new NativeFunction.MapFunction.Keys(),
                         "values", new NativeFunction.MapFunction.Values())),
+                new HashMap<>(),
                 null);
         globals.define("Map", mapClass);
     }
@@ -398,11 +400,17 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             environment.define("super", superClass);
         }
         Map<String, LoxFunction> methods = new HashMap<>();
+        Map<String, LoxFunction> staticMethods = new HashMap<>();
         for (Stmt.Function method : stmt.methods) {
-            LoxFunction function = new UserFunction(method, environment, method.name.lexeme.equals("init"));
-            methods.put(method.name.lexeme, function);
+            if (method.staticToken == null) {
+                LoxFunction function = new UserFunction(method, environment, method.name.lexeme.equals("init"));
+                methods.put(method.name.lexeme, function);
+            } else {
+                LoxFunction function = new UserFunction(method, environment, false);
+                staticMethods.put(method.name.lexeme, function);
+            }
         }
-        LoxClass klass = new LoxClass(stmt.name.lexeme, methods, (LoxClass) superClass);
+        LoxClass klass = new LoxClass(stmt.name.lexeme, methods, staticMethods, (LoxClass) superClass);
         if (superClass != null) {
             environment = environment.enclosing;
         }
@@ -416,7 +424,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         if (value instanceof LoxInstance) {
             return ((LoxInstance) value).get(expr.name);
         }
-        throw new RuntimeError(expr.name, "Only instances have properties.");
+        if (value instanceof LoxClass) {
+            return ((LoxClass) value).getStaticMethod(expr.name);
+        }
+        throw new RuntimeError(expr.name, "Only instances and classes can be accessed through dot notation.");
     }
 
     @Override
@@ -437,6 +448,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Object visitSuperExpr(Super expr) {
+        if (locals.get(expr) == null) {
+            throw new RuntimeError(expr.keyword, "Invalid use of 'super' outside of an instance method.");
+        }
         int distance = locals.get(expr);
         LoxClass superClass = (LoxClass) environment.getAt("super", distance);
         LoxInstance object = (LoxInstance) environment.getAt("this", distance - 1);

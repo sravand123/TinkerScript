@@ -1,0 +1,16 @@
+class Foo {
+    static foo() {
+        class Bar {
+            test() {
+                return this.name;
+            }
+        }
+
+        return Bar;
+    }
+}
+
+foo := Foo.foo();
+bar := foo();
+bar.name ="bar";
+println(bar.test()); // expect: bar

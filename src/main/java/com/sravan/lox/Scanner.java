@@ -36,6 +36,7 @@ public class Scanner {
         keywords.put("throw", THROW);
         keywords.put("break", BREAK);
         keywords.put("continue", CONTINUE);
+        keywords.put("static", STATIC);
     }
 
     Scanner(String source) {

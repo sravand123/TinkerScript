@@ -274,6 +274,11 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             }
             resolve(stmt.superClass);
         }
+        // resolve static methods
+        for (Stmt.Function function : stmt.methods) {
+            if (function.staticToken != null)
+                resolveFunction(function, FunctionType.METHOD);
+        }
         if (stmt.superClass != null) {
             beginScope();
             scopes.peek().put("super", true);
@@ -281,10 +286,12 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         beginScope();
         scopes.peek().put("this", true);
         for (Stmt.Function function : stmt.methods) {
-            if (function.name.lexeme.equals("init"))
-                resolveFunction(function, FunctionType.INITIALIZER);
-            else
-                resolveFunction(function, FunctionType.METHOD);
+            if (function.staticToken == null) {
+                if (function.name.lexeme.equals("init"))
+                    resolveFunction(function, FunctionType.INITIALIZER);
+                else
+                    resolveFunction(function, FunctionType.METHOD);
+            }
         }
         endScope();
         if (stmt.superClass != null)

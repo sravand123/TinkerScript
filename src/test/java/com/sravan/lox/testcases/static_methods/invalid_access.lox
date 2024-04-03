@@ -1,0 +1,8 @@
+class Foo {
+    static test() {
+        return "foo";
+    }
+}
+
+fooInstance := Foo();
+println(fooInstance.test()); // expect runtime error: Undefined property 'test'.

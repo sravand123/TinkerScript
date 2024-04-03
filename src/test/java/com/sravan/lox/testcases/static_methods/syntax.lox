@@ -1,0 +1,30 @@
+class A {
+    static foo() {
+        return "foo";
+    }
+}
+
+
+static bar() {
+
+}
+// [line 8] Error at 'static': Expected expression.
+
+
+class B {
+     foo() {
+        static bar() {
+            
+        }
+        return bar; 
+    }
+}
+
+// [line 16] Error at 'static': Expected expression.
+
+class B {
+    static {
+
+    }
+}
+// [line 26] Error at '{': Expected function name.

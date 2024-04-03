@@ -354,7 +354,11 @@ public class Parser {
 
     private Stmt.Function function(String kind) {
         Token name = null;
+        Token staticToken = null;
         if (!kind.equals("expression_function")) {
+            if (kind.equals("method") && match(STATIC)) {
+                staticToken = previous();
+            }
             name = consume(IDENTIFIER, "Expected function name.");
         } else if (match(IDENTIFIER)) {
             name = previous();
@@ -385,7 +389,7 @@ public class Parser {
         consume(RIGHT_PAREN, "Expected ')' after parameters.");
         consume(LEFT_BRACE, "Expected '{' before " + kind + " body.");
         List<Stmt> body = block();
-        return new Stmt.Function(name, parameters, spread, body);
+        return new Stmt.Function(name, parameters, spread, body, staticToken);
     }
 
     private Expr finishCall(Expr expr) {

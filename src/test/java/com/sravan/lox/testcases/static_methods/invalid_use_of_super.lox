@@ -1,0 +1,13 @@
+class Foo {
+    static foo() {
+        return "foo";
+    }
+}
+
+class Bar < Foo {
+    static foo() {
+        return super.foo();
+    }
+}
+
+println(Bar.foo()); // expect runtime error: Invalid use of 'super' outside of an instance method.
