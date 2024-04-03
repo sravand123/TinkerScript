@@ -3,6 +3,7 @@ package com.sravan.lox;
 import static com.sravan.lox.TokenType.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Parser {
@@ -234,11 +235,14 @@ public class Parser {
     }
 
     private boolean checkNext(TokenType type) {
-        if (isAtEnd() || current + 1 >= tokens.size())
-            return false;
-        return tokens.get(current + 1).type == type;
+        return checkNext(type, 1);
     }
 
+    private boolean checkNext(TokenType type, int offset) {
+        if (isAtEnd() || current + offset >= tokens.size())
+            return false;
+        return tokens.get(current + offset).type == type;
+    }
     private boolean isAtEnd() {
         return peek().type == EOF;
     }
@@ -255,9 +259,7 @@ public class Parser {
         if (match(STRING, NUMBER))
             return new Expr.Literal(previous().literal);
         if (match(LEFT_PAREN)) {
-            Expr expression = expression();
-            consume(RIGHT_PAREN, "Expected ) after expression.");
-            return new Expr.Grouping(expression);
+            return parenExpr();
         }
         if (match(LEFT_BRACE)) {
             return dictionary();
@@ -265,8 +267,13 @@ public class Parser {
         if (match(LEFT_SQARE_BRACE)) {
             return array();
         }
-        if (match(IDENTIFIER))
-            return new Expr.Variable(previous());
+        if (match(IDENTIFIER)) {
+            Token identifier = previous();
+            if (match(ARROW)) {
+                return new Expr.Lambda(Arrays.asList(identifier), null, expression());
+            }
+            return new Expr.Variable(identifier);
+        }
         if (match(FUN))
             return new Expr.Function(function("expression_function"));
         if (match(SUPER)) {
@@ -278,6 +285,39 @@ public class Parser {
 
         throw error(peek(), "Expected expression.");
 
+    }
+
+    private Expr parenExpr() {
+        if ((check(IDENTIFIER) && checkNext(COMMA)) || (check(RIGHT_PAREN) && checkNext(ARROW))
+                || (check(SPREAD) && checkNext(IDENTIFIER)) ||
+                (check(IDENTIFIER) && checkNext(RIGHT_PAREN) && checkNext(ARROW, 2))) {
+            return lambda();
+        } else {
+            Expr expr = new Expr.Grouping(expression());
+            consume(RIGHT_PAREN, "Expected ')' after expression.");
+            return expr;
+        }
+    }
+
+    private Expr lambda() {
+        List<Token> parameters = new ArrayList<>();
+        Token spread = null;
+        if (!check(RIGHT_PAREN)) {
+            do {
+                if (spread != null) {
+                    throw error(peek(), "Variadic parameter must be the last parameter");
+                }
+                if (match(SPREAD)) {
+                    spread = previous();
+                }
+                parameters.add(
+                        consume(IDENTIFIER, "Expected parameter name."));
+            } while (match(COMMA));
+        }
+        consume(RIGHT_PAREN, "Expected ')' after parameters.");
+        consume(ARROW, "Expected '->' after parameters.");
+        Expr body = expression();
+        return new Expr.Lambda(parameters, spread, body);
     }
 
     private Expr dictionary() {

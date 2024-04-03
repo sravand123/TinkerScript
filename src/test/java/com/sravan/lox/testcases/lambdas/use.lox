@@ -1,0 +1,56 @@
+x := () -> 2;
+println(x); // expect: <lambda>
+
+println(x()); // expect: 2
+
+x = (a, b) -> a + b;
+
+println(x(1, 2)); // expect: 3
+
+x = () -> 1 + 2;
+println(x()); // expect: 3
+
+x=  () -> nil;
+
+println(x()); // expect: nil
+
+x = (x) -> x;
+
+println(x(2)); // expect: 2
+
+arr := [x,x,x];
+
+for(i:=0 ; i < len(arr); i++){
+    print(arr[i](i),""); // expect: 0 1 2 
+}
+println();
+
+map := { 1: x, 2: x, 3: x };
+
+keys := map.keys();
+for(i:=0 ; i < len(keys); i++){
+    print(map[keys[i]](keys[i]),""); // expect: 1 2 3 
+}
+println();
+
+fun test(){
+    return (x,y) -> x + y;
+}
+
+x := test();
+println(x(1,2)); // expect: 3
+
+class Foo {
+    test(){
+        return (x,y) -> x + y;
+    }
+}
+
+x := Foo().test();
+println(x(1,2)); // expect: 3
+
+a := 3;
+
+x = a == 3 ? (x,y) -> x + y : (x,y) -> x - y;
+println(x(1,2)); // expect: 3
+

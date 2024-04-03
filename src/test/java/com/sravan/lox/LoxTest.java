@@ -45,6 +45,30 @@ public class LoxTest {
     }
 
     @Test
+    public void lambdas_scope() throws IOException {
+        String output= testFile(testDir + "/lambdas/scope.lox");
+        assertEquals("Hello foo\nHello foo\n", output);
+    }
+
+    @Test
+    public void lambdas_use() throws IOException {
+        String output= testFile(testDir + "/lambdas/use.lox");
+        assertEquals("<lambda>\n2\n3\n3\nnil\n2\n0 1 2 \n1 2 3 \n3\n3\n3\n", output);
+    }
+
+    @Test
+    public void lambdas_syntax() throws IOException {
+        String output= testFile(testDir + "/lambdas/syntax.lox");
+        assertEquals("[line 15] Error at ';': Expected '->' after parameters.\n[line 17] Error at ')': Expected parameter name.\n[line 18] Error at ';': Expected expression.\n", output);
+    }
+
+    @Test
+    public void lambdas_curry() throws IOException {
+        String output= testFile(testDir + "/lambdas/curry.lox");
+        assertEquals("<lambda>\n3\n6\n1\n", output);
+    }
+
+    @Test
     public void ternary_syntax_error() throws IOException {
         String output= testFile(testDir + "/ternary/syntax_error.lox");
         assertEquals("[line 1] Error at '?': Expected expression.\n[line 2] Error at ':': Expected expression.\n[line 3] Error at ';': Expected expression.\n[line 5] Error at 'var': Expected expression.\n[line 6] Error at 'var': Expected expression.\n", output);

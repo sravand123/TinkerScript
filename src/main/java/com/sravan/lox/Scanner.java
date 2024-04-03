@@ -87,7 +87,10 @@ public class Scanner {
                 }
                 break;
             case '-':
-                addToken(match('-') ? MINUS_MINUS : match('=') ? MINUS_EQUAL : MINUS);
+                if (match('>'))
+                    addToken(ARROW);
+                else
+                    addToken(match('-') ? MINUS_MINUS : match('=') ? MINUS_EQUAL : MINUS);
                 break;
             case '+':
                 addToken(match('+') ? PLUS_PLUS : match('=') ? PLUS_EQUAL : PLUS);

@@ -8,6 +8,7 @@ import java.util.Stack;
 import com.sravan.lox.Expr.Array;
 import com.sravan.lox.Expr.KeyAccess;
 import com.sravan.lox.Expr.KeySet;
+import com.sravan.lox.Expr.Lambda;
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Call;
@@ -444,6 +445,22 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
         resolveFunction(expr.function, FunctionType.FUNCTION);
         endScope();
+        return null;
+    }
+
+    @Override
+    public Object visitLambdaExpr(Lambda expr) {
+        FunctionType enclosingFunction = currentFunction;
+        currentFunction = FunctionType.FUNCTION;
+        beginScope();
+
+        for (Token param : expr.params) {
+            declare(param);
+            define(param);
+        }
+        resolve(expr.body);
+        endScope();
+        currentFunction = enclosingFunction;
         return null;
     }
 

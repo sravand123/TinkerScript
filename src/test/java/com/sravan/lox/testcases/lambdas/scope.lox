@@ -1,0 +1,20 @@
+class Foo {
+    greet(){
+        return () -> "Hello " + this.name;
+    }
+}
+
+foo := Foo();
+foo.name = "foo";
+
+println(foo.greet()()); // expect: Hello foo
+
+class Bar {
+}
+
+bar := Bar();
+bar.name = "bar";
+
+bar.greet = foo.greet;
+
+println(bar.greet()()); // expect: Hello foo

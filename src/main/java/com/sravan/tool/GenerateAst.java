@@ -33,7 +33,8 @@ public class GenerateAst {
                 "KeySet : Expr object, Expr key, Expr value , Token equals",
                 "Dictionary : List<Expr> keys, List<Expr> values",
                 "Spread : Token operator, Expr right",
-                "Function : Stmt.Function function"));
+                "Function : Stmt.Function function",
+                "Lambda : List<Token> params, Token spread , Expr body"));
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                 "Expression : Expr expression",

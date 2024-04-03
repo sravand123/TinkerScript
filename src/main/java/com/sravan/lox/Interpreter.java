@@ -10,6 +10,7 @@ import java.util.Map;
 import com.sravan.lox.Expr.Array;
 import com.sravan.lox.Expr.KeyAccess;
 import com.sravan.lox.Expr.KeySet;
+import com.sravan.lox.Expr.Lambda;
 import com.sravan.lox.Expr.Assign;
 import com.sravan.lox.Expr.Binary;
 import com.sravan.lox.Expr.Call;
@@ -87,6 +88,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     void execute(Stmt statement) {
         statement.accept(this);
+    }
+
+    void executeLambda(Expr.Lambda lambda) {
+
     }
 
     @Override
@@ -289,6 +294,16 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             this.environment = previous;
         }
 
+    }
+
+    Object evaluate(Expr expr, Environment environment) {
+        Environment previous = this.environment;
+        this.environment = environment;
+        try {
+            return evaluate(expr);
+        } finally {
+            this.environment = previous;
+        }
     }
 
     @Override
@@ -636,6 +651,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             environment.define(expr.function.name.lexeme, function);
         }
         environment = current;
+        return function;
+    }
+
+    @Override
+    public Object visitLambdaExpr(Lambda expr) {
+        LoxFunction function = new LambdaFunction(expr, environment);
         return function;
     }
 }

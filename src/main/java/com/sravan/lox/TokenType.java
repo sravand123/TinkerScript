@@ -21,6 +21,7 @@ enum TokenType {
     CARAT_EQUAL, COLON_EQUAL,
     PERCENTAGE_EQUAL,
     SPREAD,
+    ARROW,
 
     // Literals.
     IDENTIFIER, STRING, NUMBER,

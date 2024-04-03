@@ -1,0 +1,14 @@
+
+adder := (x) -> (y) -> x + y;
+
+println(adder(1)); // expect: <lambda>
+
+add := adder(1);
+println(add(2)); // expect: 3
+
+
+mult := x -> y -> z -> x * y * z;
+println(mult(1)(2)(3)); // expect: 6
+
+mult = x -> () -> () -> x;
+println(mult(1)()()); // expect: 1

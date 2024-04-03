@@ -1,0 +1,18 @@
+() ->  2;
+
+x -> x*2;
+
+(x, y) -> x+y;
+
+(x,...y) -> y.push(x);
+
+() -> nil;
+
+() -> [1,2,3];
+(x -> x+1);
+x -> x*2;
+
+(x,y); // [line 15] Error at ';': Expected '->' after parameters.
+
+(x,) -> x; // [line 17] Error at ')': Expected parameter name.
+(x) -> ; // [line 18] Error at ';': Expected expression.
