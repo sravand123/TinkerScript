@@ -1251,6 +1251,42 @@ public class LoxTest {
     }
 
     @Test
+    public void switch_switch_on_complex_data_types() throws IOException {
+        String output= testFile(testDir + "/switch/switch_on_complex_data_types.lox");
+        assertEquals("default\ndefault\n1,2,3\ndefault\nFoo\n", output);
+    }
+
+    @Test
+    public void switch_scope() throws IOException {
+        String output= testFile(testDir + "/switch/scope.lox");
+        assertEquals("2\n", output);
+    }
+
+    @Test
+    public void switch_use() throws IOException {
+        String output= testFile(testDir + "/switch/use.lox");
+        assertEquals("1\n2\n3\ndefault\n1\n2\n3\ndefault\n1\n2\n3\n2\n3\n3\n1\n2\n2\ndefault\n1\n2\n1\nnil\n", output);
+    }
+
+    @Test
+    public void switch_syntax() throws IOException {
+        String output= testFile(testDir + "/switch/syntax.lox");
+        assertEquals("[line 1] Error at '{': Expected '('.\n[line 3] Error at 'x': Expected '{'.\n[line 6] Error at ':': Expected expression.\n[line 11] Error at '3': Expected ':'.\n[line 13] Error at ')': Expected expression.\n[line 15] Error at '{': Expected ')'.\n[line 18] Error at 'break': Expected 'case' or 'default'.\n[line 25] Error at 'default': Duplicate use of 'default'.\n", output);
+    }
+
+    @Test
+    public void switch_switch_expr_evaluation() throws IOException {
+        String output= testFile(testDir + "/switch/switch_expr_evaluation.lox");
+        assertEquals("1\n1\n1\n", output);
+    }
+
+    @Test
+    public void switch_case_expr_evaluation_order() throws IOException {
+        String output= testFile(testDir + "/switch/case_expr_evaluation_order.lox");
+        assertEquals("1\n1\n2\n1\n2\n3\ndefault\n1\n2\n3\n1\n1\n2\n3\n1\nruntime error: Undefined variable 'd'.\n", output);
+    }
+
+    @Test
     public void class_empty() throws IOException {
         String output= testFile(testDir + "/class/empty.lox");
         assertEquals("Foo\n", output);

@@ -28,6 +28,7 @@ import com.sravan.lox.Expr.Unary;
 import com.sravan.lox.Expr.Variable;
 import com.sravan.lox.Stmt.Block;
 import com.sravan.lox.Stmt.Break;
+import com.sravan.lox.Stmt.Case;
 import com.sravan.lox.Stmt.Class;
 import com.sravan.lox.Stmt.Continue;
 import com.sravan.lox.Stmt.Expression;
@@ -35,6 +36,7 @@ import com.sravan.lox.Stmt.For;
 import com.sravan.lox.Stmt.Function;
 import com.sravan.lox.Stmt.If;
 import com.sravan.lox.Stmt.Return;
+import com.sravan.lox.Stmt.Switch;
 import com.sravan.lox.Stmt.Throw;
 import com.sravan.lox.Stmt.TryCatch;
 import com.sravan.lox.Stmt.Var;
@@ -63,11 +65,17 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         NONE,
         LOOP
     }
+
+    private enum SwitchType {
+        NONE,
+        SWITCH
+    }
     private ClassType currentClass = ClassType.NONE;
 
     private FunctionType currentFunction = FunctionType.NONE;
 
     private LoopType currentLoop = LoopType.NONE;
+    private SwitchType currentSwitch = SwitchType.NONE;
     Resolver(Interpreter interpreter) {
         this.interpreter = interpreter;
     }
@@ -414,8 +422,8 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitBreakStmt(Break stmt) {
-        if (currentLoop == LoopType.NONE)
-            error(stmt.keyword, "Can't use 'break' outside of a loop.");
+        if (currentLoop == LoopType.NONE && currentSwitch == SwitchType.NONE)
+            error(stmt.keyword, "Can't use 'break' outside of a loop, switch.");
         return null;
     }
 
@@ -468,6 +476,26 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         resolve(expr.body);
         endScope();
         currentFunction = enclosingFunction;
+        return null;
+    }
+
+    @Override
+    public Void visitCaseStmt(Case stmt) {
+        if (stmt.value != null)
+            resolve(stmt.value);
+        resolve(stmt.body);
+        return null;
+    }
+
+    @Override
+    public Void visitSwitchStmt(Switch stmt) {
+        resolve(stmt.value);
+        SwitchType enclosingSwitch = currentSwitch;
+        currentSwitch = SwitchType.SWITCH;
+        for (Case caseStmt : stmt.cases) {
+            resolve(caseStmt);
+        }
+        currentSwitch = enclosingSwitch;
         return null;
     }
 

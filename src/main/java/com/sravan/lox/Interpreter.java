@@ -30,12 +30,14 @@ import com.sravan.lox.Expr.Unary;
 import com.sravan.lox.Expr.Variable;
 import com.sravan.lox.Stmt.Block;
 import com.sravan.lox.Stmt.Break;
+import com.sravan.lox.Stmt.Case;
 import com.sravan.lox.Stmt.Class;
 import com.sravan.lox.Stmt.Continue;
 import com.sravan.lox.Stmt.Expression;
 import com.sravan.lox.Stmt.For;
 import com.sravan.lox.Stmt.Function;
 import com.sravan.lox.Stmt.If;
+import com.sravan.lox.Stmt.Switch;
 import com.sravan.lox.Stmt.Throw;
 import com.sravan.lox.Stmt.TryCatch;
 import com.sravan.lox.Stmt.Var;
@@ -90,6 +92,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     void execute(Stmt statement) {
         statement.accept(this);
+    }
+
+    void execute(List<Stmt> statements) {
+        for (Stmt statement : statements) {
+            execute(statement);
+        }
     }
 
     void executeLambda(Expr.Lambda lambda) {
@@ -672,5 +680,43 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Object visitLambdaExpr(Lambda expr) {
         LoxFunction function = new LambdaFunction(expr, environment);
         return function;
+    }
+
+    @Override
+    public Void visitCaseStmt(Case stmt) {
+        return null;
+    }
+
+    @Override
+    public Void visitSwitchStmt(Switch stmt) {
+        Object value = evaluate(stmt.value);
+        Boolean found = false;
+        int defaultCaseIndex = -1;
+        int index = 0;
+        try {
+            for (Case caseStatement : stmt.cases) {
+                if (found) {
+                    execute(caseStatement.body);
+                } else if (caseStatement.value != null) {
+                    Object caseValue = evaluate(caseStatement.value);
+                    if (isEqual(caseValue, value)) {
+                        found = true;
+                        execute(caseStatement.body);
+                    }
+
+                } else {
+                    defaultCaseIndex = index;
+                }
+                index++;
+            }
+            if (!found && defaultCaseIndex != -1) {
+                for (int i = defaultCaseIndex; i < stmt.cases.size(); i++) {
+                    execute(stmt.cases.get(i).body);
+                }
+            }
+        } catch (BreakOut breakOut) {
+            return null;
+        }
+        return null;
     }
 }

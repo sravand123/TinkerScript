@@ -45,7 +45,9 @@ public class GenerateAst {
                 "TryCatch : List<Stmt> tryBlock, List<Stmt> catchBlock, Token exception",
                 "Throw : Token keyword, Expr value",
                 "Break : Token keyword",
-                "Continue : Token keyword"));
+                "Continue : Token keyword",
+                "Case : Expr value, List<Stmt> body",
+                "Switch : Expr value, List<Stmt.Case> cases"));
 
     }
 

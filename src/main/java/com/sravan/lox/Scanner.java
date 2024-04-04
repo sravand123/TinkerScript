@@ -37,6 +37,9 @@ public class Scanner {
         keywords.put("break", BREAK);
         keywords.put("continue", CONTINUE);
         keywords.put("static", STATIC);
+        keywords.put("switch", SWITCH);
+        keywords.put("case", CASE);
+        keywords.put("default", DEFAULT);
     }
 
     Scanner(String source) {

@@ -31,6 +31,10 @@ abstract class Stmt {
 
         R visitContinueStmt(Continue stmt);
 
+        R visitCaseStmt(Case stmt);
+
+        R visitSwitchStmt(Switch stmt);
+
     }
 
     static class Expression extends Stmt {
@@ -220,6 +224,34 @@ abstract class Stmt {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitContinueStmt(this);
+        }
+    }
+
+    static class Case extends Stmt {
+        Case(Expr value, List<Stmt> body) {
+            this.value = value;
+            this.body = body;
+        }
+
+        final Expr value;
+        final List<Stmt> body;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitCaseStmt(this);
+        }
+    }
+
+    static class Switch extends Stmt {
+        Switch(Expr value, List<Stmt.Case> cases) {
+            this.value = value;
+            this.cases = cases;
+        }
+
+        final Expr value;
+        final List<Stmt.Case> cases;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitSwitchStmt(this);
         }
     }
 

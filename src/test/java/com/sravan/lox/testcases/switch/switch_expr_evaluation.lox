@@ -1,0 +1,23 @@
+fun f(x) {
+    println(x);
+    return x;
+}
+
+
+switch (f(1)) {
+    case f(1):
+        println("1");
+        break;
+    case f(2):
+        println("2");
+        break;
+    case f(3):
+        println("3");
+        break;
+    default:
+        println("default");
+}
+
+// expect: 1
+// expect: 1
+// expect: 1

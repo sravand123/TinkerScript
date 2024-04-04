@@ -1,0 +1,71 @@
+switch  {} // [line 1] Error at '{': Expected '('.
+
+switch (x) x // [line 3] Error at 'x': Expected '{'.
+
+switch (x) {
+    case : // [line 6] Error at ':': Expected expression.
+}
+
+switch (x) {
+    case 1: 
+    default 3 : // [line 11] Error at '3': Expected ':'.
+}
+switch ()  // [line 13] Error at ')': Expected expression.
+
+switch ( x { // [line 15] Error at '{': Expected ')'.
+
+switch (x) {
+    break // [line 18] Error at 'break': Expected 'case' or 'default'.
+}
+
+switch (x) {
+    case 1: 
+    default: 
+        break;
+    default:
+        break // [line 25] Error at 'default': Duplicate use of 'default'.
+}
+
+switch (1) {
+    case 1:
+        break;
+}
+
+
+switch (1) {
+    case 1:
+        break;
+    default:
+        break;
+}
+
+
+switch (1) {
+    case 1:
+        break;
+    default:
+        break;
+    case 2:
+        break;
+}
+
+
+switch (1) {
+    case 1:
+    default:
+        break;
+}
+
+
+switch (1+1) {
+    case 1:
+    case 2:
+    default:
+        break;
+}
+
+switch (2) {}
+
+switch(3) {
+    default:
+}

@@ -1,0 +1,65 @@
+
+switch ([1,2,3]) {
+    case [1,2,3]:
+        println("1,2,3");
+    default:
+        println("default");
+}
+
+// expect: default
+
+
+
+switch ({"a":1}) {
+    case {"a":1}:
+        println("1,2,3");
+    default:
+        println("default");
+}
+
+// expect: default
+
+
+x := [1,2,3];
+
+switch(x){
+    case x:
+        println("1,2,3");
+        break;
+    default:
+        println("default");
+        break;
+}
+
+// expect: 1,2,3
+
+
+class Foo {
+    init(x) {
+        this.x = x;
+    }
+}
+
+switch(Foo(1)){
+    case Foo(1):
+        println("Foo");
+        break;
+    default:
+        println("default");
+        break;
+}
+
+// expect: default
+
+foo := Foo(1);
+
+switch(foo){
+    case foo:
+        println("Foo");
+        break;
+    default:
+        println("default");
+        break;
+}
+
+// expect: Foo

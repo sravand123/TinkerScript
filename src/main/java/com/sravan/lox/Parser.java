@@ -91,6 +91,8 @@ public class Parser {
             return tryCatch();
         if (match(THROW))
             return throwStatement();
+        if (match(SWITCH))
+            return switchStatement();
         if (match(BREAK)) {
             Token keyword = previous();
             consume(SEMICOLON, "Expected ';'.");
@@ -103,6 +105,52 @@ public class Parser {
         }
         return expressionStatement();
 
+    }
+
+    private Stmt switchStatement() {
+        consume(LEFT_PAREN, "Expected '('.");
+        Expr condition = expression();
+        consume(RIGHT_PAREN, "Expected ')'.");
+        consume(LEFT_BRACE, "Expected '{'.");
+        List<Stmt.Case> cases = new ArrayList<>();
+        Boolean defaultFound = false;
+        while (!check(RIGHT_BRACE) && !isAtEnd()) {
+            if (match(CASE)) {
+                cases.add(caseBlock());
+            } else if (match(DEFAULT)) {
+                if (!defaultFound) {
+                    defaultFound = true;
+                    cases.add(defaultCaseBlock());
+                } else {
+                    throw error(previous(), "Duplicate use of 'default'.");
+                }
+            } else {
+                throw error(peek(), "Expected 'case' or 'default'.");
+            }
+        }
+        consume(RIGHT_BRACE, "Expected '}'.");
+        return new Stmt.Switch(condition, cases);
+    }
+
+    private List<Stmt> caseStatementList() {
+        List<Stmt> statements = new ArrayList<>();
+        while (!check(CASE, DEFAULT, RIGHT_BRACE) && !isAtEnd()) {
+            statements.add(declaration());
+        }
+        return statements;
+    }
+
+    private Stmt.Case caseBlock() {
+        Expr value = expression();
+        consume(COLON, "Expected ':'.");
+        List<Stmt> stmts = caseStatementList();
+        return new Stmt.Case(value, stmts);
+    }
+
+    private Stmt.Case defaultCaseBlock() {
+        consume(COLON, "Expected ':'.");
+        List<Stmt> stmts = caseStatementList();
+        return new Stmt.Case(null, stmts);
     }
 
     private Stmt throwStatement() {
@@ -649,6 +697,7 @@ public class Parser {
                 case IF:
                 case WHILE:
                 case RETURN:
+                case SWITCH:
                     return;
 
                 default:
