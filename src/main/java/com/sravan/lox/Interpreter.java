@@ -693,6 +693,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Boolean found = false;
         int defaultCaseIndex = -1;
         int index = 0;
+        Environment previous = environment;
+        environment = new Environment(environment);
         try {
             for (Case caseStatement : stmt.cases) {
                 if (found) {
@@ -716,7 +718,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             }
         } catch (BreakOut breakOut) {
             return null;
+        } finally {
+            environment = previous;
         }
+
         return null;
     }
 }

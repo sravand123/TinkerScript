@@ -492,9 +492,11 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         resolve(stmt.value);
         SwitchType enclosingSwitch = currentSwitch;
         currentSwitch = SwitchType.SWITCH;
+        beginScope();
         for (Case caseStmt : stmt.cases) {
             resolve(caseStmt);
         }
+        endScope();
         currentSwitch = enclosingSwitch;
         return null;
     }

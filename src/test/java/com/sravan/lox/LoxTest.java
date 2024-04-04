@@ -1259,7 +1259,7 @@ public class LoxTest {
     @Test
     public void switch_scope() throws IOException {
         String output= testFile(testDir + "/switch/scope.lox");
-        assertEquals("2\n", output);
+        assertEquals("2\n6\nruntime error: Undefined variable 'y'.\n", output);
     }
 
     @Test
