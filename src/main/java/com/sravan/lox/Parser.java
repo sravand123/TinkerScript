@@ -403,6 +403,7 @@ public class Parser {
     private Stmt.Function function(String kind) {
         Token name = null;
         Token staticToken = null;
+        Boolean isGetter = false;
         if (!kind.equals("expression_function")) {
             if (kind.equals("method") && match(STATIC)) {
                 staticToken = previous();
@@ -417,27 +418,35 @@ public class Parser {
             } else {
                 consume(LEFT_PAREN, "Expected ( after function name.");
             }
-        } else {
+        } else if (kind.equals("function")) {
             consume(LEFT_PAREN, "Expected '(' after " + kind + " name.");
+        } else {
+            if (check(LEFT_PAREN))
+                advance();
+            else {
+                isGetter = true;
+            }
         }
         List<Token> parameters = new ArrayList<>();
         Token spread = null;
-        if (!check(RIGHT_PAREN)) {
-            do {
-                if (spread != null) {
-                    throw error(peek(), "Variadic parameter must be the last parameter");
-                }
-                if (match(SPREAD)) {
-                    spread = previous();
-                }
-                parameters.add(
-                        consume(IDENTIFIER, "Expected parameter name."));
-            } while (match(COMMA));
+        if (!isGetter) {
+            if (!check(RIGHT_PAREN)) {
+                do {
+                    if (spread != null) {
+                        throw error(peek(), "Variadic parameter must be the last parameter");
+                    }
+                    if (match(SPREAD)) {
+                        spread = previous();
+                    }
+                    parameters.add(
+                            consume(IDENTIFIER, "Expected parameter name."));
+                } while (match(COMMA));
+            }
+            consume(RIGHT_PAREN, "Expected ')' after parameters.");
         }
-        consume(RIGHT_PAREN, "Expected ')' after parameters.");
         consume(LEFT_BRACE, "Expected '{' before " + kind + " body.");
         List<Stmt> body = block();
-        return new Stmt.Function(name, parameters, spread, body, staticToken);
+        return new Stmt.Function(name, parameters, spread, body, staticToken, isGetter);
     }
 
     private Expr finishCall(Expr expr) {

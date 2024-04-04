@@ -70,12 +70,14 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         NONE,
         SWITCH
     }
+
     private ClassType currentClass = ClassType.NONE;
 
     private FunctionType currentFunction = FunctionType.NONE;
 
     private LoopType currentLoop = LoopType.NONE;
     private SwitchType currentSwitch = SwitchType.NONE;
+
     Resolver(Interpreter interpreter) {
         this.interpreter = interpreter;
     }
@@ -84,6 +86,7 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Compiler.error(token, message);
         hadError = true;
     }
+
     void resolve(List<Stmt> statements) {
         for (Stmt stmt : statements) {
             resolve(stmt);
@@ -143,7 +146,6 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         endScope();
         currentFunction = enclosingFunction;
     }
-
 
     @Override
     public Void visitExpressionStmt(Expression stmt) {
@@ -284,8 +286,12 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
         // resolve static methods
         for (Stmt.Function function : stmt.methods) {
-            if (function.staticToken != null)
+            if (function.staticToken != null) {
+                if (function.isGetter) {
+                    error(function.staticToken, "Getters can't be static.");
+                }
                 resolveFunction(function, FunctionType.METHOD);
+            }
         }
         if (stmt.superClass != null) {
             beginScope();
@@ -295,10 +301,14 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         scopes.peek().put("this", true);
         for (Stmt.Function function : stmt.methods) {
             if (function.staticToken == null) {
-                if (function.name.lexeme.equals("init"))
+                if (function.name.lexeme.equals("init")) {
+                    if (function.isGetter) {
+                        error(function.name, "Getter method's name can't be 'init'.");
+                    }
                     resolveFunction(function, FunctionType.INITIALIZER);
-                else
+                } else {
                     resolveFunction(function, FunctionType.METHOD);
+                }
             }
         }
         endScope();

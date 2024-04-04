@@ -39,7 +39,7 @@ public class GenerateAst {
                 "If : Expr condition , Stmt thenStatement , Stmt elseStatement",
                 "While : Expr condition,  Stmt body",
                 "For : Stmt initializer, Expr condition, Expr increment, Stmt body",
-                "Function : Token name, List<Token> params, Token spread , List<Stmt> body, Token staticToken",
+                "Function : Token name, List<Token> params, Token spread , List<Stmt> body, Token staticToken, Boolean isGetter",
                 "Return : Token keyword, Expr value",
                 "Class : Token name, List<Stmt.Function> methods, Expr.Variable superClass",
                 "TryCatch : List<Stmt> tryBlock, List<Stmt> catchBlock, Token exception",

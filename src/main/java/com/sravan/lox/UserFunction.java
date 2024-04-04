@@ -6,11 +6,13 @@ public class UserFunction implements LoxFunction {
     final Stmt.Function declaration;
     final Environment closure;
     final boolean isInitializer;
+    final boolean isGetter;
 
-    UserFunction(Stmt.Function declaration, Environment closure, boolean isInitializer) {
+    UserFunction(Stmt.Function declaration, Environment closure, boolean isInitializer, boolean isGetter) {
         this.declaration = declaration;
         this.closure = closure;
         this.isInitializer = isInitializer;
+        this.isGetter = isGetter;
     }
 
     @Override
@@ -58,7 +60,7 @@ public class UserFunction implements LoxFunction {
     public UserFunction bind(LoxInstance instance) {
         Environment environment = new Environment(closure);
         environment.define("this", instance);
-        return new UserFunction(declaration, environment, isInitializer);
+        return new UserFunction(declaration, environment, isInitializer, isGetter);
     }
 
     @Override

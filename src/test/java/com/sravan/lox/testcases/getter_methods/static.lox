@@ -1,0 +1,5 @@
+class Foo {
+   static test{
+        return "foo"; // [line 2] Error at 'static': Getters can't be static.
+    }
+}

@@ -951,6 +951,30 @@ public class LoxTest {
     }
 
     @Test
+    public void getter_methods_use() throws IOException {
+        String output= testFile(testDir + "/getter_methods/use.lox");
+        assertEquals("6\n10\n6\n6\nruntime error: Can only call functions and classes.\n", output);
+    }
+
+    @Test
+    public void getter_methods_syntax() throws IOException {
+        String output= testFile(testDir + "/getter_methods/syntax.lox");
+        assertEquals("[line 1] Error at '{': Expected ';' after expression.\n[line 3] Error at '}': Expected expression.\n", output);
+    }
+
+    @Test
+    public void getter_methods_static() throws IOException {
+        String output= testFile(testDir + "/getter_methods/static.lox");
+        assertEquals("[line 2] Error at 'static': Getters can't be static.\n", output);
+    }
+
+    @Test
+    public void getter_methods_init() throws IOException {
+        String output= testFile(testDir + "/getter_methods/init.lox");
+        assertEquals("[line 2] Error at 'init': Getter method's name can't be 'init'.\n", output);
+    }
+
+    @Test
     public void call_nil() throws IOException {
         String output= testFile(testDir + "/call/nil.lox");
         assertEquals("runtime error: Can only call functions and classes.\n", output);

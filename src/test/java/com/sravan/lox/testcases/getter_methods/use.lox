@@ -1,0 +1,25 @@
+class Rectangle {
+    init(length, breadth) {
+        this.length = length;
+        this.breadth = breadth;
+    }
+    area {
+        return this.length * this.breadth;
+    }
+}
+
+r := Rectangle(2, 3);
+println(r.area); // expect: 6
+
+r1 := Rectangle(2, 3);
+r1.area = 10;
+println(r1.area); // expect: 10
+
+r1.area = r.area;
+println(r1.area); // expect: 6
+
+r1.width = 10;
+println(r1.area); // expect: 6
+
+
+println(r.area()); // expect runtime error: Can only call functions and classes.

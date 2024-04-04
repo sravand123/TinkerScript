@@ -1,0 +1,4 @@
+class Foo {
+    init{ // [line 2] Error at 'init': Getter method's name can't be 'init'.
+    }
+}

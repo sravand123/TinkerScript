@@ -1,0 +1,9 @@
+name { // [line 1] Error at '{': Expected ';' after expression.
+    return 2; 
+} // [line 3] Error at '}': Expected expression.
+
+class Foo{
+    name {
+        return this.name;
+    }
+}

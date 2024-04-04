@@ -380,7 +380,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitFunctionStmt(Function stmt) {
-        LoxFunction function = new UserFunction(stmt, environment, false);
+        LoxFunction function = new UserFunction(stmt, environment, false, false);
         environment.define(stmt.name.lexeme, function);
         return null;
     }
@@ -411,10 +411,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Map<String, LoxFunction> staticMethods = new HashMap<>();
         for (Stmt.Function method : stmt.methods) {
             if (method.staticToken == null) {
-                LoxFunction function = new UserFunction(method, environment, method.name.lexeme.equals("init"));
+                LoxFunction function = new UserFunction(method, environment, method.name.lexeme.equals("init"),
+                        method.isGetter);
                 methods.put(method.name.lexeme, function);
             } else {
-                LoxFunction function = new UserFunction(method, environment, false);
+                LoxFunction function = new UserFunction(method, environment, false, false);
                 staticMethods.put(method.name.lexeme, function);
             }
         }
@@ -430,8 +431,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Object visitGetExpr(Get expr) {
         Object value = evaluate(expr.object);
         if (value instanceof LoxInstance) {
-            return ((LoxInstance) value).get(expr.name);
+            Object property = ((LoxInstance) value).get(expr.name);
+            if (property instanceof UserFunction && ((UserFunction) property).isGetter) {
+                return ((UserFunction) property).call(this, new ArrayList<>());
+            }
+            return property;
         }
+
         if (value instanceof LoxClass) {
             return ((LoxClass) value).getStaticMethod(expr.name);
         }
@@ -668,7 +674,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Object visitFunctionExpr(com.sravan.lox.Expr.Function expr) {
         Environment current = environment;
         environment = new Environment(current);
-        LoxFunction function = new UserFunction(expr.function, environment, false);
+        LoxFunction function = new UserFunction(expr.function, environment, false, false);
         if (expr.function.name != null) {
             environment.define(expr.function.name.lexeme, function);
         }
