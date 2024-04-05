@@ -1,5 +1,8 @@
 package com.sravan.lox;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,18 +175,17 @@ public abstract class NativeFunction implements LoxFunction {
     static class Input extends NativeFunction {
         @Override
         public int arity() {
-            return 1;
+            return -1;
         }
 
         @Override
         public Object call(Interpreter interpreter, List<Object> arguments) {
             try {
-                if ((arguments.get(0) instanceof String)) {
+                if (arguments.size() > 0 && (arguments.get(0) instanceof String)) {
                     System.out.print(arguments.get(0));
                 }
-                byte[] buffer = new byte[1024];
-                int bytesRead = System.in.read(buffer);
-                return new String(buffer, 0, bytesRead);
+                String input = new BufferedReader(new InputStreamReader(System.in)).readLine();
+                return input;
             } catch (Exception e) {
                 throw new RuntimeError(null, "Error reading input.");
             }
