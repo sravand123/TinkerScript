@@ -5,9 +5,10 @@ import java.util.List;
 
 public class LoxArray extends LoxInstance {
     List<Object> elements;
-
+    final LoxClass klass;
     LoxArray(LoxClass klass, List<Object> elements) {
         super(klass);
+        this.klass = klass;
         this.elements = new ArrayList<>(elements);
     }
 
@@ -16,6 +17,20 @@ public class LoxArray extends LoxInstance {
             throw new RuntimeError(token, "Index " + index + " out of range.");
         }
         return this.elements.get(index);
+    }
+
+    Object getSlice(Token token, int start, int end) {
+        if (start > end) {
+            start = end;
+        }
+        if (end > this.elements.size()) {
+            end = this.elements.size();
+        }
+        if (start >= this.elements.size()) {
+            throw new RuntimeError(token, "Index " + start + " out of range.");
+        }
+        List<Object> slice = this.elements.subList(start, end);
+        return new LoxArray(this.klass, slice);
     }
 
     void set(Token token, int index, Object value) {

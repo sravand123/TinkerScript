@@ -41,6 +41,8 @@ abstract class Expr {
 
         R visitKeySetExpr(KeySet expr);
 
+        R visitSliceExpr(Slice expr);
+
         R visitDictionaryExpr(Dictionary expr);
 
         R visitSpreadExpr(Spread expr);
@@ -306,6 +308,24 @@ abstract class Expr {
 
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitKeySetExpr(this);
+        }
+    }
+
+    static class Slice extends Expr {
+        Slice(Expr array, Expr start, Expr end,  Token rightSqParen) {
+            this.array = array;
+            this.start = start;
+            this.end = end;
+            this.rightSqParen = rightSqParen;
+        }
+
+        final Expr array;
+        final Expr start;
+        final Expr end;
+        final Token rightSqParen;
+
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitSliceExpr(this);
         }
     }
 

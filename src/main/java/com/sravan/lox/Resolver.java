@@ -20,6 +20,7 @@ import com.sravan.lox.Expr.Logical;
 import com.sravan.lox.Expr.PostFix;
 import com.sravan.lox.Expr.PreFix;
 import com.sravan.lox.Expr.Set;
+import com.sravan.lox.Expr.Slice;
 import com.sravan.lox.Expr.Spread;
 import com.sravan.lox.Expr.Super;
 import com.sravan.lox.Expr.Ternary;
@@ -508,6 +509,16 @@ public class Resolver implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
         endScope();
         currentSwitch = enclosingSwitch;
+        return null;
+    }
+
+    @Override
+    public Object visitSliceExpr(Slice expr) {
+        resolve(expr.array);
+        if (expr.start != null)
+            resolve(expr.start);
+        if (expr.end != null)
+            resolve(expr.end);
         return null;
     }
 

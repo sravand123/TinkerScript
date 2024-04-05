@@ -531,6 +531,30 @@ public class LoxTest {
     }
 
     @Test
+    public void slice_array() throws IOException {
+        String output= testFile(testDir + "/slice/array.lox");
+        assertEquals("[2]\n[2, 3]\n[2, 3, 4]\n[2, 3, 4]\n[2, 3, 4]\n[1, 2]\n[1, 2, 3]\n[1, 2, 3, 4]\n[1, 2, 3, 4]\n[1, 2, 3, 4]\n[1, 2, 3, 4]\n[2, 3, 4]\n[1, 2, 3, 4]\n", output);
+    }
+
+    @Test
+    public void slice_syntax() throws IOException {
+        String output= testFile(testDir + "/slice/syntax.lox");
+        assertEquals("", output);
+    }
+
+    @Test
+    public void slice_invalid() throws IOException {
+        String output= testFile(testDir + "/slice/invalid.lox");
+        assertEquals("Invalid slice.\nInvalid slice.\nInvalid slice.\nInvalid slice.\nInvalid slice.\nInvalid slice.\n", output);
+    }
+
+    @Test
+    public void slice_string() throws IOException {
+        String output= testFile(testDir + "/slice/string.lox");
+        assertEquals("T\nTe\nes\nst\nTesti\nTestin\nT\nTe\nTes\nTest\nTesti\nTestin\nTesting\nting\nTesting\n", output);
+    }
+
+    @Test
     public void unexpected_character() throws IOException {
         String output= testFile(testDir + "/unexpected_character.lox");
         assertEquals("runtime error: Undefined variable 'foo'.\n", output);

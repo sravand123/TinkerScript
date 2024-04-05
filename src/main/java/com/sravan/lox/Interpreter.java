@@ -22,6 +22,7 @@ import com.sravan.lox.Expr.Logical;
 import com.sravan.lox.Expr.PostFix;
 import com.sravan.lox.Expr.PreFix;
 import com.sravan.lox.Expr.Set;
+import com.sravan.lox.Expr.Slice;
 import com.sravan.lox.Expr.Spread;
 import com.sravan.lox.Expr.Super;
 import com.sravan.lox.Expr.Ternary;
@@ -539,6 +540,40 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         throw new RuntimeError(token, "Invalid key.");
     }
 
+    private Object arraySliceAccess(Token token, Object object, Object start, Object end) {
+        if (end == null) {
+            end = Double.valueOf(Integer.MAX_VALUE);
+        }
+        if (start == null) {
+            start = Double.valueOf(0);
+        }
+        if (!checkInteger(start) || !checkInteger(end)) {
+            throw new RuntimeError(token, "Invalid slice.");
+        }
+        int startIndex = (int) ((double) start);
+        int endIndex = (int) ((double) end);
+        if (startIndex < 0 || endIndex < 0) {
+            throw new RuntimeError(token, "Invalid slice.");
+        }
+        if ((object instanceof LoxArray)) {
+            return ((LoxArray) object).getSlice(token, startIndex, endIndex);
+        }
+        if (object instanceof String) {
+            String str = (String) object;
+            if (startIndex >= str.length()) {
+                throw new RuntimeError(token, "Index " + startIndex + " out of range.");
+            }
+            if (endIndex > str.length()) {
+                endIndex = str.length();
+            }
+            if (startIndex > endIndex) {
+                startIndex = endIndex;
+            }
+            return str.substring(startIndex, endIndex);
+        }
+        throw new RuntimeError(token, "Slicing only supported on arrays and strings.");
+    }
+
     @Override
     public Object visitKeySetExpr(KeySet expr) {
         Object object = evaluate(expr.object);
@@ -729,5 +764,20 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
 
         return null;
+    }
+
+    @Override
+    public Object visitSliceExpr(Slice expr) {
+        Object array = evaluate(expr.array);
+        Object start = null;
+        if (expr.start != null) {
+            start = evaluate(expr.start);
+        }
+        Object end = null;
+        if (expr.end != null) {
+            end = evaluate(expr.end);
+        }
+        return arraySliceAccess(expr.rightSqParen, array, start, end);
+
     }
 }

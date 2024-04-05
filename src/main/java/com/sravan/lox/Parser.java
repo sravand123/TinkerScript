@@ -391,7 +391,32 @@ public class Parser {
                 Token name = consume(IDENTIFIER, "Expected property name after '.'.");
                 expr = new Expr.Get(expr, name);
             } else if (match(LEFT_SQARE_BRACE)) {
-                Expr indexExpr = expression();
+                // [:]
+                if (check(COLON) && checkNext(RIGHT_SQUARE_BRACE)) {
+                    advance();
+                    advance();
+                    return new Expr.Slice(expr, null, null, previous());
+                }
+                Expr indexExpr = null;
+                Expr endIndexExpr = null;
+                // [:y]
+                if (match(COLON)) {
+                    endIndexExpr = expression();
+                    consume(RIGHT_SQUARE_BRACE, "Expected ']'.");
+                    return new Expr.Slice(expr, null, endIndexExpr, previous());
+                }
+                indexExpr = expression();
+                // [x:y], [x:]
+                if (match(COLON)) {
+                    endIndexExpr = null;
+                    if (check(RIGHT_SQUARE_BRACE)) {
+                        advance();
+                    } else {
+                        endIndexExpr = expression();
+                        consume(RIGHT_SQUARE_BRACE, "Expected ']'.");
+                    }
+                    return new Expr.Slice(expr, indexExpr, endIndexExpr, previous());
+                }
                 Token token = consume(RIGHT_SQUARE_BRACE, "Expected ']'.");
                 expr = new Expr.KeyAccess(expr, indexExpr, token);
             } else

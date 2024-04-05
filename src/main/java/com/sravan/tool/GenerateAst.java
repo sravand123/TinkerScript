@@ -27,6 +27,7 @@ public class GenerateAst {
                 "Array : List<Expr> elements",
                 "KeyAccess : Expr object, Expr key, Token rightSqParen",
                 "KeySet : Expr object, Expr key, Expr value , Token equals",
+                "Slice : Expr array, Expr start, Expr end,  Token rightSqParen",
                 "Dictionary : List<Expr> keys, List<Expr> values",
                 "Spread : Token operator, Expr right",
                 "Function : Stmt.Function function",
