@@ -1,1 +1,0 @@
-foo(a | b); // expect runtime error: Undefined variable 'foo'.

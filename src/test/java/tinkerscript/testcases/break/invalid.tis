@@ -1,0 +1,5 @@
+break; // [line 1] Error at 'break': Can't use 'break' outside of a loop, switch.
+
+if(true) {
+    break; // [line 4] Error at 'break': Can't use 'break' outside of a loop, switch.
+}

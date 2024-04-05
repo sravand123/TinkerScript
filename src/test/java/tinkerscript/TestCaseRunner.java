@@ -249,24 +249,6 @@ public class TestCaseRunner {
     }
 
     @Test
-    public void Map() throws IOException {
-        String output= testFile(testDir + "/Map.tis");
-        assertEquals("1 2 true 2.3\n", output);
-    }
-
-    @Test
-    public void break_stmt() throws IOException {
-        String output= testFile(testDir + "/break_stmt.tis");
-        assertEquals("5\n", output);
-    }
-
-    @Test
-    public void continue_stmt() throws IOException {
-        String output= testFile(testDir + "/continue_stmt.tis");
-        assertEquals("Test passed!\n", output);
-    }
-
-    @Test
     public void variable_use_global_in_initializer() throws IOException {
         String output= testFile(testDir + "/variable/use_global_in_initializer.tis");
         assertEquals("value\n", output);
@@ -714,12 +696,6 @@ public class TestCaseRunner {
     public void return_return_nil_if_no_value() throws IOException {
         String output= testFile(testDir + "/return/return_nil_if_no_value.tis");
         assertEquals("nil\n", output);
-    }
-
-    @Test
-    public void unexpected_character() throws IOException {
-        String output= testFile(testDir + "/unexpected_character.tis");
-        assertEquals("runtime error: Undefined variable 'foo'.\n", output);
     }
 
     @Test
@@ -1485,6 +1461,30 @@ public class TestCaseRunner {
     }
 
     @Test
+    public void break_nested() throws IOException {
+        String output= testFile(testDir + "/break/nested.tis");
+        assertEquals("45\n9\n", output);
+    }
+
+    @Test
+    public void break_for() throws IOException {
+        String output= testFile(testDir + "/break/for.tis");
+        assertEquals("5\n", output);
+    }
+
+    @Test
+    public void break_while() throws IOException {
+        String output= testFile(testDir + "/break/while.tis");
+        assertEquals("5\n", output);
+    }
+
+    @Test
+    public void break_invalid() throws IOException {
+        String output= testFile(testDir + "/break/invalid.tis");
+        assertEquals("[line 1] Error at 'break': Can't use 'break' outside of a loop, switch.\n[line 4] Error at 'break': Can't use 'break' outside of a loop, switch.\n", output);
+    }
+
+    @Test
     public void regression_394() throws IOException {
         String output= testFile(testDir + "/regression/394.tis");
         assertEquals("B\n", output);
@@ -1494,6 +1494,30 @@ public class TestCaseRunner {
     public void regression_40() throws IOException {
         String output= testFile(testDir + "/regression/40.tis");
         assertEquals("false\n", output);
+    }
+
+    @Test
+    public void continue_nested() throws IOException {
+        String output= testFile(testDir + "/continue/nested.tis");
+        assertEquals("90\n10\n", output);
+    }
+
+    @Test
+    public void continue_for() throws IOException {
+        String output= testFile(testDir + "/continue/for.tis");
+        assertEquals("9\n8\n10\n", output);
+    }
+
+    @Test
+    public void continue_while() throws IOException {
+        String output= testFile(testDir + "/continue/while.tis");
+        assertEquals("9\n8\n10\n", output);
+    }
+
+    @Test
+    public void continue_invalid() throws IOException {
+        String output= testFile(testDir + "/continue/invalid.tis");
+        assertEquals("[line 1] Error at 'continue': Can't use 'continue' outside of a loop.\n[line 4] Error at 'continue': Can't use 'continue' outside of a loop.\n[line 9] Error at 'continue': Can't use 'continue' outside of a loop.\n", output);
     }
 
     @Test

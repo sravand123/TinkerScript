@@ -1,0 +1,10 @@
+continue; // [line 1] Error at 'continue': Can't use 'continue' outside of a loop.
+
+if(true) {
+    continue; // [line 4] Error at 'continue': Can't use 'continue' outside of a loop.
+}
+
+switch(0) {
+    case 0:
+        continue; // [line 9] Error at 'continue': Can't use 'continue' outside of a loop.
+}

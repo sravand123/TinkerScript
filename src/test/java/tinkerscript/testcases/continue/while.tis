@@ -1,0 +1,23 @@
+fun Continue(...values) {
+    cnt:=0;
+    i:= 0;
+    while(i < 10) {
+        found:=false;
+        for(j:=0; j < len(values);j++) {
+            if(i==values[j]) {
+                found = true;
+                break;
+            }
+        }
+        i++;
+        if(found) {
+            continue;
+        }
+        cnt++;
+    }
+    return cnt;
+}
+
+println(Continue(5)); // expect: 9
+println(Continue(1,2)); // expect: 8
+println(Continue()); // expect: 10
