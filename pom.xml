@@ -5,14 +5,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.sravan</groupId>
-  <artifactId>lox</artifactId>
-  <version>1.0-SNAPSHOT</version>
-
-
-  <name>lox</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <groupId>tinkerscript-lang</groupId>
+  <artifactId>tinkerscript</artifactId>
+  <version>1.0</version>
+  <name>tinkerscript</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,25 +41,11 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
-        <!-- Skip default-jar execution -->
-        <executions>
-          <execution>
-            <id>default-jar</id>
-            <phase>none</phase>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.3.0</version>
         <executions>
-          <!-- Execution for Package 1 -->
           <execution>
-            <id>jlox</id>
+            <id>tinkerscript</id>
             <phase>package</phase>
             <goals>
               <goal>single</goal>
@@ -72,32 +54,10 @@
               <descriptorRefs>
                 <descriptorRef>jar-with-dependencies</descriptorRef>
               </descriptorRefs>
-              <finalName>jlox</finalName>
               <appendAssemblyId>false</appendAssemblyId>
               <archive>
                 <manifest>
-                  <mainClass>com.sravan.lox.Lox</mainClass>
-                </manifest>
-              </archive>
-            </configuration>
-          </execution>
-
-          <!-- Execution for Package 2 -->
-          <execution>
-            <id>generate-ast</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptorRefs>
-                <descriptorRef>jar-with-dependencies</descriptorRef>
-              </descriptorRefs>
-              <finalName>generate-ast</finalName>
-              <appendAssemblyId>false</appendAssemblyId>
-              <archive>
-                <manifest>
-                  <mainClass>com.sravan.tool.GenerateAst</mainClass>
+                  <mainClass>tinkerscript.TinkerScript</mainClass>
                 </manifest>
               </archive>
             </configuration>

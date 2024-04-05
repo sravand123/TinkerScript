@@ -1,0 +1,14 @@
+#!/bin/bash
+
+jar_pattern="tinkerscript-*.jar"
+
+# Find the JAR file
+jar_file=$(find . -name "$jar_pattern" -type f -print -quit)
+
+# Check if JAR  file doesn't exists
+if [ ! -f "$jar_file" ]; then
+    echo "No $jar_pattern file found. Building with Maven..."
+    mvn clean package
+fi
+jar_file=$(find . -name "$jar_pattern" -type f -print -quit)
+java -jar "$jar_file" "$@"

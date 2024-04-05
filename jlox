@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-if [ ! -f target/jlox.jar ]; then
-  mvn clean package
-fi
-java -jar target/jlox.jar "$@"
