@@ -702,7 +702,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                     if (stmt.increment != null) {
                         evaluate(stmt.increment);
                     }
-                    execute(stmt.body);
+                    continue;
                 }
                 if (stmt.increment != null) {
                     evaluate(stmt.increment);
