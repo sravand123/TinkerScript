@@ -101,9 +101,35 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
     }
 
-    void executeLambda(Expr.Lambda lambda) {
-
+    private Object evaluateBinaryBitwiseOperator(Token operator, Object leftVal, Object rightVal) {
+        checkNumberOperands(operator, leftVal, rightVal);
+        int left = Double.valueOf((double) leftVal).intValue();
+        int right = Double.valueOf((double) rightVal).intValue();
+        int result;
+        if (operator.type == AMPERSAND) {
+            result = left & right;
+        } else if (operator.type == PIPE) {
+            result = left | right;
+        } else if (operator.type == CARAT) {
+            result = left ^ right;
+        } else {
+            throw new RuntimeError(operator, "Invalid bitwise operator.");
+        }
+        return (double) result;
     }
+
+    private Object evaluateUnaryBitwiseOperator(Token operator, Object rightVal) {
+        checkNumberOperand(operator, rightVal);
+        int right = Double.valueOf((double) rightVal).intValue();
+        int result;
+        if (operator.type == TILDA) {
+            result = ~right;
+        } else {
+            throw new RuntimeError(operator, "Invalid bitwise operator.");
+        }
+        return (double) result;
+    }
+
 
     @Override
     public Object visitBinaryExpr(Binary expr) {
@@ -136,14 +162,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             case BANG_EQUAL:
                 return !isEqual(leftVal, rightVal);
             case PIPE:
-                checkIntegerOperands(expr.operator, leftVal, rightVal);
-                return (double) ((int) (double) leftVal | (int) (double) rightVal);
+                return evaluateBinaryBitwiseOperator(expr.operator, leftVal, rightVal);
             case AMPERSAND:
-                checkIntegerOperands(expr.operator, leftVal, rightVal);
-                return (double) ((int) (double) leftVal & (int) (double) rightVal);
+                return evaluateBinaryBitwiseOperator(expr.operator, leftVal, rightVal);
             case CARAT:
-                checkIntegerOperands(expr.operator, leftVal, rightVal);
-                return (double) ((int) (double) leftVal ^ (int) (double) rightVal);
+                return evaluateBinaryBitwiseOperator(expr.operator, leftVal, rightVal);
             case PERCENTAGE:
                 checkNumberOperands(expr.operator, leftVal, rightVal);
                 return (double) leftVal % (double) rightVal;
@@ -181,8 +204,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             case BANG:
                 return !isTruthy(right);
             case TILDA:
-                checkIntegerOperand(expr.operator, right);
-                return (double) (~(int) (double) right);
+                return evaluateUnaryBitwiseOperator(expr.operator, right);
             default:
                 return null;
 
@@ -226,18 +248,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             return false;
         }
         return true;
-    }
-
-    private void checkIntegerOperands(Token operator, Object left, Object right) {
-        if (checkInteger(left) && checkInteger(right))
-            return;
-        throw new RuntimeError(operator, "Operands must be integers.");
-    }
-
-    private void checkIntegerOperand(Token operator, Object val) {
-        if (checkInteger(val))
-            return;
-        throw new RuntimeError(operator, "Operand must be integer.");
     }
 
     private void checkNumberOperand(Token operator, Object right) {
