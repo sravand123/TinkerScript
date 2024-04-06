@@ -80,6 +80,12 @@ cd TinkerScript
   ./tinkerscript [file]
 ```
 
+6. To run tests:
+
+```bash
+  mvn test
+```
+|  Some of the testcases in the repo were taken from [tests](https://github.com/munificent/craftinginterpreters/tree/master/test) and modified to test the initial implementation and remaining testcases were added as part of TinkerScript
 ## Syntax
 
 ### Primitive Data Types
@@ -387,13 +393,14 @@ outer()(); // returns 10
 
 
 #### Native functions
-- `print` - prints given values separated by a space
-- `println` - prints given values separated by a space ended with a new line
-- `read` - reads a line from input
-- `strlen` - returns the length of a given string
-- `len` - returns the length of a given array
-- `string` - returns a string representation of a given value
-- `number` - returns a number representation of a given value
+- `print()` - prints given values separated by a space
+- `println()` - prints given values separated by a space ended with a new line
+- `read()` - reads a line from input
+- `strlen()` - returns the length of a given string
+- `len()` - returns the length of a given array
+- `string()` - returns a string representation of a given value
+- `number()` - returns a number representation of a given value
+- `clock()` - returns the current time in seconds
 
 
 ### Errors
@@ -504,11 +511,16 @@ println(rectangle.area); // 6
 ```javascript
 array := [1, 2, 3, 4, 5];
 ```
+- Arrays can contain items of different types
+
+```javascript
+array := [1, 3.14, "hello", true, nil];
+```
 
 
 #### Array access
 ```javascript
-print(array[2]); // 3
+array[2]; // 3
 ```
 #### Slicing array
 ```javascript
@@ -529,7 +541,7 @@ newArray := [...array,6,7]; // newArray = [1, 2, 3, 4, 5, 6, 7]
 #### Array built-in methods
 ```javascript
 array := [1, 2, 3, 4, 5];
-array.push(6); // [1, 2, 3, 4, 5, 6]
+array.push(6); // array = [1, 2, 3, 4, 5, 6]
 array.pop(); // 6
 array.length(); // 5
 ```
