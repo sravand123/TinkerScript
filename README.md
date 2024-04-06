@@ -19,23 +19,23 @@ TinkerScript is a dynamically-typed, high-level programming language written in 
 
 ##### Features from the book
 - Variables
-- Control flow (if, while, for, switch, try-catch and throw)
+- Print 
+- Control flow (if, while, for)
 - Functions 
-- Closures
 - Classes
 - Inheritance
 
 ##### Features added
 - Multi-line comments
-- Support for Escaping characters and Unicode characters in strings
-- More Operators 
+- String support for Escaping characters and Unicode characters.
+- More Arithmetic, Logical and Bitwise operators 
+- Increment and Decrement
+- Compound assignment operators
 - Break and Continue
 - Switch Case
 - Try-Catch
 - Ternary
 - Spread operator
-- Increment and Decrement
-- Compound assignment operators
 - Array
 - Slice
 - Map
@@ -44,15 +44,23 @@ TinkerScript is a dynamically-typed, high-level programming language written in 
 - Static methods
 - Getters
 - Reading user input
-- Added more native functions
-## Installation
+- More native functions
+- Improved REPL using jline
+
+## Installation and Usage
 ### From JAR file
 1. Download the JAR file from the [releases]
-2. Run the JAR file using the following command:
+2. To start TinkerScript REPL,
 ```bash
 java -jar TinkerScript.jar
 ```
-### Using Maven
+3. To run a TinkerScript file:
+```bash
+java -jar TinkerScript.jar [file]
+```
+
+### From Source
+Make sure you have Java and Maven installed on your machine
 1. Clone the repository:
 ```bash
 git clone https://github.com/sravand123/TinkerScript
@@ -65,24 +73,13 @@ cd TinkerScript
 ```bash
   chmod +x tinkerscript
 ```
-4. Run the command:
+4. To start TinkerScript REPL:
 ```bash
   ./tinkerscript
 ```
-
-
-## Usage
-To run the TinkerScript REPL, run the following command:
+5. To run a TinkerScript file:
 ```bash
-./tinkerscript
-```
-To run a TinkerScript file, run the following command:
-```bash
-./tinkerscript [file]
-```
-To run the TinkerScript tests, run the following command:
-```bash
-mvn test
+  ./tinkerscript [file]
 ```
 
 ## Syntax
@@ -126,7 +123,8 @@ y := "Hello, World!";
 ```
 
 ### Operators
-TinkerScript supports the following operators:
+
+Operators follow the same precedence as C.
 #### Binary
 ##### Arithmetic
 - `+`, `-`, `*`, `/`, `%`
@@ -151,6 +149,7 @@ x := 5;
 y := 10;
 z := x>5 && y<10; // true
 ```
+Alternatively , you can use the `and` and `or` keywords:
 
 ##### Bitwise
 - `&`, `|`, `^`
@@ -223,7 +222,7 @@ print("Hello", "World!"); // prints "Hello World!"
 ```
 - `println()` can be used to print output with a new line
 ```javascript
-print("Hello, World!"); // prints "Hello, World!" with a new line
+println("Hello, World!"); // prints "Hello, World!" with a new line
 ```
 #### Input
 - `read()` can be used to read input from the user
@@ -235,7 +234,6 @@ x := read(); // reads input
 x := read("Enter a number: "); // reads input
 ```
 
-- Operators follow the same precedence as C.
 ### Control Flow
 ####  If Else
 ```javascript
@@ -548,12 +546,12 @@ map[false] = "value4";
 #### Map Built-in methods
 ```javascript
 map.keys(); // [key1, 2, true, false]
-map.values(); // ["value1", "value2", "value3", "value4"]
+map.values(); // [value1, value2, value3, value4]
 ```
 
 
 ## Contributing
-Pull requests are always welcome.
+If you find any bugs or have any features you would like to see added, feel free to open an issue or submit a pull request
 
 ## License
 ```
