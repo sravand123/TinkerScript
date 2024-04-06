@@ -258,38 +258,40 @@ if (x > 5) {
 cnt:= 0;
 while (cnt < 10) {
   cnt++;
-} // cnt = 10
+}
+print(cnt); // prints 10
 ```
 
 ####  For
 ```javascript
-cnt := 0;
-for (i := 0; i < 10; i++) {
-  cnt++;
-} // cnt = 10
+for (i := 0; i < 5; i++) {
+    print(i,"");
+}
+// prints 0 1 2 3 4
 ```
 
 #### Break
 ```javascript
 x := 0;
-while (x < 10) {
-  if (x == 5) {
+while (x < 5) {
+  if (x == 3) {
     break;
   }
+  print(x,"");
   x++;
-} // x = 5
+}
+// prints 0 1 2
 ```
 
 #### Continue
 ```javascript
-cnt:= 0;
 for (i := 0; i < 5; i++) {
   if (i == 3) {
     continue;
   }
-  cnt++;
-  
-} // cnt = 4
+  print(i,"");
+}
+// prints 0 1 2 4
 ```
 
 ####  Switch Case
@@ -298,14 +300,14 @@ x := 1;
 var y;
 switch (x) {
   case 0:
-    y = 10;
+    print("x is 0");
     break;
   case 1:
-    y = 20;
+    print("x is 1");
     break;
   default:
-    y = 30;
-} // y = 20
+    print("x is neither 0 nor 1");
+} // prints "x is 1"
 ```
 ### Functions
 
