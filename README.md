@@ -1,12 +1,12 @@
 # TinkerScript
 
-A dynamically-typed , high-level programming language
+A dynamically-typed ,high-level, toy programming language written in Java
 
 
 ## Table of Contents
 - [About](#about)
-- [Installation](#installation)
-- [Usage](#usage)
+- [Installation and Usage](#installation)
+- [Syntax](#syntax)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -92,10 +92,10 @@ cd TinkerScript
 ####  `string`
 - Strings are enclosed in double quotes: `"Hello, World!"`
 - Supports escaping characters: `"\n"`, `"\r", "\t", "\b", "\f" ,"\\", "\"`
-- Supports Unicode characters: `"\u0041"`
+- Supports Unicode characters
 
 ####  `boolean`
-- `true` or `false`
+- `true`, `false`
 ####  `nil`
 - `nil`
 
@@ -131,7 +131,7 @@ Operators follow the same precedence as C.
 ```javascript
 x := 5;
 y := 10;
-z := x+y; // 15
+z := x+y; // z = 15
 ```
 
 ##### Comparison
@@ -139,7 +139,7 @@ z := x+y; // 15
 ```javascript
 x := 5;
 y := 10;
-z := x==y; // false
+z := x==y; // z = false
 ```
 
 ##### Logical
@@ -147,7 +147,7 @@ z := x==y; // false
 ```javascript
 x := 5;
 y := 10;
-z := x>5 && y<10; // true
+z := x>5 && y<10; // z = true
 ```
 Alternatively , you can use the `and` and `or` keywords:
 
@@ -156,60 +156,66 @@ Alternatively , you can use the `and` and `or` keywords:
 ```javascript
 x := 5;
 y := 10;
-z := x & y; // 0
+z := x & y; // z = 0
 ```
 #### Unary
 ##### Arithmetic
 - `-`
 ```javascript
 x := 5;
-y := -x; // -5
+y := -x; // y = -5
 ```
 ##### Logical
 - `!`
 ```javascript
 x := true;
-y := !x; // false
+y := !x; // y = false
 ```
 ##### Bitwise
 - `~`
 ```javascript
 x := 5;
-y := ~x; // -6
+y := ~x; // y = -6
 ```
 
 #### Increment and Decrement
 ##### Postfix
+In postfix increment/decrement, the value of the variable is used in the expression first, and then the value is incremented/decremented.
 - `++`, `--`
 ```javascript
 x := 5;
-x++; // 6
-x--; // 5
+y := x++; // y = 5, x = 6
+
 ```
 
 ##### Prefix
+In prefix increment/decrement,the value of the variable is incremented/decremented before the value is used in the expression.
 - `++`, `--`
 ```javascript
 x := 5;
-++x; // 6
---x; // 5
+y := ++x; // y = 6, x = 6
 ```
 
 
 #### Assignment
+##### Direct assignment
 - `=`,
-- `+=`, `-=`, `*=`, `/=`, `%=`, `&=`, `|=`, `^=` (compound assignment operators)
 ```javascript
-x := 5;
+var x;
 x = 10;
-x /= 5; // 2
+```
+##### Compound Assignment
+- `+=`, `-=`, `*=`, `/=`, `%=`, `&=`, `|=`, `^=`
+```javascript
+x := 10;
+x /= 5; // x = 2
 ```
 
 #### Ternary
 - `? :`
 ```javascript
 x := 5;
-y := x > 5 ? "x is greater than 5" : "x is less than or equal to 5"; // "x is greater than 5"
+y := x > 5 ? 2*x : 3*x; // y = 15
 ```
 
 ### IO
@@ -217,8 +223,8 @@ y := x > 5 ? "x is greater than 5" : "x is less than or equal to 5"; // "x is gr
 - `print()` can be used to display output
 ```javascript
 print("Hello, World!"); // prints "Hello, World!"
-// Accepts multiple arguments
-print("Hello", "World!"); // prints "Hello World!"
+
+print("Meaning of Life", 42 ); // prints "Meaning of Life 42"
 ```
 - `println()` can be used to print output with a new line
 ```javascript
@@ -249,18 +255,18 @@ if (x > 5) {
 
 ####  While
 ```javascript
-x:= 0;
-while (x < 10) {
-  x++;
-}
-print(x); // prints 10
+cnt:= 0;
+while (cnt < 10) {
+  cnt++;
+} // cnt = 10
 ```
 
 ####  For
 ```javascript
+cnt := 0;
 for (i := 0; i < 10; i++) {
-  print(i);
-} // prints 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+  cnt++;
+} // cnt = 10
 ```
 
 #### Break
@@ -271,53 +277,35 @@ while (x < 10) {
     break;
   }
   x++;
-}
-print(x); // prints 5
+} // x = 5
 ```
 
 #### Continue
 ```javascript
+cnt:= 0;
 for (i := 0; i < 5; i++) {
   if (i == 3) {
     continue;
   }
-  print(i);
-} // prints 0, 1, 2, 4
+  cnt++;
+  
+} // cnt = 4
 ```
 
 ####  Switch Case
 ```javascript
 x := 1;
+var y;
 switch (x) {
   case 0:
-    print("x is 0");
+    y = 10;
     break;
   case 1:
-    print("x is 1");
+    y = 20;
     break;
   default:
-    print("x is neither 0 nor 1");
-} // prints "x is 1"
-```
-
-#### Try Catch and Throw
-##### Catch errors
-```javascript
-try {
-  x := [1,2,3];
-  x[100] = 10; // throws error
-} catch (e) {
-  print(e);  // Index 100 out of range.
-}
-```
-##### Throw errors
-```javascript
-try {
-  x := [1,2,3];
-  throw "10"; // throws an error
-} catch (e) {
-  print(e); // prints 10
-}
+    y = 30;
+} // y = 20
 ```
 ### Functions
 
@@ -348,6 +336,12 @@ add(5,10); // 15
 add := (x, y) -> x + y;
 add(5, 10); // 15
 ```
+
+```javascript
+adder := x -> y -> x + y;
+adder(5)(10); // 15
+```
+
 
 #### Variadic functions
 TinkerScript also supports variadic functions ( functions with variable number of arguments).
@@ -393,10 +387,35 @@ outer()(); // 10
 
 
 #### Native functions
-- print - prints given values separated by a space
-- println - prints given values separated by a space ended with a new line
-- read - reads a line from standard input
-- len - returns the length of a given array or string
+- `print` - prints given values separated by a space
+- `println` - prints given values separated by a space ended with a new line
+- `read` - reads a line from input
+- `strlen` - returns the length of a given string
+- `len` - returns the length of a given array
+- `string` - returns a string representation of a given value
+- `number` - returns a number representation of a given value
+
+
+### Errors
+
+##### Catch errors
+```javascript
+try {
+  x := [1,2,3];
+  x[100] = 10;
+} catch (e) {
+  print(e);  // prints Index 100 out of range.
+}
+```
+##### Throw errors
+```javascript
+try {
+  x := [1,2,3];
+  throw "10"; 
+} catch (e) {
+  print(e); // prints 10
+}
+```
 
 ### Classes
 
@@ -418,15 +437,6 @@ point :=  Point();
 point.x = 10;
 point.y = 20;
 ```
-#### Constructor
-```javascript
-class Point {
-    init(x, y) {
-      this.x = x;
-      this.y = y;
-    }
-}
-```
 #### Methods
 ```javascript
 class Point {
@@ -440,7 +450,7 @@ class Point {
 point :=  Point();
 point.x = 10;
 point.y = 20;
-point.getX(); // 10
+print(point.getX(), point.getY()); // 10 20
 ```
 #### Constructor
 ```javascript
@@ -451,22 +461,26 @@ class Point {
     }
 }
 point :=  Point(10, 20);
-point.getX(); // 10
-point.getY(); // 20
+print(point.x, point.y); // 10 20
 ```
 
 #### Static methods
 ```javascript
 class Point {
+    init(x, y) {
+      this.x = x;
+      this.y = y;
+    }
     static midpoint(point1, point2) {
-    const midX = (point1.x + point2.x) / 2;
-    const midY = (point1.y + point2.y) / 2;
-    return  Point(midX, midY);
+       midX := (point1.x + point2.x) / 2;
+       midY := (point1.y + point2.y) / 2;
+      return  Point(midX, midY);
    }
 }
 point1 :=  Point(2, 2);
 point2 :=  Point(0, 0); 
-Point.midpoint(point1, point2); // Point(1, 1)
+midPoint := (Point.midpoint(point1, point2));
+print(midPoint.x, midPoint.y); // 1 1
 ```
 
 #### Getters
@@ -583,5 +597,5 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 ## Contact Me
-- Email: sravandasari111@gmail.com
+- sravandasari111@gmail.com
 - [LinkedIn](https://linkedin.com/in/sravan-kumar-dasari-02ab93195)
