@@ -12,28 +12,27 @@ A dynamically-typed ,high-level, toy programming language written in Java
 
 ## About
 
-TinkerScript is a dynamically-typed, high-level programming language written in Java. Initially, it started as an implementation of the Lox programming language from the book [Crafting Interpreters](https://craftinginterpreters.com/). However, as I continued adding more features to it, the language began to diverge significantly from its original form. So I have renamed it to TinkerScript.
+TinkerScript is a dynamically-typed, high-level programming language written in Java. Initially, it started as an implementation of a tree walk interpreter for the Lox programming language from the book [Crafting Interpreters](https://craftinginterpreters.com/). However, as I continued adding more features to it, the language began to diverge significantly from its original form. So I have renamed it to TinkerScript.
 
-
-
-
-##### Features from the book
+#### Features
+##### Features present in the Book implementation of Lox
 - Variables
-- Print 
+- Expressions
+- Statements
 - Control flow (if, while, for)
 - Functions 
 - Classes
 - Inheritance
 
-##### Features added
+##### Feature added as a part of TinkerScript
 - Multi-line comments
-- String support for Escaping characters and Unicode characters.
-- More Arithmetic, Logical and Bitwise operators 
-- Increment and Decrement
-- Compound assignment operators
+- Support for Escaping characters and Unicode characters in strings
+- More Arithmetic, Logical and Bitwise operators (`%`, `&&`, `||`,`|`, `&`,`^`, `~`) 
+- Increment and Decrement operators (`++`, `--`)
+- Compound assignment operators (`+=`, `-=`, `*=`, `/=`, `||=`, `&&=`, `|=`, `&=`, `^=`)
 - Break and Continue
 - Switch Case
-- Try-Catch
+- Try Catch and Throw
 - Ternary
 - Spread operator
 - Array
@@ -43,13 +42,12 @@ TinkerScript is a dynamically-typed, high-level programming language written in 
 - Lambdas
 - Static methods
 - Getters
-- Reading user input
-- More native functions
-- Improved REPL using jline
+- Reading Input
+- More Native functions
 
 ## Installation and Usage
 ### From JAR file
-1. Download the JAR file from the [releases]
+1. Download the JAR file from the [releases](https://github.com/sravand123/TinkerScript/releases)
 2. To start TinkerScript REPL,
 ```bash
 java -jar TinkerScript.jar
@@ -60,7 +58,7 @@ java -jar TinkerScript.jar [file]
 ```
 
 ### From Source
-Make sure you have Java and Maven installed on your machine
+Make sure you have Java 11 or higher and Maven installed on your machine
 1. Clone the repository:
 ```bash
 git clone https://github.com/sravand123/TinkerScript
@@ -231,11 +229,11 @@ print("Meaning of Life", 42 ); // prints "Meaning of Life 42"
 println("Hello, World!"); // prints "Hello, World!" with a new line
 ```
 #### Input
-- `read()` can be used to read input from the user
+- `read()` can be used to read input.
 ```javascript
 x := read(); // reads input
 ```
-- User can optionally provide a prompt
+- Users can also provide prompt when reading input
 ```javascript
 x := read("Enter a number: "); // reads input
 ```
@@ -321,7 +319,7 @@ fun add(x, y) {
 ```javascript
 x := 5;
 y := 10;
-z := add(x, y); // 15
+z := add(x, y); // returns 15
 ```
 
 #### Function expression
@@ -329,25 +327,23 @@ z := add(x, y); // 15
 add := fun (x, y) {
     return x+y;
 };
-add(5,10); // 15
+add(5,10); // returns 15
 ```
 
 #### Lambda
 ```javascript
 
 add := (x, y) -> x + y;
-add(5, 10); // 15
+add(5, 10); // returns 15
 ```
 
 ```javascript
 adder := x -> y -> x + y;
-adder(5)(10); // 15
+adder(5)(10); // returns 15
 ```
 
 
 #### Variadic functions
-TinkerScript also supports variadic functions ( functions with variable number of arguments).
-
 - Variable parameter can be defined using the spread `...` syntax
 - A function can have only one variadic parameter
 - The variadic parameter must be the last parameter
@@ -359,7 +355,7 @@ fun sum(...values){
   }
   return total;
 }
-sum(1, 2, 3, 4, 5); // 15
+sum(1, 2, 3, 4, 5); // returns 15
 ```
 
 #### Spreading arguments
@@ -372,10 +368,12 @@ fun add(x, y, z){
   return total;
 }
 x := [1, 2, 3];
-add(...x); // 15
+add(...x); // returns 15
 ```
 
 #### Closures
+- Functions support closures by retaining access to the enclosing scope where they were defined.
+
 ```javascript
 fun outer() {
   outerVariable := 10;
@@ -384,7 +382,7 @@ fun outer() {
   }
   return inner;
 }
-outer()(); // 10
+outer()(); // returns 10
 ```
 
 
@@ -512,7 +510,7 @@ array := [1, 2, 3, 4, 5];
 ```javascript
 print(array[2]); // 3
 ```
-#### Slice
+#### Slicing array
 ```javascript
 array := [1, 2, 3, 4, 5];
 array[1:3]; // [2, 3]
@@ -520,10 +518,10 @@ array[3:]; // [4, 5]
 array[:3]; // [1, 2, 3]
 array[:]; // [1, 2, 3, 4, 5]
 ```
-#### Spread
+#### Using Spread in array
 ```javascript
 array := [1, 2, 3, 4, 5];
-newArray := [...array,6,7]; // [1, 2, 3, 4, 5, 6, 7]
+newArray := [...array,6,7]; // newArray = [1, 2, 3, 4, 5, 6, 7]
 ```
 
 
@@ -595,7 +593,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Acknowledgements
  - [Crafting Interpreters](https://craftinginterpreters.com)
-
 
 
 ## Contact Me
