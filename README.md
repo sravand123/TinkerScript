@@ -85,7 +85,7 @@ cd TinkerScript
 ```bash
   mvn test
 ```
-|  Some of the testcases in the repo were taken from [tests](https://github.com/munificent/craftinginterpreters/tree/master/test) and modified to test the initial implementation and remaining testcases were added as part of TinkerScript
+> Some of the testcases  in the repo were taken from [Tests](https://github.com/munificent/craftinginterpreters/tree/master/test) of Lox Interpreter and were modified to test the initial implementation and remaining testcases were added as part of TinkerScript
 ## Syntax
 
 ### Primitive Data Types
