@@ -161,13 +161,13 @@ public class Parser {
     }
 
     private Stmt tryCatch() {
-        consume(LEFT_BRACE, "Expected '{' after try.");
+        consume(LEFT_BRACE, "Expected '{' after 'try'.");
         List<Stmt> tryBlock = block();
-        consume(CATCH, "Expected catch after try block.");
-        consume(LEFT_PAREN, "Expected '(' after catch.");
+        consume(CATCH, "Expected 'catch' after try block.");
+        consume(LEFT_PAREN, "Expected '(' after 'catch'.");
         Token exception = consume(IDENTIFIER, "Expected exception name.");
         consume(RIGHT_PAREN, "Expected ')'.");
-        consume(LEFT_BRACE, "Expected  '{' after catch.");
+        consume(LEFT_BRACE, "Expected  '{'.");
         List<Stmt> catchBlock = block();
         return new Stmt.TryCatch(tryBlock, catchBlock, exception);
     }
@@ -732,6 +732,7 @@ public class Parser {
                 case WHILE:
                 case RETURN:
                 case SWITCH:
+                case TRY:
                     return;
 
                 default:

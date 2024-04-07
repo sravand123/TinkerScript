@@ -1,0 +1,23 @@
+try{
+    a := 1;
+} catch(e){
+   println(e);
+}
+try{
+    println(a); 
+} catch(e){
+   b := 3;
+   println(e.message); // expect: Undefined variable 'a'.
+}
+
+try{
+    println(b);
+} catch(e){
+   println(e.message); // expect: Undefined variable 'b'.
+}
+
+try{
+    println(e);
+} catch(e){
+   println(e.message); // expect: Undefined variable 'e'.
+}
