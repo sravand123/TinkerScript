@@ -411,16 +411,15 @@ try {
   x := [1,2,3];
   x[100] = 10;
 } catch (e) {
-  print(e);  // prints Index 100 out of range.
+  print(e);  // prints Error: Index 100 out of range.
 }
 ```
 ##### Throw errors
 ```javascript
 try {
-  x := [1,2,3];
-  throw "10"; 
+  throw Error("error"); 
 } catch (e) {
-  print(e); // prints 10
+  print(e.message); // prints error
 }
 ```
 
