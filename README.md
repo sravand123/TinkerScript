@@ -599,8 +599,6 @@ If you find any bugs or have any features you would like to see added, feel free
 
 ## License
 ```
-Copyright (c) 2012-2024 Scott Chacon and others
-
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
 "Software"), to deal in the Software without restriction, including
