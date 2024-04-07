@@ -533,7 +533,7 @@ public class TestCaseRunner {
     @Test
     public void trycatch_use() throws IOException {
         String output= testFile(testDir + "/trycatch/use.tis");
-        assertEquals("error\nError: Undefined variable 'x'.\n\tat 'x' [line: 8]\nError: Operands must be two numbers or two strings.\n", output);
+        assertEquals("error\nError: Undefined variable 'x'.\n\tat 'x' [line: 8]\nOperands must be two numbers or two strings.\n", output);
     }
 
     @Test
