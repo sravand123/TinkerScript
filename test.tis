@@ -1,0 +1,12 @@
+
+class Rectangle {
+   
+    static area(width, height){
+      return width * height;
+    }
+}
+class Square < Rectangle {
+}
+
+
+print(Square.area(5, 5));

@@ -471,6 +471,25 @@ point :=  Point(10, 20);
 print(point.x, point.y); // 10 20
 ```
 
+#### Inheritance
+```javascript
+class Rectangle {
+    init(width, height) {
+      this.width = width;
+      this.height = height;
+    }
+    area() {
+      return this.width * this.height;
+    }
+}
+class Square < Rectangle {
+    init(width) {
+      super.init(width, width);
+    }
+}
+print(Square(5).area()); // 25
+```
+
 #### Static methods
 ```javascript
 class Point {
@@ -478,7 +497,7 @@ class Point {
       this.x = x;
       this.y = y;
     }
-    static midpoint(point1, point2) {
+    static midPoint(point1, point2) {
        midX := (point1.x + point2.x) / 2;
        midY := (point1.y + point2.y) / 2;
       return  Point(midX, midY);
@@ -486,7 +505,7 @@ class Point {
 }
 point1 :=  Point(2, 2);
 point2 :=  Point(0, 0); 
-midPoint := (Point.midpoint(point1, point2));
+midPoint := (Point.midPoint(point1, point2));
 print(midPoint.x, midPoint.y); // 1 1
 ```
 
