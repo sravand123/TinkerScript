@@ -81,7 +81,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     Object createLangErrorFromRuntimeError(RuntimeError error) {
         LangClass errorClass = (LangClass) globals.get("Error");
-        LangInstance errorInstance = new LangError(errorClass);
+        LangInstance errorInstance = new LangInstance(errorClass);
         errorInstance.set("message", error.getMessage());
         if (error.token != null) {
             errorInstance.set("stack",

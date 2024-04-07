@@ -13,6 +13,6 @@ try {
 try {
     x = 2+nil;
 } catch (error) {
-    println(error); // expect: Error: Operands must be two numbers or two strings.
+    println(error.message); // expect: Operands must be two numbers or two strings.
 }
 
