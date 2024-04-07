@@ -243,12 +243,6 @@ public class TestCaseRunner {
     }
 
     @Test
-    public void try_catch() throws IOException {
-        String output= testFile(testDir + "/try_catch.tis");
-        assertEquals("Test passed!\n", output);
-    }
-
-    @Test
     public void variable_use_global_in_initializer() throws IOException {
         String output= testFile(testDir + "/variable/use_global_in_initializer.tis");
         assertEquals("value\n", output);
@@ -534,6 +528,30 @@ public class TestCaseRunner {
     public void slice_invalid() throws IOException {
         String output= testFile(testDir + "/slice/invalid.tis");
         assertEquals("Invalid slice.\nInvalid slice.\nInvalid slice.\nInvalid slice.\nInvalid slice.\nInvalid slice.\n", output);
+    }
+
+    @Test
+    public void trycatch_use() throws IOException {
+        String output= testFile(testDir + "/trycatch/use.tis");
+        assertEquals("error\nError: Undefined variable 'x'.\n\tat 'x' [line: 8]\nError: Operands must be two numbers or two strings.\n", output);
+    }
+
+    @Test
+    public void trycatch_scope() throws IOException {
+        String output= testFile(testDir + "/trycatch/scope.tis");
+        assertEquals("Undefined variable 'a'.\nUndefined variable 'b'.\nUndefined variable 'e'.\n", output);
+    }
+
+    @Test
+    public void trycatch_syntax() throws IOException {
+        String output= testFile(testDir + "/trycatch/syntax.tis");
+        assertEquals("[line 1] Error at ';': Expected '{' after 'try'.\n[line 3] Error at ';': Expected 'catch' after try block.\n[line 5] Error at ';': Expected '(' after 'catch'.\n[line 7] Error at ')': Expected exception name.\n[line 9] Error at ';': Expected expression.\n", output);
+    }
+
+    @Test
+    public void trycatch_error() throws IOException {
+        String output= testFile(testDir + "/trycatch/error.tis");
+        assertEquals("Expected 1 arguments but got 0.\nerror\n", output);
     }
 
     @Test

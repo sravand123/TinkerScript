@@ -74,6 +74,23 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 new HashMap<>(),
                 null);
         globals.define("Map", mapClass);
+        LangClass error = new LangClass("Error", new HashMap<>(
+                Map.of("init", new NativeFunction.Error.ErrorConstructor())), new HashMap<>(), null);
+        globals.define("Error", error);
+    }
+
+    Object createLangErrorFromRuntimeError(RuntimeError error) {
+        LangClass errorClass = (LangClass) globals.get("Error");
+        LangInstance errorInstance = new LangError(errorClass);
+        errorInstance.set("message", error.getMessage());
+        if (error.token != null) {
+            errorInstance.set("stack",
+                    "Error: " + error.getMessage() + "\n\tat '" + error.token.lexeme + "' [line: "
+                            + error.token.line + "]");
+        } else {
+            errorInstance.set("stack", "Error: " + error.getMessage());
+        }
+        return errorInstance;
     }
 
     void resolve(Expr expression, Integer depth) {
@@ -658,12 +675,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitTryCatchStmt(TryCatch stmt) {
         try {
-            executeBlock(stmt.tryBlock, environment);
+            executeBlock(stmt.tryBlock, new Environment(environment));
         } catch (Catch error) {
+            Environment environment = new Environment(this.environment);
             environment.define(stmt.exception.lexeme, error.value);
             executeBlock(stmt.catchBlock, environment);
         } catch (RuntimeError error) {
-            environment.define(stmt.exception.lexeme, error.getMessage());
+            Environment environment = new Environment(this.environment);
+            environment.define(stmt.exception.lexeme, createLangErrorFromRuntimeError(error));
             executeBlock(stmt.catchBlock, environment);
         }
         return null;

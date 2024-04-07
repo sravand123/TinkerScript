@@ -3,19 +3,19 @@ a := [1,2,3];
 try{
    println(a[-1:2]); 
 } catch(e) {
-   println(e); // expect: Invalid slice.
+   println(e.message); // expect: Invalid slice.
 }
 
 try{
    println(a[1:-1]);
 } catch(e) {
-   println(e); // expect: Invalid slice.
+   println(e.message); // expect: Invalid slice.
 }
 
 try{
    println(a[-1:-2]);
 } catch(e) {
-   println(e); // expect: Invalid slice.
+   println(e.message); // expect: Invalid slice.
 }
 
 a = "abc";
@@ -23,17 +23,17 @@ a = "abc";
 try{
    println(a[-1:2]); 
 } catch(e) {
-   println(e); // expect: Invalid slice.
+   println(e.message); // expect: Invalid slice.
 }
 
 try{
    println(a[1:-1]);
 } catch(e) {
-   println(e); // expect: Invalid slice.
+   println(e.message); // expect: Invalid slice.
 }
 
 try{
    println(a[-1:-2]);
 } catch(e) {
-   println(e); // expect: Invalid slice.
+   println(e.message); // expect: Invalid slice.
 }

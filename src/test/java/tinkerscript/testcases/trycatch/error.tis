@@ -1,0 +1,11 @@
+try{
+    throw Error();
+} catch(error) {
+    println(error.message); // expect: Expected 1 arguments but got 0.
+}
+
+try{
+    throw Error("error");
+} catch(error) {
+    println(error.message); // expect: error
+}
