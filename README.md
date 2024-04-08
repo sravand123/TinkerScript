@@ -408,18 +408,17 @@ outer()(); // returns 10
 ##### Catch errors
 ```javascript
 try {
-  x := [1,2,3];
-  x[100] = 10;
-} catch (e) {
-  print(e);  // prints Error: Index 100 out of range.
+  println(2+[1,2,3]);
+} catch (error) {
+  print(error.message);  // prints Error: Operands must be two numbers or two strings.
 }
 ```
 ##### Throw errors
 ```javascript
 try {
   throw Error("error"); 
-} catch (e) {
-  print(e.message); // prints error
+} catch (error) {
+  print(error.message); // prints error
 }
 ```
 
