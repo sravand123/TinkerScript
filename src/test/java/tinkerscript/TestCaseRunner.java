@@ -243,12 +243,6 @@ public class TestCaseRunner {
     }
 
     @Test
-    public void try_catch() throws IOException {
-        String output= testFile(testDir + "/try_catch.tis");
-        assertEquals("Test passed!\n", output);
-    }
-
-    @Test
     public void variable_use_global_in_initializer() throws IOException {
         String output= testFile(testDir + "/variable/use_global_in_initializer.tis");
         assertEquals("value\n", output);
@@ -537,9 +531,27 @@ public class TestCaseRunner {
     }
 
     @Test
-    public void variadic_function() throws IOException {
-        String output= testFile(testDir + "/variadic_function.tis");
-        assertEquals("Test passed!\n", output);
+    public void trycatch_use() throws IOException {
+        String output= testFile(testDir + "/trycatch/use.tis");
+        assertEquals("error\nError: Undefined variable 'x'.\n\tat 'x' [line: 8]\nOperands must be two numbers or two strings.\n", output);
+    }
+
+    @Test
+    public void trycatch_scope() throws IOException {
+        String output= testFile(testDir + "/trycatch/scope.tis");
+        assertEquals("Undefined variable 'a'.\nUndefined variable 'b'.\nUndefined variable 'e'.\n", output);
+    }
+
+    @Test
+    public void trycatch_syntax() throws IOException {
+        String output= testFile(testDir + "/trycatch/syntax.tis");
+        assertEquals("[line 1] Error at ';': Expected '{' after 'try'.\n[line 3] Error at ';': Expected 'catch' after try block.\n[line 5] Error at ';': Expected '(' after 'catch'.\n[line 7] Error at ')': Expected exception name.\n[line 9] Error at ';': Expected expression.\n", output);
+    }
+
+    @Test
+    public void trycatch_error() throws IOException {
+        String output= testFile(testDir + "/trycatch/error.tis");
+        assertEquals("Expected 1 arguments but got 0.\nerror\n", output);
     }
 
     @Test
@@ -603,6 +615,24 @@ public class TestCaseRunner {
     }
 
     @Test
+    public void variadic_function_use() throws IOException {
+        String output= testFile(testDir + "/variadic_function/use.tis");
+        assertEquals("55\n1\n[2, 3, 4, 5, 6, 7, 8, 9, 10]\n55\n", output);
+    }
+
+    @Test
+    public void variadic_function_syntax() throws IOException {
+        String output= testFile(testDir + "/variadic_function/syntax.tis");
+        assertEquals("[line 1] Error at '.': Expected parameter name.\n[line 2] Error at '.': Expected parameter name.\n[line 5] Error at 'b': Variadic parameter must be the last parameter.\n[line 6] Error at '...': Only one variadic parameter is allowed.\n", output);
+    }
+
+    @Test
+    public void variadic_function_zero_arguments() throws IOException {
+        String output= testFile(testDir + "/variadic_function/zero_arguments.tis");
+        assertEquals("0\n", output);
+    }
+
+    @Test
     public void assignment_grouping() throws IOException {
         String output= testFile(testDir + "/assignment/grouping.tis");
         assertEquals("[line 2] Error at '=': Invalid assignment target.\n", output);
@@ -654,6 +684,24 @@ public class TestCaseRunner {
     public void assignment_undefined() throws IOException {
         String output= testFile(testDir + "/assignment/undefined.tis");
         assertEquals("runtime error: Undefined variable 'unknown'.\n", output);
+    }
+
+    @Test
+    public void spread_array() throws IOException {
+        String output= testFile(testDir + "/spread/array.tis");
+        assertEquals("[1, 2, 3, 4, 5, 6]\n[1, 2, 3, 4, 5, 6]\n", output);
+    }
+
+    @Test
+    public void spread_function() throws IOException {
+        String output= testFile(testDir + "/spread/function.tis");
+        assertEquals("1 2 3 4\n", output);
+    }
+
+    @Test
+    public void spread_syntax() throws IOException {
+        String output= testFile(testDir + "/spread/syntax.tis");
+        assertEquals("[line 1] Error at '.': Expected expression.\n[line 4] Error at '...': Expected expression.\n", output);
     }
 
     @Test
@@ -918,12 +966,6 @@ public class TestCaseRunner {
     public void number_trailing_dot() throws IOException {
         String output= testFile(testDir + "/number/trailing_dot.tis");
         assertEquals("[line 2] Error at ';': Expected property name after '.'.\n", output);
-    }
-
-    @Test
-    public void array_spread() throws IOException {
-        String output= testFile(testDir + "/array_spread.tis");
-        assertEquals("1\n2\n3\n4\n5\n6\n", output);
     }
 
     @Test
@@ -1389,6 +1431,18 @@ public class TestCaseRunner {
     }
 
     @Test
+    public void compound_assignment_power() throws IOException {
+        String output= testFile(testDir + "/compound_assignment/power.tis");
+        assertEquals("8\nOperands must be numbers.\n", output);
+    }
+
+    @Test
+    public void compound_assignment_power_syntax() throws IOException {
+        String output= testFile(testDir + "/compound_assignment/power_syntax.tis");
+        assertEquals("[line 1] Error at '**=': Invalid assignment target.\n", output);
+    }
+
+    @Test
     public void string_with_esacape_characters() throws IOException {
         String output= testFile(testDir + "/string/with_esacape_characters.tis");
         assertEquals("", output);
@@ -1607,7 +1661,7 @@ public class TestCaseRunner {
     @Test
     public void precedence() throws IOException {
         String output= testFile(testDir + "/precedence.tis");
-        assertEquals("14\n8\n4\n0\ntrue\ntrue\ntrue\ntrue\n0\n0\n0\n0\n4\n", output);
+        assertEquals("14\n8\n4\n0\ntrue\ntrue\ntrue\ntrue\n0\n0\n0\n0\n-4\n4\n", output);
     }
 
     @Test
@@ -1656,6 +1710,12 @@ public class TestCaseRunner {
     public void operator_add_num_nil() throws IOException {
         String output= testFile(testDir + "/operator/add_num_nil.tis");
         assertEquals("runtime error: Operands must be two numbers or two strings.\n", output);
+    }
+
+    @Test
+    public void operator_power() throws IOException {
+        String output= testFile(testDir + "/operator/power.tis");
+        assertEquals("1\n8\n0.5\n0.25\n0\n-4\n0.25\n", output);
     }
 
     @Test
@@ -1794,6 +1854,18 @@ public class TestCaseRunner {
     public void operator_greater_or_equal_num_nonnum() throws IOException {
         String output= testFile(testDir + "/operator/greater_or_equal_num_nonnum.tis");
         assertEquals("runtime error: Operands must be numbers.\n", output);
+    }
+
+    @Test
+    public void operator_power_zero_to_negative_power() throws IOException {
+        String output= testFile(testDir + "/operator/power_zero_to_negative_power.tis");
+        assertEquals("runtime error: zero cannot be raised to negative power.\n", output);
+    }
+
+    @Test
+    public void operator_power_nonnum() throws IOException {
+        String output= testFile(testDir + "/operator/power_nonnum.tis");
+        assertEquals("Operands must be numbers.\nOperands must be numbers.\nOperands must be numbers.\n", output);
     }
 
     @Test

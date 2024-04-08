@@ -1,0 +1,1 @@
+0 ** -1; // expect runtime error: zero cannot be raised to negative power.

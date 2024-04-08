@@ -2,14 +2,14 @@ try{
     a := {"a":1, 2:"2"};
     println(a["b"]);
 } catch(e){
-    println(e); // expect: Undefined key 'b'.
+    println(e.message); // expect: Undefined key 'b'.
 }
 
 try{
     a := {"a":1, 2:"2"};
     println(a[[1,2]]);
 } catch(e){
-    println(e); // expect: Invalid key [1, 2].
+    println(e.message); // expect: Invalid key [1, 2].
 }
 
 try{
@@ -17,7 +17,7 @@ try{
     a := {"a":1, 2:"2"};
     println(a[f]);
 } catch(e){
-    println(e); // expect: Invalid key <fn f>.
+    println(e.message); // expect: Invalid key <fn f>.
 }
 
 try{
@@ -25,7 +25,7 @@ try{
     a := {"a":1, 2:"2"};
     println(a[b]);
 } catch(e){
-    println(e); // expect: Invalid key {}.
+    println(e.message); // expect: Invalid key {}.
 }
 
 
@@ -34,7 +34,7 @@ try{
     a := {"a":1, 2:"2"};
     println(a[A]);
 } catch(e){
-    println(e); // expect: Invalid key A.
+    println(e.message); // expect: Invalid key A.
 }
 
 try{
@@ -42,7 +42,7 @@ try{
     a := {"a":1, 2:"2"};
     println(a[A()]);
 } catch(e){
-    println(e); // expect: Invalid key A instance.
+    println(e.message); // expect: Invalid key A instance.
 }
 
 
@@ -50,5 +50,5 @@ try{
     a := {"a":1, 2:"2"};
     println(a.a);
 } catch(e){
-    println(e); // expect: Undefined property 'a'.
+    println(e.message); // expect: Undefined property 'a'.
 }

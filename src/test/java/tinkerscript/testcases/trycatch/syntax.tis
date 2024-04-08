@@ -1,0 +1,11 @@
+try ; // [line 1] Error at ';': Expected '{' after 'try'.
+
+try { 1 + 2; } ; // [line 3] Error at ';': Expected 'catch' after try block.
+
+try { 1; } catch ; // [line 5] Error at ';': Expected '(' after 'catch'.
+
+try { 1; } catch ( ) ; // [line 7] Error at ')': Expected exception name.
+
+throw ; // [line 9] Error at ';': Expected expression.
+
+try { 1; } catch (error) {} 

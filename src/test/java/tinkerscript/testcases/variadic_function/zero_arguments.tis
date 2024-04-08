@@ -1,0 +1,10 @@
+fun sum(...values){
+    total := 0;
+    for (i:=0; i<len(values); i++) {
+        total += values[i];
+    }
+    return total;
+}
+
+
+println(sum()); // expect: 0

@@ -3,7 +3,7 @@ try{
     a := {"a":1, 2:"2"};
     a[[1,2]] = 3;
 } catch(e){
-    println(e); // expect: Invalid key [1, 2].
+    println(e.message); // expect: Invalid key [1, 2].
 }
 
 try{
@@ -11,7 +11,7 @@ try{
     a := {"a":1, 2:"2"};
     a[f] = 3;
 } catch(e){
-    println(e); // expect: Invalid key <fn f>.
+    println(e.message); // expect: Invalid key <fn f>.
 }
 
 try{
@@ -19,7 +19,7 @@ try{
     a := {"a":1, 2:"2"};
     a[b] = 3;
 } catch(e){
-    println(e); // expect: Invalid key {}.
+    println(e.message); // expect: Invalid key {}.
 }
 
 
@@ -28,7 +28,7 @@ try{
     a := {"a":1, 2:"2"};
     a[A] = 3;
 } catch(e){
-    println(e); // expect: Invalid key A.
+    println(e.message); // expect: Invalid key A.
 }
 
 try{
@@ -36,5 +36,5 @@ try{
     a := {"a":1, 2:"2"};
     a[A()] = 3;
 } catch(e){
-    println(e); // expect: Invalid key A instance.
+    println(e.message); // expect: Invalid key A instance.
 }

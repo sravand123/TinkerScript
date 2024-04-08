@@ -161,13 +161,13 @@ public class Parser {
     }
 
     private Stmt tryCatch() {
-        consume(LEFT_BRACE, "Expected '{' after try.");
+        consume(LEFT_BRACE, "Expected '{' after 'try'.");
         List<Stmt> tryBlock = block();
-        consume(CATCH, "Expected catch after try block.");
-        consume(LEFT_PAREN, "Expected '(' after catch.");
+        consume(CATCH, "Expected 'catch' after try block.");
+        consume(LEFT_PAREN, "Expected '(' after 'catch'.");
         Token exception = consume(IDENTIFIER, "Expected exception name.");
         consume(RIGHT_PAREN, "Expected ')'.");
-        consume(LEFT_BRACE, "Expected  '{' after catch.");
+        consume(LEFT_BRACE, "Expected  '{'.");
         List<Stmt> catchBlock = block();
         return new Stmt.TryCatch(tryBlock, catchBlock, exception);
     }
@@ -458,7 +458,10 @@ public class Parser {
             if (!check(RIGHT_PAREN)) {
                 do {
                     if (spread != null) {
-                        throw error(peek(), "Variadic parameter must be the last parameter");
+                        if (check(SPREAD)) {
+                            throw error(peek(), "Only one variadic parameter is allowed.");
+                        }
+                        throw error(peek(), "Variadic parameter must be the last parameter.");
                     }
                     if (match(SPREAD)) {
                         spread = previous();
@@ -497,7 +500,17 @@ public class Parser {
             Expr right = unary();
             return new Expr.Unary(operator, right);
         }
-        return preFix();
+        return power();
+    }
+
+    private Expr power() {
+        Expr expr = preFix();
+        while (match(STAR_STAR)) {
+            Token operator = previous();
+            Expr right = unary();
+            expr = new Expr.Binary(expr, operator, right);
+        }
+        return expr;
     }
 
     private Expr preFix() {
@@ -732,6 +745,7 @@ public class Parser {
                 case WHILE:
                 case RETURN:
                 case SWITCH:
+                case TRY:
                     return;
 
                 default:
@@ -774,6 +788,9 @@ public class Parser {
         } else if (token.type == PERCENTAGE_EQUAL) {
             type = PERCENTAGE;
             lexeme = "%";
+        } else if (token.type == STAR_STAR_EQUAL) {
+            type = STAR_STAR;
+            lexeme = "**";
         } else {
             throw error(token,
                     "Can't create arithmetic operator token as the token is not compound assignment operator");
@@ -796,7 +813,7 @@ public class Parser {
      */
     private boolean isCompoundAssignmentOperatorPresent() {
         return (check(PLUS_EQUAL, MINUS_EQUAL, STAR_EQUAL, SLASH_EQUAL, PIPE_PIPE_EQUAL, AMPERSAND_AMPRESAND_EQUAL,
-                PIPE_EQUAL, AMPERSAND_EQUAL, CARAT_EQUAL, PERCENTAGE_EQUAL));
+                PIPE_EQUAL, AMPERSAND_EQUAL, CARAT_EQUAL, PERCENTAGE_EQUAL, STAR_STAR_EQUAL));
     }
 
     /*

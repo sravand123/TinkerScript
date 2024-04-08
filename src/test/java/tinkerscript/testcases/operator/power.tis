@@ -1,0 +1,12 @@
+2 ** 3;
+
+println(2 ** 0); // expect: 1
+println(2 ** 3); // expect: 8
+println(2 ** -1); // expect: 0.5
+println(2 ** -2); // expect: 0.25
+
+println(0 ** 3); // expect: 0
+
+println(-2 ** 2); // expect: -4
+
+println(2 ** -2); // expect: 0.25
