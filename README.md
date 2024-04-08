@@ -25,25 +25,40 @@ TinkerScript is a dynamically-typed, high-level programming language written in 
 - Inheritance
 
 ##### Feature added as a part of TinkerScript
-- Multi-line comments
+- Multi-line comments - `/* */`
 - Support for Escaping characters and Unicode characters in strings
-- More Arithmetic, Logical and Bitwise operators (`%`, `&&`, `||`,`|`, `&`,`^`, `~`) 
-- Increment and Decrement operators (`++`, `--`)
+- Arithmetic Operators - `%`,`**`
+- Bitwise operators - `|`, `^`, `&`, `~`
+- Alternative syntax for logical operators  `or` and `and` - `&&`, `||`
+- Prefix and Postfix increment/decrement operators - `++`, `--`
 - Compound assignment operators (`+=`, `-=`, `*=`, `/=`, `||=`, `&&=`, `|=`, `&=`, `^=`)
-- Break and Continue
-- Switch Case
-- Try Catch and Throw
-- Ternary
-- Spread operator
-- Array
-- Slice
-- Map
-- Variadic functions
-- Lambdas
-- Static methods
-- Getters
-- Reading Input
+- Ternary operator - `? :`
+- Spread operator - `...`
+- Shorthand syntax for variable declaration and initialization - `:=`
+- `break` and `continue`
+- `switch` `case`
+- `try` `catch` and `throw`
+- Data structures
+  *  Arrays 
+  *  Maps
+
+- Functions
+  * Variadic functions
+  * Function expressions
+  * Lambdas
+- Classes
+  * Static methods
+  * Getters
+- I/O built-in functions
+  * `print()` 
+  * `println()`
+  * `read()`
 - More Native functions
+  * `len()`
+  * `strlen()`
+  * `string()`
+  * `number()`
+
 
 ## Installation and Usage
 ### From JAR file
@@ -95,7 +110,7 @@ cd TinkerScript
 
 ####  `string`
 - Strings are enclosed in double quotes: `"Hello, World!"`
-- Supports escaping characters: `"\n"`, `"\r", "\t", "\b", "\f" ,"\\", "\"`
+- Supports escaping characters: `\n`,`\r`, `\t`, `\b`, `\f` ,`\`, `"`
 - Supports Unicode characters
 
 ####  `boolean`
@@ -117,10 +132,10 @@ multi-line comment */
 ### Variables
 Variables are declared using the `var` keyword: 
 ```javascript
-var x = 10;
+var x;
 var y = "Hello, World!";
 ```
-Variables can also be declared with a shorthand syntax:
+Variables can also be declared and initialized with a shorter syntax:
 ```javascript
 x := 10;
 y := "Hello, World!";
@@ -130,57 +145,76 @@ y := "Hello, World!";
 
 Operators follow the same precedence as C.
 #### Binary
+Let `a` = 2 and `b` = 10
 ##### Arithmetic
-- `+`, `-`, `*`, `/`, `%`
-```javascript
-x := 5;
-y := 10;
-z := x+y; // z = 15
-```
+<!-- Table of Operators -->
+| Operator |   Description    | Example                |
+| :-------- | :------- | :------------------------- |
+| `+` | Addition | a + b is 12 |
+| `-` | Subtraction | a - b is -8 |
+| `*` | Multiplication | a * b is 20 |
+| `/` | Division | a / b is 0.2 |
+| `%` | Modulus |  b % a is 0 |
+| `**` | Exponent | a ** b is 1024 |
 
 ##### Comparison
-- `==`, `!=`, `>`, `<`, `>=`, `<=`
-```javascript
-x := 5;
-y := 10;
-z := x==y; // z = false
-```
+
+| Operator |   Description    | Example                |
+| :-------- | :------- | :------------------------- |
+| `>` | Greater than | a > b is false |
+| `<` | Less than | a < b is true |
+| `>=` | Greater than or equal to | a >= b is false |
+| `<=` | Less than or equal to | a <= b is true |
+| `==` | Equality | a == b is false |
+| `!=` | Inequality | a != b is true |
 
 ##### Logical
-- `&&`, `||`
-```javascript
-x := 5;
-y := 10;
-z := x>5 && y<10; // z = true
-```
-Alternatively , you can use the `and` and `or` keywords:
+
+| Operator |   Description    | Example                |
+| :-------- | :------- | :------------------------- |
+| `\|\|` (or) | Logical OR | a \|\| b is 2 |
+| `&&` (and) | Logical AND | a && b is 10 |
+
 
 ##### Bitwise
-- `&`, `|`, `^`
-```javascript
-x := 5;
-y := 10;
-z := x & y; // z = 0
-```
+
+| Operator |   Description    | Example                |
+| :-------- | :------- | :------------------------- |
+| `&` | Bitwise AND | a & b is 2 |
+| `\|` | Bitwise OR | a \| b is 10 |
+| `^` | Bitwise XOR | a ^ b is 8 |
 #### Unary
-##### Arithmetic
-- `-`
+| Operator |   Description    | Example                |
+| :-------- | :------- | :------------------------- |
+| `-` | Negation | -a is -2 |
+| `!` | Logical complement | !a is false |
+| `~` | Bitwise complement | ~a is -3 |
+
+
+
+#### Assignment
+##### Direct assignment
+- `=`,
 ```javascript
-x := 5;
-y := -x; // y = -5
+var x;
+x = 10;
 ```
-##### Logical
-- `!`
-```javascript
-x := true;
-y := !x; // y = false
-```
-##### Bitwise
-- `~`
-```javascript
-x := 5;
-y := ~x; // y = -6
-```
+##### Compound Assignment
+
+Let `a := 2` and `b := 10`
+| Assignment Operator |   Description    | Example                |
+| :-------- | :------- | :------------------------- |
+| `+=` | Adds the value on the right-hand side to the variable on the left-hand side. | `a += b` results in `a` being `12`. |
+| `-=` | Subtracts the value on the right-hand side from the variable on the left-hand side. | `a -= b` results in `a` being `-8`. |
+| `*=` | Multiplies the variable on the left-hand side by the value on the right-hand side. | `a *= b` results in `a` being `20`. |
+| `/=` | Divides the variable on the left-hand side by the value on the right-hand side. | `a /= b` results in `a` being `0.2`. |
+| `%=` | Assigns the remainder of the division of the variable on the left-hand side by the value on the right-hand side to the variable on the left-hand side. |  `b %= a` results in `b` being `0`. |
+| `**=` | Raises the variable on the left-hand side to the power of the value on the right-hand side. | `a **= b` results in `a` being `1024`. |
+| `\|\|=` | Performs a logical OR operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a \|\|= b` results in `a` being `2`. |
+| `&&=` | Performs a logical AND operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a &&= b` results in `a` being `10`. |
+| `&=` | Performs a bitwise AND operation between the variable on the left-hand side and the value on the right-hand side. | `a &= b` results in `a` being `2`. |
+| `\|=` | Performs a bitwise OR operation between the variable on the left-hand side and the value on the right-hand side. | `a \|= b` results in `a` being `10`. |
+| `^=` | Performs a bitwise XOR operation between the variable on the left-hand side and the value on the right-hand side. | `a ^= b` results in `a` being `8`. |
 
 #### Increment and Decrement
 ##### Postfix
@@ -198,21 +232,6 @@ In prefix increment/decrement,the value of the variable is incremented/decrement
 ```javascript
 x := 5;
 y := ++x; // y = 6, x = 6
-```
-
-
-#### Assignment
-##### Direct assignment
-- `=`,
-```javascript
-var x;
-x = 10;
-```
-##### Compound Assignment
-- `+=`, `-=`, `*=`, `/=`, `%=`, `&=`, `|=`, `^=`
-```javascript
-x := 10;
-x /= 5; // x = 2
 ```
 
 #### Ternary
