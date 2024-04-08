@@ -1,0 +1,9 @@
+fun test(..a) { } // [line 1] Error at '.': Expected parameter name.
+fun test(.a) { } // [line 2] Error at '.': Expected parameter name.
+
+
+fun test(...a, b) { } // [line 5] Error at 'b': Variadic parameter must be the last parameter.
+fun test(...a, ...b) { } // [line 6] Error at '...': Only one variadic parameter is allowed.
+
+fun test(...a) { }
+fun test(a, ...b) { }

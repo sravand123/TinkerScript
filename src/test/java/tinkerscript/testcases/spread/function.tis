@@ -1,0 +1,6 @@
+fun printValues(...values) {
+     println(...values);
+}
+
+a := [1,2,3,4];
+printValues(...a); // expect: 1 2 3 4

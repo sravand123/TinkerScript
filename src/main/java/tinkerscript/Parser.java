@@ -458,7 +458,10 @@ public class Parser {
             if (!check(RIGHT_PAREN)) {
                 do {
                     if (spread != null) {
-                        throw error(peek(), "Variadic parameter must be the last parameter");
+                        if (check(SPREAD)) {
+                            throw error(peek(), "Only one variadic parameter is allowed.");
+                        }
+                        throw error(peek(), "Variadic parameter must be the last parameter.");
                     }
                     if (match(SPREAD)) {
                         spread = previous();

@@ -1,0 +1,18 @@
+fun sum(...values){
+    total := 0;
+    for (i:=0; i<len(values); i++) {
+        total += values[i];
+    }
+    return total;
+}
+
+
+println(sum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)); // expect: 55
+
+fun f(a , ...b) {
+    println(a); // expect: 1
+    println(b); // expect: [2, 3, 4, 5, 6, 7, 8, 9, 10]
+    return a + sum(...b);
+}
+
+println(f(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)); // expect: 55

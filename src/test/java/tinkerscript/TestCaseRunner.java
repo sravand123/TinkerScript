@@ -555,12 +555,6 @@ public class TestCaseRunner {
     }
 
     @Test
-    public void variadic_function() throws IOException {
-        String output= testFile(testDir + "/variadic_function.tis");
-        assertEquals("Test passed!\n", output);
-    }
-
-    @Test
     public void if_fun_in_else() throws IOException {
         String output= testFile(testDir + "/if/fun_in_else.tis");
         assertEquals("[line 2] Error at end: Expected ';' after expression.\n", output);
@@ -621,6 +615,24 @@ public class TestCaseRunner {
     }
 
     @Test
+    public void variadic_function_use() throws IOException {
+        String output= testFile(testDir + "/variadic_function/use.tis");
+        assertEquals("55\n1\n[2, 3, 4, 5, 6, 7, 8, 9, 10]\n55\n", output);
+    }
+
+    @Test
+    public void variadic_function_syntax() throws IOException {
+        String output= testFile(testDir + "/variadic_function/syntax.tis");
+        assertEquals("[line 1] Error at '.': Expected parameter name.\n[line 2] Error at '.': Expected parameter name.\n[line 5] Error at 'b': Variadic parameter must be the last parameter.\n[line 6] Error at '...': Only one variadic parameter is allowed.\n", output);
+    }
+
+    @Test
+    public void variadic_function_zero_arguments() throws IOException {
+        String output= testFile(testDir + "/variadic_function/zero_arguments.tis");
+        assertEquals("0\n", output);
+    }
+
+    @Test
     public void assignment_grouping() throws IOException {
         String output= testFile(testDir + "/assignment/grouping.tis");
         assertEquals("[line 2] Error at '=': Invalid assignment target.\n", output);
@@ -672,6 +684,24 @@ public class TestCaseRunner {
     public void assignment_undefined() throws IOException {
         String output= testFile(testDir + "/assignment/undefined.tis");
         assertEquals("runtime error: Undefined variable 'unknown'.\n", output);
+    }
+
+    @Test
+    public void spread_array() throws IOException {
+        String output= testFile(testDir + "/spread/array.tis");
+        assertEquals("[1, 2, 3, 4, 5, 6]\n[1, 2, 3, 4, 5, 6]\n", output);
+    }
+
+    @Test
+    public void spread_function() throws IOException {
+        String output= testFile(testDir + "/spread/function.tis");
+        assertEquals("1 2 3 4\n", output);
+    }
+
+    @Test
+    public void spread_syntax() throws IOException {
+        String output= testFile(testDir + "/spread/syntax.tis");
+        assertEquals("[line 1] Error at '.': Expected expression.\n[line 4] Error at '...': Expected expression.\n", output);
     }
 
     @Test
@@ -936,12 +966,6 @@ public class TestCaseRunner {
     public void number_trailing_dot() throws IOException {
         String output= testFile(testDir + "/number/trailing_dot.tis");
         assertEquals("[line 2] Error at ';': Expected property name after '.'.\n", output);
-    }
-
-    @Test
-    public void array_spread() throws IOException {
-        String output= testFile(testDir + "/array_spread.tis");
-        assertEquals("1\n2\n3\n4\n5\n6\n", output);
     }
 
     @Test

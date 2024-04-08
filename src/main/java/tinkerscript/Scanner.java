@@ -83,7 +83,7 @@ public class Scanner {
                 addToken(COMMA);
                 break;
             case '.':
-                if (checkSequence("..")) {
+                if (checkSequence("...")) {
                     advance();
                     advance();
                     addToken(SPREAD);
