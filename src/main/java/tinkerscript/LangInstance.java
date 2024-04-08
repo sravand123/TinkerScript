@@ -25,6 +25,14 @@ public class LangInstance {
         fields.put(name.lexeme, value);
     }
 
+    void set(String name, Object value) {
+        fields.put(name, value);
+    }
+
+    Map<String, Object> getFields() {
+        return fields;
+    }
+
     @Override
     public String toString() {
         return klass.name + " instance";

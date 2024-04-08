@@ -1,0 +1,9 @@
+..a; // [line 1] Error at '.': Expected expression.
+
+// Can't use outside of array, function argument,and function parameters
+...a; // [line 4] Error at '...': Expected expression.
+
+a := [1,2,3];
+[...a];
+fun test(...a) { }
+test(...a);

@@ -1,0 +1,18 @@
+try {
+    throw "error";
+} catch (error) {
+    println(error); // expect: error
+}
+
+try {
+    x = 2;
+} catch (error) {
+    println(error.stack); // expect: Error: Undefined variable 'x'.\n\tat 'x' [line: 8]
+}
+
+try {
+    x = 2+nil;
+} catch (error) {
+    println(error.message); // expect: Operands must be two numbers or two strings.
+}
+

@@ -293,4 +293,31 @@ public abstract class NativeFunction implements LangFunction {
         }
     }
 
+    static class Error {
+        static class ErrorConstructor extends NativeFunction {
+            private LangInstance instance;
+
+            @Override
+            public int arity() {
+                return 1;
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                if (!(arguments.get(0) instanceof String)) {
+                    throw new RuntimeError(null, "Invalid message type. Expected string.");
+                }
+                String message = (String) arguments.get(0);
+                instance.set("message", message);
+                return instance;
+            }
+
+            @Override
+            public LangFunction bind(LangInstance instance) {
+                this.instance = instance;
+                return this;
+            }
+        }
+    }
+
 }
