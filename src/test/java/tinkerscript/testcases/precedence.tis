@@ -28,5 +28,7 @@ println(1 -1);  // expect: 0
 println(1- 1);  // expect: 0
 println(1-1);   // expect: 0
 
+// ** has higher precedence than all the above
+println(-2 ** 2); // expect: -4
 // Using () for grouping.
 println((2 * (6 - (2 + 2)))); // expect: 4

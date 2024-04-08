@@ -104,7 +104,16 @@ public class Scanner {
                 addToken(SEMICOLON);
                 break;
             case '*':
-                addToken(match('=') ? STAR_EQUAL : STAR);
+                if (match('*')) {
+                    if (match('='))
+                        addToken(STAR_STAR_EQUAL);
+                    else
+                        addToken(STAR_STAR);
+                } else if (match('=')) {
+                    addToken(STAR_EQUAL);
+                } else {
+                    addToken(STAR);
+                }
                 break;
             case '?':
                 addToken(CONDITIONAL);

@@ -1,0 +1,8 @@
+i := 2;
+i **= 3;
+println(i); // expect: 8
+try{
+    i **= nil;
+} catch(error){
+    println(error.message); // expect: Operands must be numbers.
+}

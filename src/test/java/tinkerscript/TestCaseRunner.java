@@ -1431,6 +1431,18 @@ public class TestCaseRunner {
     }
 
     @Test
+    public void compound_assignment_power() throws IOException {
+        String output= testFile(testDir + "/compound_assignment/power.tis");
+        assertEquals("8\nOperands must be numbers.\n", output);
+    }
+
+    @Test
+    public void compound_assignment_power_syntax() throws IOException {
+        String output= testFile(testDir + "/compound_assignment/power_syntax.tis");
+        assertEquals("[line 1] Error at '**=': Invalid assignment target.\n", output);
+    }
+
+    @Test
     public void string_with_esacape_characters() throws IOException {
         String output= testFile(testDir + "/string/with_esacape_characters.tis");
         assertEquals("", output);
@@ -1649,7 +1661,7 @@ public class TestCaseRunner {
     @Test
     public void precedence() throws IOException {
         String output= testFile(testDir + "/precedence.tis");
-        assertEquals("14\n8\n4\n0\ntrue\ntrue\ntrue\ntrue\n0\n0\n0\n0\n4\n", output);
+        assertEquals("14\n8\n4\n0\ntrue\ntrue\ntrue\ntrue\n0\n0\n0\n0\n-4\n4\n", output);
     }
 
     @Test
@@ -1698,6 +1710,12 @@ public class TestCaseRunner {
     public void operator_add_num_nil() throws IOException {
         String output= testFile(testDir + "/operator/add_num_nil.tis");
         assertEquals("runtime error: Operands must be two numbers or two strings.\n", output);
+    }
+
+    @Test
+    public void operator_power() throws IOException {
+        String output= testFile(testDir + "/operator/power.tis");
+        assertEquals("1\n8\n0.5\n0.25\n0\n-4\n0.25\n", output);
     }
 
     @Test
@@ -1836,6 +1854,18 @@ public class TestCaseRunner {
     public void operator_greater_or_equal_num_nonnum() throws IOException {
         String output= testFile(testDir + "/operator/greater_or_equal_num_nonnum.tis");
         assertEquals("runtime error: Operands must be numbers.\n", output);
+    }
+
+    @Test
+    public void operator_power_zero_to_negative_power() throws IOException {
+        String output= testFile(testDir + "/operator/power_zero_to_negative_power.tis");
+        assertEquals("runtime error: zero cannot be raised to negative power.\n", output);
+    }
+
+    @Test
+    public void operator_power_nonnum() throws IOException {
+        String output= testFile(testDir + "/operator/power_nonnum.tis");
+        assertEquals("Operands must be numbers.\nOperands must be numbers.\nOperands must be numbers.\n", output);
     }
 
     @Test

@@ -161,6 +161,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             case MINUS:
                 checkNumberOperands(expr.operator, leftVal, rightVal);
                 return (double) leftVal - (double) rightVal;
+            case STAR_STAR:
+                checkNumberOperands(expr.operator, leftVal, rightVal);
+                if ((double) leftVal == 0 && (double) rightVal < 0) {
+                    throw new RuntimeError(expr.operator, "zero cannot be raised to negative power.");
+                }
+                return (double) Math.pow((double) leftVal, (double) rightVal);
             case LESS_EQUAL:
                 checkNumberOperands(expr.operator, leftVal, rightVal);
                 return (double) leftVal <= (double) rightVal;
