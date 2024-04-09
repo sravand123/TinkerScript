@@ -35,7 +35,7 @@ public class TestCaseRunner {
         return result + error;
     }
     private final String testFile(String path) throws IOException {
-        Compiler compiler = new Compiler();
+        Compiler compiler = new Compiler(CompilerMode.FILE);
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         compiler.run(new String(bytes, Charset.defaultCharset()));
         String result = systemOutRule.getLog();
