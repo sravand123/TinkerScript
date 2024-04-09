@@ -30,7 +30,8 @@ TinkerScript is a dynamically-typed, high-level programming language written in 
   * Logical  `or` (`||`) , `and` (`&&`), `!`
   * Assignment -`=`,`:=`, `+=`, `-=`, `*=`, `/=`, `%=`, `**=`, 
   `&=`, `|=`, `^=`, `||=`, `&&=`, `++`, `--`
-  * Conditional operator - `? :`
+  * Conditional - `? :`
+  * Spread - `...`
 - Variables
   * Declaration and initialization
   * Assignment
@@ -209,12 +210,14 @@ Let `a` = 2 and `b` = 10
 
 #### Assignment
 ##### Direct assignment
-- `=`,
+- Variables can be assigned  using the `=` operator:
 ```javascript
 var x;
 x = 10;
 ```
 ##### Compound Assignment
+* Compound assignment operators are shorthand operators used  to combine an arithmetic or logical or bitwise operation with assignment.
+
 
 Let `a := 2` and `b := 10`
 | Assignment Operator |   Description    | Example                |
@@ -233,8 +236,7 @@ Let `a := 2` and `b := 10`
 
 #### Increment and Decrement
 ##### Postfix
-In postfix increment/decrement, the value of the variable is used in the expression first, and then the value is incremented/decremented.
-- `++`, `--`
+In postfix increment (`++`) /decrement (`--`), the value of the variable is used in the expression first, and then the value is incremented/decremented.
 ```javascript
 x := 5;
 y := x++; // y = 5, x = 6
@@ -242,15 +244,15 @@ y := x++; // y = 5, x = 6
 ```
 
 ##### Prefix
-In prefix increment/decrement,the value of the variable is incremented/decremented before the value is used in the expression.
-- `++`, `--`
+In prefix increment (`++`) /decrement (`--`),the value of the variable is incremented/decremented before the value is used in the expression.
 ```javascript
 x := 5;
 y := ++x; // y = 6, x = 6
 ```
 
-#### Ternary
-- `? :`
+#### Conditional Operator
+
+The conditional operator (`? :`), also known as the ternary operator, is a shorthand method of writing conditional expressions . It evaluates a condition and returns one of two values based on whether the condition is true or false.
 ```javascript
 x := 5;
 y := x > 5 ? 2*x : 3*x; // y = 15
@@ -258,6 +260,7 @@ y := x > 5 ? 2*x : 3*x; // y = 15
 
 ### IO
 #### Output
+TinkerScript provides built-in functions for doing I/O.
 - `print()` can be used to display output
 ```javascript
 print("Hello, World!"); // prints "Hello, World!"
@@ -384,9 +387,8 @@ adder(5)(10); // returns 15
 
 
 #### Variadic functions
-- Variable parameter can be defined using the spread `...` syntax
-- A function can have only one variadic parameter
-- The variadic parameter must be the last parameter
+ Variadic parameter can be defined using the spread `...` operator .A function can have only one variadic parameter and that parameter must be the last parameter
+
 ```javascript
 fun sum(...values){
   total := 0;
@@ -399,6 +401,7 @@ sum(1, 2, 3, 4, 5); // returns 15
 ```
 
 #### Spreading arguments
+
 ```javascript
 fun add(x, y, z){
   total := 0;
@@ -427,18 +430,22 @@ outer()(); // returns 10
 
 
 #### Native functions
-- `print()` - prints given values separated by a space
-- `println()` - prints given values separated by a space ended with a new line
-- `read()` - reads a line from input
-- `strlen()` - returns the length of a given string
-- `len()` - returns the length of a given array
-- `string()` - returns a string representation of a given value
-- `number()` - returns a number representation of a given value
-- `clock()` - returns the current time in seconds
+
+| Function   | Arguments             | Return Type | Description                               |
+|------------|-----------------------|-------------|-------------------------------------------|
+| `string()` | `string`       | `string`    | Returns a string representation of the input value. |
+| `number()` | `number`       | `number`    | Returns a numerical representation of the input value. |
+| `clock()`  | -                     | `number`    | Returns the current time in seconds.      |
+| `strlen()` | `string`         | `number`    | Returns the length of the input string.   |
+| `len()`    | `Array`     | `number`    | Returns the length of the input array.    |
+| `print()`  | `...any`      | -           | Prints the given values to the console.   |
+| `println()`| `...any`      | -           | Prints the given values to the console, followed by a new line. |
+| `read()`   | `string` ( optiona l)                      | `string`    | Reads a line from input.                  |
 
 
-### Errors
 
+### Error Handling
+Tinkerscript supports error handling using the `try` and `catch` keywords.
 ##### Catch errors
 ```javascript
 try {
@@ -448,6 +455,7 @@ try {
 }
 ```
 ##### Throw errors
+Errors can be thrown using the `throw` keyword.
 ```javascript
 try {
   throw Error("error"); 
@@ -457,7 +465,7 @@ try {
 ```
 
 ### Classes
-
+TinkerScript support object-oriented programming using classes.
 #### Class declaration
 ```javascript
 class Point {
@@ -570,10 +578,11 @@ array := [1, 3.14, "hello", true, nil];
 
 
 #### Array access
+##### Indexing
 ```javascript
 array[2]; // 3
 ```
-#### Slicing array
+##### Slicing 
 ```javascript
 array := [1, 2, 3, 4, 5];
 array[1:3]; // [2, 3]
