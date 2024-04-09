@@ -30,6 +30,7 @@ TinkerScript is a dynamically-typed, high-level programming language written in 
   * Logical  `or` (`||`) , `and` (`&&`), `!`
   * Assignment -`=`,`:=`, `+=`, `-=`, `*=`, `/=`, `%=`, `**=`, 
   `&=`, `|=`, `^=`, `||=`, `&&=`, `++`, `--`
+  * Conditional operator - `? :`
 - Variables
   * Declaration and initialization
   * Assignment
