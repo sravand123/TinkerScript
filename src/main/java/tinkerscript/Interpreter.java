@@ -49,8 +49,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private Environment environment = globals;
     private final Map<Expr, Integer> locals = new HashMap<>();
     public Boolean hadRuntimeError = false;
+    private Object lastEvaluated = null;
+    private final CompilerMode mode;
 
-    Interpreter() {
+    Interpreter(CompilerMode mode) {
+        this.mode = mode;
         globals.define("clock", new NativeFunction.Clock());
         globals.define("strlen", new NativeFunction.StringLength());
         globals.define("read", new NativeFunction.Input());
@@ -59,6 +62,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         globals.define("string", new NativeFunction.ToString());
         globals.define("print", new NativeFunction.Print());
         globals.define("println", new NativeFunction.Println());
+
 
         // define a base class Object which is superclass of all classes
 
@@ -98,10 +102,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     void interpret(List<Stmt> statements) {
+        lastEvaluated = null;
         try {
             for (Stmt stmt : statements) {
                 execute(stmt);
             }
+            if (lastEvaluated != null && mode == CompilerMode.REPL)
+                System.out.println(TinkerScript.stringify(lastEvaluated));
         } catch (RuntimeError error) {
             hadRuntimeError = true;
             Compiler.runtimeError(error);
@@ -235,6 +242,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     private Object evaluate(Expr expr) {
         return expr.accept(this);
+
     }
 
     private boolean isTruthy(Object object) {
@@ -289,7 +297,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitExpressionStmt(Expression stmt) {
-        evaluate(stmt.expression);
+        lastEvaluated = evaluate(stmt.expression);
         return null;
     }
 
