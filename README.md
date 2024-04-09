@@ -5,61 +5,74 @@ A dynamically-typed ,high-level, toy programming language written in Java
 
 ## Table of Contents
 - [About](#about)
-- [Installation and Usage](#installation)
+- [Installation and Usage](#installation-and-usage)
 - [Syntax](#syntax)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## About
 
-TinkerScript is a dynamically-typed, high-level programming language written in Java. Initially, it started as an implementation of a tree walk interpreter for the Lox programming language from the book [Crafting Interpreters](https://craftinginterpreters.com/). However, as I continued adding more features to it, the language began to diverge significantly from its original form. So I have renamed it to TinkerScript.
+TinkerScript is a dynamically-typed, high-level programming language written in Java. Initially, it started as an implementation of a tree walk interpreter for the Lox programming language from the book [Crafting Interpreters](https://craftinginterpreters.com/). However, as I continued adding more features to it, the language began to diverge significantly from its original form. Therefore, I have renamed it to TinkerScript.
 
 #### Features
-##### Features present in the Book implementation of Lox
+- Comments 
+  * Single line - `//`
+  * Multi-line - `/* */`
+- Primitive Data Types
+  * Numbers 
+  * Strings
+  * Booleans
+  * `nil`
+- Operators 
+  * Arithmetic -`+`, `-`, `*`, `/`, `%`,`**`
+  * Relational - `==`, `!=`, `>`, `<`, `>=`, `<=`
+  * Bitwise  - `|`, `^`, `&`, `~`
+  * Logical  `or` (`||`) , `and` (`&&`), `!`
+  * Assignment -`=`,`:=`, `+=`, `-=`, `*=`, `/=`, `%=`, `**=`, 
+  `&=`, `|=`, `^=`, `||=`, `&&=`, `++`, `--`
 - Variables
-- Expressions
-- Statements
-- Control flow (if, while, for)
+  * Declaration and initialization
+  * Assignment
+- Control flow
+  * `if` and `else`
+  * `while`
+  * `for`
+  * `break` and `continue`
+  * `switch` `case`
 - Functions 
+  * Declaration
+  * Function calls
+  * Return values
+  * Closures
+  * Variadic functions
+  * Function Expression
+  * Lambdas
 - Classes
-- Inheritance
-
-##### Feature added as a part of TinkerScript
-- Multi-line comments - `/* */`
-- Support for Escaping characters and Unicode characters in strings
-- Arithmetic Operators - `%`,`**`
-- Bitwise operators - `|`, `^`, `&`, `~`
-- Alternative syntax for logical operators  `or` and `and` - `&&`, `||`
-- Prefix and Postfix increment/decrement operators - `++`, `--`
-- Compound assignment operators (`+=`, `-=`, `*=`, `/=`, `||=`, `&&=`, `|=`, `&=`, `^=`)
-- Ternary operator - `? :`
-- Spread operator - `...`
-- Shorthand syntax for variable declaration and initialization - `:=`
-- `break` and `continue`
-- `switch` `case`
-- `try` `catch` and `throw`
+  * Declaration
+  * Fields
+  * Methods
+    * Instance methods
+    * Static methods
+    * Getters
+  * Constructors
+  * Inheritance
 - Data structures
   *  Arrays 
   *  Maps
-
-- Functions
-  * Variadic functions
-  * Function expressions
-  * Lambdas
-- Classes
-  * Static methods
-  * Getters
-- I/O built-in functions
+- Error Handling
+  * `try` `catch`
+  * `throw`
+- I/O 
   * `print()` 
   * `println()`
   * `read()`
-- More Native functions
+- Native functions
+  * `clock()`
   * `len()`
   * `strlen()`
   * `string()`
   * `number()`
-
-
+  
 ## Installation and Usage
 ### From JAR file
 1. Download the JAR file from the [releases](https://github.com/sravand123/TinkerScript/releases)
@@ -100,7 +113,8 @@ cd TinkerScript
 ```bash
   mvn test
 ```
-> Some of the testcases  in the repo were taken from [Tests](https://github.com/munificent/craftinginterpreters/tree/master/test) of Lox Interpreter and were modified to test the initial implementation and remaining testcases were added as part of TinkerScript
+> Some of the testcases  in the repository were taken from [Tests](https://github.com/munificent/craftinginterpreters/tree/master/test) of Lox Interpreter and were modified to test the initial implementation.
+
 ## Syntax
 
 ### Primitive Data Types
@@ -212,9 +226,9 @@ Let `a := 2` and `b := 10`
 | `**=` | Raises the variable on the left-hand side to the power of the value on the right-hand side. | `a **= b` results in `a` being `1024`. |
 | `\|\|=` | Performs a logical OR operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a \|\|= b` results in `a` being `2`. |
 | `&&=` | Performs a logical AND operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a &&= b` results in `a` being `10`. |
-| `&=` | Performs a bitwise AND operation between the variable on the left-hand side and the value on the right-hand side. | `a &= b` results in `a` being `2`. |
-| `\|=` | Performs a bitwise OR operation between the variable on the left-hand side and the value on the right-hand side. | `a \|= b` results in `a` being `10`. |
-| `^=` | Performs a bitwise XOR operation between the variable on the left-hand side and the value on the right-hand side. | `a ^= b` results in `a` being `8`. |
+| `&=` | Performs a bitwise AND operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a &= b` results in `a` being `2`. |
+| `\|=` | Performs a bitwise OR operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a \|= b` results in `a` being `10`. |
+| `^=` | Performs a bitwise XOR operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a ^= b` results in `a` being `8`. |
 
 #### Increment and Decrement
 ##### Postfix
