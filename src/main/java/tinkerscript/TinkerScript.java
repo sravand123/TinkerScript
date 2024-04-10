@@ -36,8 +36,8 @@ public class TinkerScript {
 
     public static void runPrompt() throws IOException {
         try {
-            System.out.println("TinkerScript REPL");
-            System.out.println("Press Ctrl+C to exit");
+            System.out.println("Welcome To TinkerScript REPL");
+            System.out.println("Press Ctrl+C or Ctrl+D to exit");
             Terminal terminal = TerminalBuilder.builder().system(true).build();
             LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
             // don't escape characters
@@ -55,7 +55,6 @@ public class TinkerScript {
         } catch (EndOfFileException e) {
             System.out.println("Exiting...");
         } catch (Exception e) {
-            e.printStackTrace();
             System.err.println("Error: " + e.getMessage());
             System.err.println("Exiting...");
         }
