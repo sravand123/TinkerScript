@@ -7,13 +7,19 @@ import java.util.List;
 public class Compiler {
     public Boolean hadError = false;
     public Boolean hadRuntimeError = false;
-    Interpreter interpreter = new Interpreter();
+    Interpreter interpreter;
+    private final CompilerMode mode;
+
+    Compiler(CompilerMode mode) {
+        this.mode = mode;
+        interpreter = new Interpreter(mode);
+    }
 
     public void run(String source) {
         Scanner scanner = new Scanner(source);
         hadError = scanner.hadError;
         List<Token> tokens = scanner.scanTokens();
-        Parser parser = new Parser(tokens);
+        Parser parser = new Parser(tokens, mode);
         List<Stmt> statements = parser.parse();
         hadError = parser.hadError;
         if (hadError)
