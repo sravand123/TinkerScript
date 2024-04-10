@@ -74,6 +74,7 @@ TinkerScript is a dynamically-typed, high-level programming language written in 
   * `strlen()`
   * `string()`
   * `number()`
+- Feature Rich REPL
   
 ## Installation and Usage
 ### From JAR file
@@ -120,20 +121,18 @@ cd TinkerScript
 ## Syntax
 
 ### Primitive Data Types
-####  `number`
+#### Number
 - All integers and decimals are considered as numbers
 
-
-####  `string`
+#### String
 - Strings are enclosed in double quotes: `"Hello, World!"`
 - Supports escaping characters: `\n`,`\r`, `\t`, `\b`, `\f` ,`\`, `"`
 - Supports Unicode characters
 
-####  `boolean`
+#### Boolean
 - `true`, `false`
-####  `nil`
-- `nil`
-
+####  nil
+`nil` is a special value like null in other programming languages, that represents an empty value.
 
 ### Comment
 #### Single Line
@@ -261,6 +260,7 @@ y := x > 5 ? 2*x : 3*x; // y = 15
 ### IO
 #### Output
 TinkerScript provides built-in functions for doing I/O.
+
 - `print()` can be used to display output
 ```javascript
 print("Hello, World!"); // prints "Hello, World!"
@@ -366,6 +366,7 @@ z := add(x, y); // returns 15
 ```
 
 #### Function expression
+Functions can also be defined as expressions.
 ```javascript
 add := fun (x, y) {
     return x+y;
@@ -374,6 +375,7 @@ add(5,10); // returns 15
 ```
 
 #### Lambda
+
 ```javascript
 
 add := (x, y) -> x + y;
@@ -401,7 +403,7 @@ sum(1, 2, 3, 4, 5); // returns 15
 ```
 
 #### Spreading arguments
-
+Spread operator `...` can be used to spread elements of an array as arguments to a function
 ```javascript
 fun add(x, y, z){
   total := 0;
@@ -415,7 +417,7 @@ add(...x); // returns 15
 ```
 
 #### Closures
-- Functions support closures by retaining access to the enclosing scope where they were defined.
+Functions support closures by retaining access to the enclosing scope where they were defined even after the scope is executed.
 
 ```javascript
 fun outer() {
@@ -440,7 +442,7 @@ outer()(); // returns 10
 | `len()`    | `Array`     | `number`    | Returns the length of the input array.    |
 | `print()`  | `...any`      | -           | Prints the given values to the console.   |
 | `println()`| `...any`      | -           | Prints the given values to the console, followed by a new line. |
-| `read()`   | `string` ( optiona l)                      | `string`    | Reads a line from input.                  |
+| `read()`   | `string ?`                      | `string`    | Reads a line from input.                  |
 
 
 
@@ -471,8 +473,6 @@ TinkerScript support object-oriented programming using classes.
 class Point {
 }
 ```
-
-
 
 #### Class instantiation
 ```javascript
@@ -570,7 +570,7 @@ println(rectangle.area); // 6
 ```javascript
 array := [1, 2, 3, 4, 5];
 ```
-- Arrays can contain items of different types
+Arrays can contain items of different types
 
 ```javascript
 array := [1, 3.14, "hello", true, nil];
@@ -607,7 +607,6 @@ array.length(); // 5
 ```
 
 ### Maps
-
 #### Map declaration
 ```javascript
 map := {"key1": "value1", 2: "value2", true: "value3", false: "value4"};
@@ -616,23 +615,23 @@ map := {"key1": "value1", 2: "value2", true: "value3", false: "value4"};
 #### Map access
 ##### Get
 ```javascript
-print(map["key1"]); // value1
-print(map[2]); // value2
-print(map[true]); // value3
-print(map[false]); // value4
+map["key1"]; // value1
+map[2]; // value2
+map[true]; // value3
+map[false]; // value4
 ```
 
 ##### Set
 ```javascript
-map["key1"] = "value1";
-map[2] = "value2";
-map[true] = "value3";
-map[false] = "value4";
+map["key1"] = 10;
+map[2] =  nil;
+map[true] = [1,2,3];
+map[false] = {"a":1, "b":2};
 ```
 #### Map Built-in methods
 ```javascript
-map.keys(); // [key1, 2, true, false]
-map.values(); // [value1, value2, value3, value4]
+map.keys(); // [key1, 2, false, true]
+map.values(); // [10, nil, {a: 1, b: 2}, [1, 2, 3]]
 ```
 
 
@@ -641,6 +640,8 @@ If you find any bugs or have any features you would like to see added, feel free
 
 ## License
 ```
+Copyright (c) 2024 Sravan Kumar Dasari
+
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
 "Software"), to deal in the Software without restriction, including
