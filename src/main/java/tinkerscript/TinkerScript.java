@@ -26,7 +26,7 @@ public class TinkerScript {
 
     public static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
-        Compiler compiler = new Compiler();
+        Compiler compiler = new Compiler(CompilerMode.FILE);
         compiler.run(new String(bytes, Charset.defaultCharset()));
         if (compiler.hadError)
             System.exit(65);
@@ -42,7 +42,7 @@ public class TinkerScript {
             LineReader reader = LineReaderBuilder.builder().terminal(terminal).build();
             // don't escape characters
             reader.setOpt(LineReader.Option.DISABLE_EVENT_EXPANSION);
-            Compiler compiler = new Compiler();
+            Compiler compiler = new Compiler(CompilerMode.REPL);
             while (true) {
                 String line = multiLine(reader);
                 if (line == null)

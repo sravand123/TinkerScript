@@ -10,15 +10,35 @@ public class Parser {
     private final List<Token> tokens;
     private int current = 0;
     public Boolean hadError = false;
+    private final CompilerMode mode;
+    private Boolean reportError = true;
 
     private static class ParseError extends RuntimeException {
     };
 
-    Parser(List<Token> tokens) {
+    Parser(List<Token> tokens, CompilerMode mode) {
         this.tokens = tokens;
+        this.mode = mode;
     }
 
     List<Stmt> parse() {
+        // Incase of REPL mode, try to parse an expression first, and if it fails,
+        // then parse statements
+        if (mode == CompilerMode.REPL) {
+            reportError = false;
+            try {
+                Expr expr = expression();
+                if (!isAtEnd()) {
+                    throw new ParseError();
+                }
+                return List.of(new Stmt.Expression(expr));
+            } catch (ParseError error) {
+                // ignore errors and clear the error flag
+                hadError = false;
+                current = 0;
+            }
+        }
+        reportError = true;
         try {
             List<Stmt> statements = new ArrayList<>();
             while (!isAtEnd()) {
@@ -725,7 +745,9 @@ public class Parser {
     }
 
     private ParseError error(Token token, String error) {
-        Compiler.error(token, error);
+        if (reportError) {
+            Compiler.error(token, error);
+        }
         hadError = true;
         return new ParseError();
     }

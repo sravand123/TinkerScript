@@ -63,7 +63,7 @@ public class GenerateTest {
         writer.println("    }");
         writer.println(
                 "    private final String testFile(String path) throws IOException {");
-        writer.println("        Compiler compiler = new Compiler();");
+        writer.println("        Compiler compiler = new Compiler(CompilerMode.FILE);");
         writer.println("        byte[] bytes = Files.readAllBytes(Paths.get(path));");
         writer.println("        compiler.run(new String(bytes, Charset.defaultCharset()));");
         writer.println("        String result = systemOutRule.getLog();");
