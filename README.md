@@ -463,8 +463,7 @@ try {
 ### Classes
 #### Class declaration
 ```javascript
-class Point {
-}
+class Point { }
 ```
 
 #### Class instantiation
