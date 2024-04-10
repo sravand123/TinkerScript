@@ -219,19 +219,19 @@ x = 10;
 
 
 Let `a := 2` and `b := 10`
-| Assignment Operator |   Description    | Example                |
-| :-------- | :------- | :------------------------- |
-| `+=` | Adds the value on the right-hand side to the variable on the left-hand side. | `a += b` results in `a` being `12`. |
-| `-=` | Subtracts the value on the right-hand side from the variable on the left-hand side. | `a -= b` results in `a` being `-8`. |
-| `*=` | Multiplies the variable on the left-hand side by the value on the right-hand side. | `a *= b` results in `a` being `20`. |
-| `/=` | Divides the variable on the left-hand side by the value on the right-hand side. | `a /= b` results in `a` being `0.2`. |
-| `%=` | Assigns the remainder of the division of the variable on the left-hand side by the value on the right-hand side to the variable on the left-hand side. |  `b %= a` results in `b` being `0`. |
-| `**=` | Raises the variable on the left-hand side to the power of the value on the right-hand side. | `a **= b` results in `a` being `1024`. |
-| `\|\|=` | Performs a logical OR operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a \|\|= b` results in `a` being `2`. |
-| `&&=` | Performs a logical AND operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a &&= b` results in `a` being `10`. |
-| `&=` | Performs a bitwise AND operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a &= b` results in `a` being `2`. |
-| `\|=` | Performs a bitwise OR operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a \|= b` results in `a` being `10`. |
-| `^=` | Performs a bitwise XOR operation between the variable on the left-hand side and the value on the right-hand side and assigns the result to the variable on the left-hand side. | `a ^= b` results in `a` being `8`. |
+| Assignment Operator  | Example                    |
+| :-------- | :------------------------- |
+| `+=` |`a += b` results in `a` being `12`. |
+| `-=` |  `a -= b` results in `a` being `-8`. |
+| `*=` | `a *= b` results in `a` being `20`. |
+| `/=` |  `a /= b` results in `a` being `0.2`. |
+| `%=` |  `b %= a` results in `b` being `0`. |
+| `**=`|  `a **= b` results in `a` being `1024`. |
+| `\|\|=` | `a \|\|= b` results in `a` being `2`. |
+| `&&=` |  `a &&= b` results in `a` being `10`. |
+| `&=`  | `a &= b` results in `a` being `2`. |
+| `\|=` |  `a \|= b` results in `a` being `10`. |
+| `^=`  |  `a ^= b` results in `a` being `8`. |
 
 #### Increment and Decrement
 ##### Postfix
@@ -251,7 +251,6 @@ y := ++x; // y = 6, x = 6
 
 #### Conditional Operator
 
-The conditional operator (`? :`), also known as the ternary operator, is a shorthand method of writing conditional expressions . It evaluates a condition and returns one of two values based on whether the condition is true or false.
 ```javascript
 x := 5;
 y := x > 5 ? 2*x : 3*x; // y = 15
@@ -365,8 +364,22 @@ y := 10;
 z := add(x, y); // returns 15
 ```
 
+#### Closures
+Functions support closures by retaining access to the enclosing scope where they were defined even after the enclosing scope is executed.
+
+```javascript
+fun outer() {
+  outerVariable := 10;
+  fun inner() {
+    return outerVariable;
+  }
+  return inner;
+}
+outer()(); // returns 10
+```
+
 #### Function expression
-Functions can also be defined as expressions.
+
 ```javascript
 add := fun (x, y) {
     return x+y;
@@ -374,7 +387,7 @@ add := fun (x, y) {
 add(5,10); // returns 15
 ```
 
-#### Lambda
+#### Lambda function
 
 ```javascript
 
@@ -389,7 +402,6 @@ adder(5)(10); // returns 15
 
 
 #### Variadic functions
- Variadic parameter can be defined using the spread `...` operator .A function can have only one variadic parameter and that parameter must be the last parameter
 
 ```javascript
 fun sum(...values){
@@ -403,32 +415,16 @@ sum(1, 2, 3, 4, 5); // returns 15
 ```
 
 #### Spreading arguments
-Spread operator `...` can be used to spread elements of an array as arguments to a function
+
 ```javascript
 fun add(x, y, z){
-  total := 0;
-  for(i:=0; i<len(values); i++){
-    total += values[i];
-  }
-  return total;
+  return x + y + z;
 }
 x := [1, 2, 3];
-add(...x); // returns 15
+add(...x); // returns 6
 ```
 
-#### Closures
-Functions support closures by retaining access to the enclosing scope where they were defined even after the scope is executed.
 
-```javascript
-fun outer() {
-  outerVariable := 10;
-  fun inner() {
-    return outerVariable;
-  }
-  return inner;
-}
-outer()(); // returns 10
-```
 
 
 #### Native functions
@@ -447,7 +443,6 @@ outer()(); // returns 10
 
 
 ### Error Handling
-Tinkerscript supports error handling using the `try` and `catch` keywords.
 ##### Catch errors
 ```javascript
 try {
@@ -457,7 +452,6 @@ try {
 }
 ```
 ##### Throw errors
-Errors can be thrown using the `throw` keyword.
 ```javascript
 try {
   throw Error("error"); 
@@ -467,7 +461,6 @@ try {
 ```
 
 ### Classes
-TinkerScript support object-oriented programming using classes.
 #### Class declaration
 ```javascript
 class Point {
@@ -568,19 +561,15 @@ println(rectangle.area); // 6
 
 #### Array declaration
 ```javascript
-array := [1, 2, 3, 4, 5];
+array := [1.2, "hello", true, nil,[1,2,3]];
 ```
-Arrays can contain items of different types
-
-```javascript
-array := [1, 3.14, "hello", true, nil];
-```
-
 
 #### Array access
-##### Indexing
+##### Indexing ( 0 based )
 ```javascript
-array[2]; // 3
+array[0]; // 1.2
+array[2]; // true
+array[4]; // nil
 ```
 ##### Slicing 
 ```javascript
@@ -590,6 +579,7 @@ array[3:]; // [4, 5]
 array[:3]; // [1, 2, 3]
 array[:]; // [1, 2, 3, 4, 5]
 ```
+
 #### Using Spread in array
 ```javascript
 array := [1, 2, 3, 4, 5];
@@ -600,10 +590,9 @@ newArray := [...array,6,7]; // newArray = [1, 2, 3, 4, 5, 6, 7]
 
 #### Array built-in methods
 ```javascript
-array := [1, 2, 3, 4, 5];
-array.push(6); // array = [1, 2, 3, 4, 5, 6]
-array.pop(); // 6
-array.length(); // 5
+array := [1, 2, 3];
+array.push(4); // array = [1, 2, 3, 4]
+array.pop(); // 4
 ```
 
 ### Maps
