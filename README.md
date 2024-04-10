@@ -1,7 +1,5 @@
 # TinkerScript
-
-A dynamically-typed ,high-level, toy programming language written in Java
-
+A dynamically-typed, interpreted, high-level, toy programming language.
 
 ## Table of Contents
 - [About](#about)
@@ -12,7 +10,7 @@ A dynamically-typed ,high-level, toy programming language written in Java
 
 ## About
 
-TinkerScript is a dynamically-typed, high-level programming language written in Java. Initially, it started as an implementation of a tree walk interpreter for the Lox programming language from the book [Crafting Interpreters](https://craftinginterpreters.com/). However, as I continued adding more features to it, the language began to diverge significantly from its original form. Therefore, I have renamed it to TinkerScript.
+TinkerScript is a dynamically-typed, interpreted, high-level, toy programming language written in Java. Initially, it started as an implementation of a tree walk interpreter for the Lox programming language from the book [Crafting Interpreters](https://craftinginterpreters.com/). However, as I continued adding more features to it, the language began to diverge significantly from its original form. Therefore, I have renamed it to TinkerScript.
 
 #### Features
 - Comments 
